@@ -11,10 +11,10 @@ const emergencyContacts = [];
 const linkRequests = [];
 
 // Populate default demo data instantly into memory store
-const initSeedData = async () => {
+const initSeedData = () => {
   if (users.length > 0) return;
 
-  const passwordHash = await bcrypt.hash('password123', 10);
+  const passwordHash = bcrypt.hashSync('password123', 10);
 
   const senior = {
     _id: 'usr_senior_001',

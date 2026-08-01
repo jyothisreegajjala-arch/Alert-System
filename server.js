@@ -381,7 +381,11 @@ io.on('connection', (socket) => {
 
 // Connect Database for Vercel serverless environment
 if (process.env.VERCEL) {
-  connectDB();
+  connectDB().then((connected) => {
+    if (connected) {
+      autoSeedDatabase();
+    }
+  });
 }
 
 // Start Server locally
