@@ -2,25 +2,28 @@ const mongoose = require('mongoose');
 const dns = require('dns');
 const config = require('./config');
 
-try {
-  dns.setDefaultResultOrder('ipv4first');
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch (e) {
-  // Use default OS DNS resolution if setting custom servers is restricted
+if (process.platform === 'win32' && !process.env.VERCEL) {
+  try {
+    dns.setDefaultResultOrder('ipv4first');
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch (e) {}
 }
 
 let isConnected = false;
 
 const connectDB = async () => {
-  if (isConnected) return true;
+  if (isConnected && mongoose.connection.readyState === 1) return true;
   try {
-    const conn = await mongoose.connect(config.MONGO_URI, { serverSelectionTimeoutMS: 10000 });
+    const conn = await mongoose.connect(config.MONGO_URI, {
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000
+    });
     isConnected = true;
     console.log(`[Database] SafeReach connected to Live MongoDB Atlas Cluster: ${conn.connection.host}`);
     return true;
   } catch (err) {
+    isConnected = false;
     console.error(`[Database] MongoDB Atlas Connection Error: ${err.message}`);
-    console.log('[Database] Note: Ensure MONGO_URI in .env is configured with your MongoDB Atlas connection string.');
     return false;
   }
 };
