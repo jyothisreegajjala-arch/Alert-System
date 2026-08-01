@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="brand">CareConnect - Emergency Console</title>
+  <!-- Google Fonts Unicode Support, Socket.IO, Leaflet JS & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/dashboard.css">
+  <link rel="stylesheet" href="/public/css/accessibility.css">
+  <style>
+    .d-none { display: none !important; }
+    .language-selector-wrapper { display: flex; align-items: center; gap: 0.4rem; }
+    .language-select-input { background: rgba(15, 23, 42, 0.9); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; padding: 0.35rem 0.5rem; font-size: 0.88rem; cursor: pointer; }
+    .floating-assist-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">🆘</div>
+        <span data-i18n="brand">CareConnect</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+        <!-- Language Selector Dropdown (Requirement 8) -->
+        <div id="nav-language-selector-container"></div>
+        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+          👁️ Accessibility
+        </button>
+
+        <!-- Real-Time Notifications Button with Red Badge (Requirement 1, 3) -->
+        <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
+          <span>🔔</span> <span data-i18n="notifications">Notifications</span>
+          <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
+        </button>
+
+        <div id="duty-status-container"></div>
+        <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="sign_out">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Dashboard Wrapper -->
+  <div class="container dashboard-container">
+    
+    <!-- User Profile Banner -->
+    <div id="user-profile-bar" class="user-profile-bar d-none">
+      <div class="user-info-meta">
+        <div id="user-avatar" class="avatar-circle">U</div>
+        <div class="user-details">
+          <h2 id="user-display-name">Loading Profile...</h2>
+          <p id="user-display-role" data-i18n="app_tagline">CareConnect Emergency System</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:0.75rem; align-items:center;">
+        <button id="btn-edit-profile" onclick="openEditProfileModal()" class="btn btn-primary btn-sm">✏️ <span data-i18n="profile">Edit Profile & Contacts</span></button>
+        <a id="btn-emergency-logs" href="#history" class="btn btn-secondary btn-sm d-none">📜 <span data-i18n="reports">Emergency Logs</span></a>
+        <button onclick="logout()" class="btn btn-outline-danger btn-sm">🚪 <span data-i18n="sign_out">Logout</span></button>
+      </div>
+    </div>
+
+    <!-- Active Emergency Tracker Banner (For Senior/Child) -->
+    <div id="active-sos-tracker" class="d-none"></div>
+
+    <!-- Responder Account Link Requests Notification Banner -->
+    <div id="responder-link-requests-container" class="d-none" style="margin-bottom:2rem;"></div>
+
+    <!-- ROLE VIEW 1: SENIOR CITIZEN & CHILD SOS TRIGGER HUB (FIRST & MOST PROMINENT) -->
+    <div id="view-senior-sos" class="d-none">
+      <div class="sos-hub">
+        <h1 class="sos-title" data-i18n="brand">CARE CONNECT</h1>
+        
+        <!-- 3-Second Press & Hold SOS Button -->
+        <div class="sos-button-wrapper">
+          <svg class="sos-svg-ring" viewBox="0 0 280 280">
+            <circle class="sos-ring-bg" cx="140" cy="140" r="126"></circle>
+            <circle id="sos-ring-progress" class="sos-ring-progress" cx="140" cy="140" r="126"></circle>
+          </svg>
+          <button id="sos-press-btn" class="sos-btn" aria-label="Press and hold SOS">
+            <span class="sos-text" style="display:flex; align-items:center; gap:0.4rem;">
+              <span>🚨</span><span>SOS</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="main-sos-subtext-group">
+          <span class="main-sos-line1">Press and Hold for 3 Seconds</span>
+          <span class="main-sos-line2">For Emergency Assistance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GPS & CURRENT LOCATION CARD (Requirements 4, 9, 10, 12) -->
+    <div id="location-widget-section" class="glass-card" style="margin-bottom:2rem; padding:1.25rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
+        <h4 style="color:#fff; margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.15rem;">
+          <span>📡</span> <span data-i18n="live_gps_title">Live GPS Location & Controls</span>
+        </h4>
+        <button type="button" id="btn-get-location" onclick="SafeReachLocation.refreshLocationWidget()" class="btn btn-primary btn-sm">
+          📍 <span data-i18n="get_current_location">Get Current Location</span>
+        </button>
+      </div>
+      <div id="location-status-text" class="location-status status-neutral" style="font-size:0.9rem; color:#94a3b8; margin-bottom:0.5rem;">
+        Click "Get Current Location" to fetch your live high-accuracy GPS coordinates.
+      </div>
+      <div id="location-info-display" class="d-none"></div>
+    </div>
+
+    <!-- SENIOR CITIZEN LINK REQUESTS & NETWORK STATUS SECTION -->
+    <div id="senior-link-requests-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <h3 style="color:#fff; font-weight:800; font-size:1.3rem; display:flex; align-items:center; gap:0.5rem;">
+          <span>📋</span> <span data-i18n="emergency_contacts">Account Link Requests & Safety Network Status</span>
+        </h3>
+        <button onclick="openEditProfileModal()" class="btn btn-primary btn-sm">➕ Add Contact</button>
+      </div>
+
+      <div id="senior-link-requests-content">
+        <div style="text-align:center; padding:1.5rem; color:var(--dark-muted);">Loading link requests...</div>
+      </div>
+    </div>
+
+    <!-- ROLE VIEW 2: COMMUNITY RESPONDERS (NEIGHBOR / SECURITY / VOLUNTEER / FAMILY) -->
+    <div id="view-responder-feed" class="d-none" style="margin-bottom:2.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+        <h3 style="font-size:1.4rem; color:#fff; font-weight:800;">🚨 <span data-i18n="active_emergency">Active Community Emergency Alerts</span></h3>
+        <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm">🔄 Refresh Feed</button>
+      </div>
+
+      <!-- Feed Container -->
+      <div id="active-alerts-feed">
+        <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
+          <p>Scanning active emergency alerts in your area...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map View Container -->
+    <div id="view-map-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.25rem;">
+      <h4 style="color:#fff; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+        <span>🗺️</span> <span data-i18n="live_gps_title">Live Community Emergency Location Map</span>
+      </h4>
+      <div id="map-container">
+        <div id="map"></div>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div id="history" class="glass-card d-none">
+      <h3 style="color:#fff; font-weight:700; margin-bottom:1rem;">📜 <span data-i18n="history">Emergency History & Audit Log</span></h3>
+      <div style="overflow-x:auto;">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Alert ID</th>
+              <th>User Name</th>
+              <th>Date & Time</th>
+              <th>Location Address</th>
+              <th>Status</th>
+              <th>Accepted By</th>
+              <th>Response Time</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body">
+            <tr>
+              <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
+                Loading emergency logs...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DYNAMIC ROLE-BASED EDIT PROFILE MODAL -->
+  <div id="edit-profile-modal" class="modal-backdrop d-none">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 id="edit-profile-modal-title">✏️ Edit Profile</h3>
+        <button onclick="closeEditProfileModal()" class="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+      <form id="edit-profile-form" onsubmit="handleSaveProfile(event)">
+        <div id="edit-profile-modal-body" class="modal-body">
+          <!-- Dynamically populated based on user role -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeEditProfileModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-success">💾 Save Profile Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL (Requirements 1, 3) -->
+  <div id="notifications-modal" class="modal-backdrop d-none">
+    <div class="modal-content" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:0.5rem; margin:0;">
+          <span>🔔</span> <span data-i18n="notifications">Notifications & Connection Requests</span>
+        </h3>
+        <button onclick="closeNotificationsModal()" class="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Filter Tabs & Count Metrics -->
+        <div style="display:flex; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap; align-items:center;">
+          <button type="button" id="tab-notif-all" class="btn btn-sm notif-tab-btn active" onclick="filterNotifications('all')">
+            📋 All
+          </button>
+          <button type="button" id="tab-notif-pending" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('PENDING')">
+            🔴 Pending (<span id="count-pending">0</span>)
+          </button>
+          <button type="button" id="tab-notif-accepted" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('ACCEPTED')">
+            🟢 Accepted (<span id="count-accepted">0</span>)
+          </button>
+          <button type="button" id="tab-notif-read" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('READ')">
+            ⚪ Read (<span id="count-read">0</span>)
+          </button>
+        </div>
+
+        <!-- Notification List Container -->
+        <div id="notifications-list-content">
+          <div style="text-align:center; padding:2rem; color:var(--dark-muted);">Loading notifications...</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" onclick="closeNotificationsModal()" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Voice Assistant & Speech-to-Text Bar (Requirements 5, 6, 7) -->
+  <div class="floating-assist-bar">
+    <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">
+      🔊 Voice Assistant
+    </button>
+    <button type="button" id="btn-voice-command" onclick="CareConnectVoiceCommands.toggleListening()" class="btn btn-primary btn-sm" data-i18n="voice_command_btn">
+      🎙️ Voice Command
+    </button>
+  </div>
+
+  <!-- Socket.IO, Leaflet JS & CareConnect Multilingual Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/public/js/i18n.js"></script>
+  <script src="/public/js/voiceAssistant.js"></script>
+  <script src="/public/js/voiceCommands.js"></script>
+  <script src="/public/js/accessibility.js"></script>
+  <script src="/public/js/app.js"></script>
+  <script src="/public/js/location.js"></script>
+  <script src="/public/js/sos.js"></script>
+  <script src="/public/js/map.js"></script>
+  <script src="/public/js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.CareConnectI18n) {
+        CareConnectI18n.renderLanguageSelector('nav-language-selector-container');
+      }
+    });
+  </script>
+</body>
+</html>

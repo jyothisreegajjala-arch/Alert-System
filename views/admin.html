@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Console - SafeReach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/dashboard.css">
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="/admin" class="brand-logo">
+        <div class="logo-icon">👑</div>
+        <span>SafeReach Admin</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <a href="/dashboard" class="btn btn-secondary btn-sm">📱 Emergency Console</a>
+        <button onclick="logout()" class="btn btn-outline-danger btn-sm">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container dashboard-container">
+    <div class="admin-header">
+      <h1 style="font-size:2rem; font-weight:800; color:#fff;">System Administration & Analytics</h1>
+      <p style="color:var(--dark-muted);">Monitor real-time network telemetry, manage users, and review emergency response metrics.</p>
+    </div>
+
+    <!-- KPI Metric Cards Grid -->
+    <div class="admin-kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon users">👥</div>
+        <div class="kpi-details">
+          <h4>Total Users</h4>
+          <div id="kpi-total-users" class="kpi-value">0</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon neighbors">🏡</div>
+        <div class="kpi-details">
+          <h4>Neighbors</h4>
+          <div id="kpi-neighbors" class="kpi-value">0</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon guards">👮</div>
+        <div class="kpi-details">
+          <h4>Security Guards</h4>
+          <div id="kpi-guards" class="kpi-value">0</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon volunteers">🤝</div>
+        <div class="kpi-details">
+          <h4>Volunteers</h4>
+          <div id="kpi-volunteers" class="kpi-value">0</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon emergencies">🚨</div>
+        <div class="kpi-details">
+          <h4>Active Emergencies</h4>
+          <div id="kpi-active-sos" class="kpi-value">0</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon users" style="background:linear-gradient(135deg, #34c759, #10b981);">⚡</div>
+        <div class="kpi-details">
+          <h4>Avg Response Time</h4>
+          <div id="kpi-avg-response" class="kpi-value">0s</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real-Time System Event Terminal -->
+    <div class="glass-card" style="margin-bottom:2.5rem;">
+      <h3 style="color:#fff; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+        <span>📡</span> Real-Time System Event Stream
+      </h3>
+      <div id="admin-log-terminal" class="system-log-terminal">
+        <div class="log-entry">
+          <span class="log-time">[System]</span>
+          <span class="log-msg-info">Connecting to SafeReach socket stream...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Management Table -->
+    <div class="glass-card">
+      <div class="filter-toolbar">
+        <div>
+          <h3 style="color:#fff; font-weight:700;">👥 User Account Directory</h3>
+          <p style="font-size:0.85rem; color:var(--dark-muted);">Manage access, status, and credentials across all 7 user roles.</p>
+        </div>
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="user-search-input" placeholder="Search by name, email, or phone...">
+        </div>
+      </div>
+
+      <!-- Role Filter Pills -->
+      <div class="role-filter-pills" style="margin-bottom:1.25rem;">
+        <button class="pill-btn active" data-role="all">All Roles</button>
+        <button class="pill-btn" data-role="senior_citizen">Senior Citizens</button>
+        <button class="pill-btn" data-role="child">Children</button>
+        <button class="pill-btn" data-role="family_member">Family</button>
+        <button class="pill-btn" data-role="neighbor">Neighbors</button>
+        <button class="pill-btn" data-role="security_guard">Security Guards</button>
+        <button class="pill-btn" data-role="volunteer">Volunteers</button>
+        <button class="pill-btn" data-role="admin">Admins</button>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Apartment / Address</th>
+              <th>Account Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-table-body">
+            <tr>
+              <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
+                Loading user directory...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/public/js/app.js"></script>
+  <script src="/public/js/admin.js"></script>
+</body>
+</html>

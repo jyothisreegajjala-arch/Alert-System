@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="brand">CareConnect - Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/accessibility.css">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 1));
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark-muted); margin-bottom: 0.4rem; }
+    .form-control { width: 100%; padding: 0.85rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--dark-border); border-radius: var(--radius-md); color: #ffffff; font-size: 0.95rem; outline: none; transition: var(--transition); }
+    .form-control:focus { border-color: var(--secondary); background: rgba(255, 255, 255, 0.08); }
+    .quick-demo-box { margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--dark-border); }
+    .demo-role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 0.75rem; }
+    .top-lang-bar { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 480px; }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="top-lang-bar">
+      <a href="/language" class="btn btn-outline-secondary btn-sm">🌐 <span data-i18n="select_language">Language Gateway</span></a>
+      <div id="login-language-selector-container"></div>
+      <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+        👁️ Accessibility
+      </button>
+    </div>
+
+    <div class="glass-card auth-card">
+      <div style="text-align:center; margin-bottom: 2rem;">
+        <a href="/" class="brand-logo" style="justify-content:center; margin-bottom:0.75rem;">
+          <div class="logo-icon">🆘</div>
+          <span data-i18n="brand">CareConnect</span>
+        </a>
+        <h2 style="font-size:1.5rem; color:#fff; font-weight:700;" data-i18n="welcome">Welcome Back</h2>
+        <p style="font-size:0.88rem; color:var(--dark-muted);" data-i18n="app_tagline">Sign in to access your community emergency console</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label for="login-password">Password</label>
+            <a href="#" onclick="alert('Demo reset instructions sent to your email address.')" style="font-size:0.8rem;">Forgot?</a>
+          </div>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.9rem; margin-top:0.5rem;" data-i18n="login">Sign In</button>
+      </form>
+
+      <!-- Dedicated Role Login Portals -->
+      <div class="quick-demo-box">
+        <p style="font-size:0.82rem; font-weight:700; color:#ff9500; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">
+          🔑 Select Dedicated Role Login Portal
+        </p>
+        <div class="demo-role-grid">
+          <a href="/login/senior" class="btn btn-secondary btn-sm" style="text-align:center;"><span data-i18n="senior_citizen">👵 Senior Citizen</span></a>
+          <a href="/login/family" class="btn btn-secondary btn-sm" style="text-align:center;"><span data-i18n="guardian">👨‍👩‍👧 Family Member</span></a>
+          <a href="/login/neighbor" class="btn btn-secondary btn-sm" style="text-align:center;"><span data-i18n="neighbor">🏡 Neighbor</span></a>
+          <a href="/login/security" class="btn btn-secondary btn-sm" style="text-align:center;"><span data-i18n="security">👮 Security Guard</span></a>
+          <a href="/login/volunteer" class="btn btn-secondary btn-sm" style="text-align:center;"><span data-i18n="volunteer">🤝 Volunteer</span></a>
+          <a href="/login/admin" class="btn btn-outline-danger btn-sm" style="text-align:center;"><span data-i18n="admin">👑 System Admin</span></a>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--dark-muted);">
+        Don't have an account? <a href="/register" style="font-weight:600;" data-i18n="register">Register Here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/public/js/i18n.js"></script>
+  <script src="/public/js/voiceAssistant.js"></script>
+  <script src="/public/js/accessibility.js"></script>
+  <script src="/public/js/app.js"></script>
+  <script src="/public/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.CareConnectI18n) {
+        CareConnectI18n.renderLanguageSelector('login-language-selector-container');
+      }
+    });
+  </script>
+</body>
+</html>
