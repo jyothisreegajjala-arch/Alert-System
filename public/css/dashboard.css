@@ -581,3 +581,35 @@
   margin-bottom: 0.75rem;
 }
 
+@media (max-width: 768px) {
+  .user-profile-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .sos-hub {
+    padding: 2rem 1rem;
+  }
+  .sos-title {
+    font-size: 2.2rem;
+  }
+  .sos-subtitle {
+    font-size: 1rem;
+  }
+  .sos-button-wrapper {
+    width: 230px;
+    height: 230px;
+  }
+  .sos-button {
+    width: 170px;
+    height: 170px;
+  }
+  .sos-text {
+    font-size: 2.4rem;
+  }
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
