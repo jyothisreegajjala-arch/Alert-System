@@ -31,6 +31,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ensure MongoDB Atlas connection before handling any request
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 // Serve static frontend files
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/views', express.static(path.join(__dirname, 'views')));
