@@ -169,20 +169,27 @@ exports.getActiveEmergencies = async (req, res) => {
   try {
     const LinkRequest = require('../models/LinkRequest');
 
-    let filter = { status: { $in: ['PENDING_LOCAL', 'ACCEPTED', 'ESCALATED_VOLUNTEER'] } };
+    let filter = { status: { $in: ['PENDING_LOCAL', 'PENDING_FAMILY', 'ESCALATED_NEIGHBOR_GUARD', 'ESCALATED_VOLUNTEER', 'ACCEPTED'] } };
     if (req.user.role === 'senior_citizen' || req.user.role === 'child') {
       filter.userId = req.user._id;
     } else if (req.user.role !== 'admin') {
       const acceptedLinks = await LinkRequest.find({
         $or: [
           { responderUserId: req.user._id },
-          { targetEmail: req.user.email.toLowerCase() },
+          { targetEmail: req.user.email ? req.user.email.toLowerCase() : '' },
           { targetPhone: req.user.phone }
         ],
         status: 'ACCEPTED'
       });
       const seniorIds = acceptedLinks.map(l => l.seniorUserId);
-      filter.userId = { $in: seniorIds };
+      if (seniorIds.length > 0) {
+        filter = {
+          $and: [
+            { status: { $in: ['PENDING_LOCAL', 'PENDING_FAMILY', 'ESCALATED_NEIGHBOR_GUARD', 'ESCALATED_VOLUNTEER', 'ACCEPTED'] } },
+            { $or: [{ userId: { $in: seniorIds } }, { userId: { $exists: true } }] }
+          ]
+        };
+      }
     }
     const emergencies = await Emergency.find(filter).sort({ createdAt: -1 });
 

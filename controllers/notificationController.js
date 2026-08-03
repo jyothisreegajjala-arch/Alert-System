@@ -11,7 +11,9 @@ exports.getUserNotifications = async (req, res) => {
       $or: [
         { recipientUserId: user._id },
         { recipientRole: user.role },
-        { targetEmail: user.email.toLowerCase() }
+        { targetEmail: user.email ? user.email.toLowerCase() : '' },
+        { senderUserId: user._id },
+        { type: 'EMERGENCY_ALERT' }
       ]
     }).sort({ createdAt: -1 });
 
