@@ -753,6 +753,19 @@ const CareConnectI18n = {
 
     if (isHidden) {
       popover.classList.remove('d-none');
+      // Dynamic position adjustment for screen boundary safety on mobile
+      popover.style.left = '';
+      popover.style.right = '0';
+      const rect = popover.getBoundingClientRect();
+      if (rect.left < 10) {
+        popover.style.left = '0';
+        popover.style.right = 'auto';
+      }
+      const rect2 = popover.getBoundingClientRect();
+      if (rect2.right > window.innerWidth - 10) {
+        popover.style.right = '0';
+        popover.style.left = 'auto';
+      }
     }
   },
 

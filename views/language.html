@@ -17,14 +17,18 @@
   <style>
     .lang-container {
       max-width: 1000px;
-      margin: 3rem auto;
-      padding: 2rem;
+      margin: 2rem auto;
+      padding: 1.5rem;
     }
     .lang-card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 480px) {
+      .lang-container { margin: 1rem auto; padding: 0.75rem; }
+      .lang-card { padding: 1rem; }
     }
     .lang-card {
       background: var(--dark-card);

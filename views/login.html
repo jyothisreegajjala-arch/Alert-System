@@ -27,9 +27,11 @@
     .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark-muted); margin-bottom: 0.4rem; }
     .form-control { width: 100%; padding: 0.85rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--dark-border); border-radius: var(--radius-md); color: #ffffff; font-size: 0.95rem; outline: none; transition: var(--transition); }
     .form-control:focus { border-color: var(--secondary); background: rgba(255, 255, 255, 0.08); }
-    .quick-demo-box { margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--dark-border); }
-    .demo-role-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 0.75rem; }
-    .top-lang-bar { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 480px; }
+    .top-lang-bar { margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap; width: 100%; max-width: 480px; }
+    @media (max-width: 480px) {
+      .auth-card { padding: 1.25rem; }
+      .demo-role-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
