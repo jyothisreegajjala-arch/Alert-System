@@ -113,6 +113,8 @@ function initSocketConnection() {
     SafeReach.showToast(data.message, 'danger');
     playNotificationSound();
     loadActiveEmergencies();
+    loadUserNotifications();
+    openNotificationsModal();
   });
 
   // Tier 2 Alert (Volunteers & Family)
@@ -120,6 +122,8 @@ function initSocketConnection() {
     SafeReach.showToast(data.message, 'danger');
     playNotificationSound();
     loadActiveEmergencies();
+    loadUserNotifications();
+    openNotificationsModal();
   });
 
   // Status updates
