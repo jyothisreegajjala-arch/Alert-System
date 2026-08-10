@@ -151,10 +151,10 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const cleanEmail = (email || '').trim().toLowerCase();
-    const cleanPassword = (password || '').trim();
+    const rawInput = (email || '').trim();
 
     if (!cleanEmail || !cleanPassword) {
-      return res.status(400).json({ success: false, message: 'Please provide email and password' });
+      return res.status(400).json({ success: false, message: 'Please provide email/phone and password' });
     }
 
     const memoryStore = require('../config/memoryStore');
@@ -163,13 +163,20 @@ exports.login = async (req, res) => {
 
     if (isDbConnected) {
       try {
-        const dbUser = await User.findOne({ email: cleanEmail }).select('+password');
+        const dbUser = await User.findOne({
+          $or: [
+            { email: cleanEmail },
+            { phone: rawInput },
+            { phone: cleanEmail }
+          ]
+        }).select('+password');
+
         if (dbUser) {
           const isMatch = await dbUser.matchPassword(cleanPassword);
           if (isMatch) {
             user = dbUser;
           } else {
-            return res.status(401).json({ success: false, message: 'Invalid email or password' });
+            return res.status(401).json({ success: false, message: 'Invalid email/phone or password' });
           }
         }
       } catch (dbErr) {
@@ -180,7 +187,10 @@ exports.login = async (req, res) => {
 
     // Fallback to memoryStore if DB did not return a matching user
     if (!user) {
-      const memUser = memoryStore.users.find(u => u.email === cleanEmail);
+      const memUser = memoryStore.users.find(u =>
+        (u.email && u.email.toLowerCase() === cleanEmail) ||
+        (u.phone && (u.phone === rawInput || u.phone === cleanEmail))
+      );
       if (memUser) {
         let passwordMatches = false;
         if (memUser.rawPassword && memUser.rawPassword === cleanPassword) {
@@ -195,7 +205,7 @@ exports.login = async (req, res) => {
         }
 
         if (!passwordMatches) {
-          return res.status(401).json({ success: false, message: 'Invalid email or password' });
+          return res.status(401).json({ success: false, message: 'Invalid email/phone or password' });
         }
 
         user = memUser;

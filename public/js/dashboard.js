@@ -1070,11 +1070,13 @@ async function loadSeniorLinkRequests() {
               if (r.status === 'ACCEPTED') badge = `<span class="badge badge-accepted">CONNECTED</span>`;
               if (r.status === 'REJECTED') badge = `<span class="badge badge-escalated">DECLINED</span>`;
 
+              const displayEmail = (r.targetEmail && !r.targetEmail.includes('@safereach.com')) ? r.targetEmail : '';
+
               return `
                 <tr>
                   <td><strong>${r.targetName}</strong></td>
                   <td>${SafeReach.formatRole(r.targetRole)} (${r.relationship || 'Contact'})</td>
-                  <td>${r.targetEmail}<br><small style="color:var(--dark-muted);">${r.targetPhone}</small></td>
+                  <td>${displayEmail ? `${displayEmail}<br>` : ''}<small style="color:var(--dark-muted);">${r.targetPhone || '—'}</small></td>
                   <td>${r.requestDate || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
                   <td>${badge}</td>
                   <td>
