@@ -151,6 +151,7 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
     const rawInput = (email || '').trim();
 
     if (!cleanEmail || !cleanPassword) {
