@@ -7,29 +7,47 @@ exports.createLinkRequest = async (req, res) => {
     const { targetName, targetEmail, targetPhone, targetRole, relationship } = req.body;
     const seniorUser = req.user;
 
-    if (!targetName || !targetEmail || !targetPhone || !targetRole) {
-      return res.status(400).json({ success: false, message: 'Please provide contact name, email, phone, and role.' });
+    if (!targetName || (!targetEmail && !targetPhone) || !targetRole) {
+      return res.status(400).json({ success: false, message: 'Please provide contact name, role, and at least an email address or phone number.' });
     }
 
-    const cleanEmail = targetEmail.trim().toLowerCase();
-    const cleanPhone = targetPhone.trim();
+    const inputEmail = targetEmail ? targetEmail.trim().toLowerCase() : '';
+    const inputPhone = targetPhone ? targetPhone.trim() : '';
     const isDbConnected = require('mongoose').connection.readyState === 1;
 
     let existingResponderId = null;
-    const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    let cleanEmail = inputEmail;
+    let cleanPhone = inputPhone;
+    const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Kolkata' });
 
     if (isDbConnected) {
-      const matchingUser = await User.findOne({
-        $or: [{ email: cleanEmail }, { phone: cleanPhone }]
-      });
-      if (matchingUser) existingResponderId = matchingUser._id;
+      const query = [];
+      if (inputEmail) query.push({ email: inputEmail });
+      if (inputPhone) query.push({ phone: inputPhone });
 
-      const existingReq = await LinkRequest.findOne({
-        seniorUserId: seniorUser._id,
-        $or: [{ targetEmail: cleanEmail }, { targetPhone: cleanPhone }]
-      });
-      if (existingReq) {
-        return res.status(400).json({ success: false, message: 'A link request has already been sent to this contact.' });
+      let matchingUser = null;
+      if (query.length > 0) {
+        matchingUser = await User.findOne({ $or: query });
+      }
+
+      if (matchingUser) {
+        existingResponderId = matchingUser._id;
+        if (!cleanEmail) cleanEmail = matchingUser.email;
+        if (!cleanPhone) cleanPhone = matchingUser.phone;
+      }
+
+      const checkQuery = [];
+      if (cleanEmail) checkQuery.push({ targetEmail: cleanEmail });
+      if (cleanPhone) checkQuery.push({ targetPhone: cleanPhone });
+
+      if (checkQuery.length > 0) {
+        const existingReq = await LinkRequest.findOne({
+          seniorUserId: seniorUser._id,
+          $or: checkQuery
+        });
+        if (existingReq) {
+          return res.status(400).json({ success: false, message: 'A link request has already been sent to this contact.' });
+        }
       }
 
       const linkReq = await LinkRequest.create({
