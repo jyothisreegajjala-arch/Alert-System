@@ -1,0 +1,103 @@
+/* CareConnect - High-Contrast Accessibility Mode Styles */
+
+body.accessibility-mode {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  font-size: 1.25rem !important; /* Large text scale */
+}
+
+/* High Contrast Glass Cards & Panels */
+body.accessibility-mode .glass-card,
+body.accessibility-mode .glass-card-sm,
+body.accessibility-mode .navbar,
+body.accessibility-mode .user-profile-bar,
+body.accessibility-mode .active-sos-card,
+body.accessibility-mode .modal-content,
+body.accessibility-mode .sos-hub {
+  background: #000000 !important;
+  border: 3px solid #facc15 !important; /* Vivid Yellow high contrast border */
+  box-shadow: 0 0 15px rgba(250, 204, 21, 0.4) !important;
+}
+
+/* Typography High Contrast */
+body.accessibility-mode h1,
+body.accessibility-mode h2,
+body.accessibility-mode h3,
+body.accessibility-mode h4,
+body.accessibility-mode label,
+body.accessibility-mode strong,
+body.accessibility-mode .location-value {
+  color: #facc15 !important; /* High contrast yellow headers */
+  font-weight: 800 !important;
+}
+
+body.accessibility-mode p,
+body.accessibility-mode span,
+body.accessibility-mode div {
+  color: #ffffff !important;
+}
+
+/* Extra Large Touch Target Buttons (Minimum 64px) */
+body.accessibility-mode .btn {
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  min-height: 60px !important;
+  padding: 0.85rem 1.75rem !important;
+  border-width: 3px !important;
+  border-radius: 12px !important;
+}
+
+body.accessibility-mode .btn-primary {
+  background: #00f0ff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+body.accessibility-mode .btn-secondary {
+  background: #334155 !important;
+  color: #ffffff !important;
+  border-color: #facc15 !important;
+}
+
+body.accessibility-mode .btn-success {
+  background: #22c55e !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+body.accessibility-mode .btn-warning {
+  background: #eab308 !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+body.accessibility-mode .btn-danger,
+body.accessibility-mode .sos-btn {
+  background: #ff003c !important;
+  color: #ffffff !important;
+  border: 4px solid #ffffff !important;
+  box-shadow: 0 0 20px #ff003c !important;
+}
+
+/* Voice Assistant & Mic Active Animations */
+.voice-active {
+  animation: pulse-voice 1.2s infinite alternate;
+  background: #22c55e !important;
+  color: #000 !important;
+}
+
+.mic-active {
+  animation: pulse-mic 1s infinite alternate;
+  background: #ff003c !important;
+  color: #fff !important;
+}
+
+@keyframes pulse-voice {
+  0% { box-shadow: 0 0 5px #22c55e; }
+  100% { box-shadow: 0 0 25px #22c55e; transform: scale(1.05); }
+}
+
+@keyframes pulse-mic {
+  0% { box-shadow: 0 0 5px #ff003c; }
+  100% { box-shadow: 0 0 25px #ff003c; transform: scale(1.05); }
+}
