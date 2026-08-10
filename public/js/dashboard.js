@@ -174,18 +174,23 @@ function renderRoleDashboard() {
   if (locationWidget) locationWidget.classList.remove('d-none');
   if (mapSection) mapSection.classList.remove('d-none');
 
-  // Senior Citizen or Child View
-  if (role === 'senior_citizen' || role === 'child') {
+  // Senior Citizen, Child, or Family Member (Guardian) View
+  if (role === 'senior_citizen' || role === 'child' || role === 'family_member') {
     if (profileBar) profileBar.classList.remove('d-none');
     if (emergencyLogsBtn) emergencyLogsBtn.classList.add('d-none');
-
-    if (responderFeed) responderFeed.classList.add('d-none');
     if (historySection) historySection.classList.add('d-none');
 
-    if (seniorSosView) seniorSosView.classList.remove('d-none');
-    initSOSButtonEngine();
+    if (role === 'senior_citizen' || role === 'child') {
+      if (responderFeed) responderFeed.classList.add('d-none');
+      if (seniorSosView) seniorSosView.classList.remove('d-none');
+      initSOSButtonEngine();
+    } else {
+      // Family Member / Guardian: views active responder feed, emergency history is hidden
+      if (responderFeed) responderFeed.classList.remove('d-none');
+      if (seniorSosView) seniorSosView.classList.add('d-none');
+    }
   } 
-  // Responders (Neighbor / Security / Volunteer / Family Member / Admin)
+  // Responders (Neighbor / Security / Volunteer / Admin)
   else {
     if (profileBar) profileBar.classList.remove('d-none');
     if (emergencyLogsBtn) emergencyLogsBtn.classList.remove('d-none');
@@ -497,8 +502,8 @@ async function resolveEmergencyAlert(emergencyId) {
 
 // Emergency History Loader
 async function loadEmergencyHistory() {
-  if (currentUser.role === 'senior_citizen' || currentUser.role === 'child') {
-    return; // Bypass history table loading for Senior Citizens to keep view clutter-free
+  if (currentUser.role === 'senior_citizen' || currentUser.role === 'child' || currentUser.role === 'family_member') {
+    return; // Bypass history table loading for Senior Citizens & Family Members (Guardians)
   }
 
   try {
