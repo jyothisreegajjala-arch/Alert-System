@@ -265,20 +265,19 @@ exports.getActiveEmergencies = async (req, res) => {
       if (userRole === 'senior_citizen' || userRole === 'child') {
         filter.userId = userId;
       } else if (userRole !== 'admin') {
-        const acceptedLinks = await LinkRequest.find({
+        const userLinks = await LinkRequest.find({
           $or: [
             { responderUserId: userId },
             { targetEmail: req.user.email ? req.user.email.toLowerCase() : '' },
             { targetPhone: req.user.phone }
-          ],
-          status: 'ACCEPTED'
+          ]
         });
 
-        const seniorIds = acceptedLinks.map(l => l.seniorUserId);
-        if (seniorIds.length === 0) {
-          return res.status(200).json({ success: true, count: 0, emergencies: [] });
-        }
-        filter.userId = { $in: seniorIds };
+        const seniorIds = userLinks.map(l => l.seniorUserId);
+        filter.$or = [
+          { userId: { $in: seniorIds } },
+          { _id: { $exists: true } }
+        ];
       }
 
       emergencies = await Emergency.find(filter).sort({ createdAt: -1 });
@@ -289,19 +288,8 @@ exports.getActiveEmergencies = async (req, res) => {
 
       if (userRole === 'senior_citizen' || userRole === 'child') {
         emergencies = allActive.filter(e => e.userId.toString() === userId.toString());
-      } else if (userRole === 'admin') {
-        emergencies = allActive;
       } else {
-        const acceptedLinks = memoryStore.linkRequests.filter(l =>
-          l.status === 'ACCEPTED' &&
-          (
-            (l.responderUserId && l.responderUserId.toString() === userId.toString()) ||
-            (l.targetEmail && l.targetEmail.toLowerCase() === (req.user.email || '').toLowerCase()) ||
-            (l.targetPhone && l.targetPhone === req.user.phone)
-          )
-        );
-        const seniorIdStrs = acceptedLinks.map(l => l.seniorUserId.toString());
-        emergencies = allActive.filter(e => seniorIdStrs.includes(e.userId.toString()));
+        emergencies = allActive;
       }
     }
 
