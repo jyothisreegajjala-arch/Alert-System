@@ -135,15 +135,64 @@ exports.getSeniorLinkRequests = async (req, res) => {
     const isDbConnected = require('mongoose').connection.readyState === 1;
     const seniorIdStr = (seniorUser._id || seniorUser.id).toString();
 
+    let requests = [];
     if (isDbConnected) {
-      const requests = await LinkRequest.find({ seniorUserId: seniorUser._id }).sort({ createdAt: -1 });
-      return res.status(200).json({ success: true, requests });
+      const rawRequests = await LinkRequest.find({ seniorUserId: seniorUser._id }).sort({ createdAt: -1 });
+
+      const populatedRequests = await Promise.all(rawRequests.map(async (r) => {
+        const obj = r.toObject ? r.toObject() : { ...r };
+        let matchingUser = null;
+
+        if (obj.responderUserId) {
+          matchingUser = await User.findById(obj.responderUserId);
+        }
+
+        if (!matchingUser) {
+          const query = [];
+          if (obj.targetEmail && !obj.targetEmail.includes('@safereach.com')) {
+            query.push({ email: obj.targetEmail.toLowerCase() });
+          }
+          if (obj.targetPhone) {
+            query.push({ phone: obj.targetPhone });
+          }
+          if (query.length > 0) {
+            matchingUser = await User.findOne({ $or: query });
+          }
+        }
+
+        if (matchingUser) {
+          obj.targetEmail = matchingUser.email;
+          obj.targetPhone = matchingUser.phone || obj.targetPhone;
+          if (!obj.responderUserId) obj.responderUserId = matchingUser._id;
+        } else if (obj.targetEmail && obj.targetEmail.includes('@safereach.com')) {
+          obj.targetEmail = obj.targetPhone ? `Phone: ${obj.targetPhone}` : '—';
+        }
+        return obj;
+      }));
+
+      requests = populatedRequests;
     } else {
       const memoryStore = require('../config/memoryStore');
-      const requests = memoryStore.linkRequests.filter(r => r.seniorUserId && r.seniorUserId.toString() === seniorIdStr);
-      return res.status(200).json({ success: true, requests });
+      requests = memoryStore.linkRequests.filter(r => r.seniorUserId && r.seniorUserId.toString() === seniorIdStr).map(r => {
+        const obj = { ...r };
+        const matchingUser = memoryStore.users.find(u =>
+          (obj.responderUserId && u._id.toString() === obj.responderUserId.toString()) ||
+          (u.phone && obj.targetPhone && u.phone === obj.targetPhone) ||
+          (u.email && obj.targetEmail && u.email.toLowerCase() === obj.targetEmail.toLowerCase())
+        );
+        if (matchingUser) {
+          obj.targetEmail = matchingUser.email;
+          obj.targetPhone = matchingUser.phone || obj.targetPhone;
+        } else if (obj.targetEmail && obj.targetEmail.includes('@safereach.com')) {
+          obj.targetEmail = obj.targetPhone ? `Phone: ${obj.targetPhone}` : '—';
+        }
+        return obj;
+      });
     }
+
+    return res.status(200).json({ success: true, requests });
   } catch (err) {
+    console.error('getSeniorLinkRequests Error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 };

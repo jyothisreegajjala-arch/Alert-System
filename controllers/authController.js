@@ -345,7 +345,7 @@ exports.updateProfile = async (req, res) => {
         contactsToProcess.push({
           targetName: req.body.familyContactName,
           targetPhone: req.body.familyPhone || '',
-          targetEmail: req.body.familyEmail || 'family@safereach.com',
+          targetEmail: (req.body.familyEmail || '').trim().toLowerCase(),
           targetRole: 'family_member',
           relationship: req.body.familyRelationship || 'Son'
         });
@@ -354,7 +354,7 @@ exports.updateProfile = async (req, res) => {
         contactsToProcess.push({
           targetName: req.body.neighborName,
           targetPhone: req.body.neighborPhone || '',
-          targetEmail: req.body.neighborEmail || 'neighbor@safereach.com',
+          targetEmail: (req.body.neighborEmail || '').trim().toLowerCase(),
           targetRole: 'neighbor',
           relationship: 'Nearby Apartment Neighbor'
         });
@@ -363,7 +363,7 @@ exports.updateProfile = async (req, res) => {
         contactsToProcess.push({
           targetName: req.body.guardName,
           targetPhone: req.body.guardPhone || '',
-          targetEmail: req.body.guardEmail || 'guard@safereach.com',
+          targetEmail: (req.body.guardEmail || '').trim().toLowerCase(),
           targetRole: 'security_guard',
           relationship: 'Gatehouse Guard'
         });
@@ -372,7 +372,7 @@ exports.updateProfile = async (req, res) => {
         contactsToProcess.push({
           targetName: req.body.volunteerName,
           targetPhone: req.body.volunteerPhone || '',
-          targetEmail: req.body.volunteerEmail || 'volunteer@safereach.com',
+          targetEmail: (req.body.volunteerEmail || '').trim().toLowerCase(),
           targetRole: 'volunteer',
           relationship: 'Community Responder'
         });
