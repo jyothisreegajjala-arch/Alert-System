@@ -22,6 +22,7 @@ const formatEmergencyIST = (e) => {
 // Trigger SOS
 exports.triggerSOS = async (req, res) => {
   try {
+    const user = req.user;
     const { latitude, longitude, address, emergencyType, medicalInfo } = req.body;
     const now = new Date();
     const { date, time } = getFormattedDateTime(now);
