@@ -104,36 +104,38 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
     const seniorIdStr = seniorUserId.toString();
 
     if (isDbConnected) {
-      const query = { seniorUserId, status: 'ACCEPTED' };
+      const query = { seniorUserId };
       if (targetRoles && targetRoles.length > 0) {
         query.targetRole = { $in: targetRoles };
       }
-      const acceptedLinks = await LinkRequest.find(query);
+      const links = await LinkRequest.find(query);
 
-      for (const link of acceptedLinks) {
+      for (const link of links) {
         if (link.responderUserId) {
           userIds.add(link.responderUserId.toString());
         } else {
-          const matchUser = await User.findOne({
-            $or: [{ email: link.targetEmail }, { phone: link.targetPhone }]
-          });
-          if (matchUser) userIds.add(matchUser._id.toString());
+          const check = [];
+          if (link.targetEmail && !link.targetEmail.includes('@safereach.com')) check.push({ email: link.targetEmail.toLowerCase() });
+          if (link.targetPhone) check.push({ phone: link.targetPhone });
+          if (check.length > 0) {
+            const matchUser = await User.findOne({ $or: check });
+            if (matchUser) userIds.add(matchUser._id.toString());
+          }
         }
       }
     } else {
-      const acceptedLinks = memoryStore.linkRequests.filter(l =>
+      const links = memoryStore.linkRequests.filter(l =>
         l.seniorUserId && l.seniorUserId.toString() === seniorIdStr &&
-        l.status === 'ACCEPTED' &&
         (!targetRoles || targetRoles.includes(l.targetRole))
       );
 
-      for (const link of acceptedLinks) {
+      for (const link of links) {
         if (link.responderUserId) {
           userIds.add(link.responderUserId.toString());
         } else {
           const matchUser = memoryStore.users.find(u =>
-            (u.email && u.email.toLowerCase() === link.targetEmail.toLowerCase()) ||
-            (u.phone && u.phone === link.targetPhone)
+            (u.email && link.targetEmail && u.email.toLowerCase() === link.targetEmail.toLowerCase()) ||
+            (u.phone && link.targetPhone && u.phone === link.targetPhone)
           );
           if (matchUser) userIds.add(matchUser._id.toString());
         }
@@ -145,15 +147,34 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
   return Array.from(userIds);
 };
 
+const Notification = require('./models/Notification');
+
 const handleSOSTrigger = async (emergency) => {
   console.log(`[SOS Triggered] Alert ID: ${emergency.alertId} by ${emergency.userName}`);
 
   const googleMapsUrl = `https://www.google.com/maps?q=${emergency.latitude},${emergency.longitude}`;
   emergency.googleMapsUrl = googleMapsUrl;
 
-  // Tier 1: Notify ONLY linked Neighbors and Security Guards
-  const tier1ResponderIds = await getLinkedResponderUserIds(emergency.userId, ['neighbor', 'security_guard']);
-  console.log(`[Tier 1 SOS Alert] Sending alert to ${tier1ResponderIds.length} linked local responders (Neighbors/Guards).`);
+  // Get ALL connected members (Family, Neighbors, Guards, Volunteers)
+  const allLinkedResponderIds = await getLinkedResponderUserIds(emergency.userId);
+  console.log(`[SOS Alert] Sending alert to ${allLinkedResponderIds.length} connected network members.`);
+
+  // Also include general community responders by role
+  const isDb = mongoose.connection.readyState === 1;
+  let targetUserIds = new Set(allLinkedResponderIds);
+
+  if (isDb) {
+    const roleUsers = await User.find({ role: { $in: ['family_member', 'neighbor', 'security_guard', 'volunteer'] } });
+    roleUsers.forEach(u => targetUserIds.add(u._id.toString()));
+  } else {
+    memoryStore.users.forEach(u => {
+      if (['family_member', 'neighbor', 'security_guard', 'volunteer'].includes(u.role)) {
+        targetUserIds.add((u._id || u.id).toString());
+      }
+    });
+  }
+
+  const recipientList = Array.from(targetUserIds);
 
   const alertPayload = {
     tier: 1,
@@ -163,8 +184,10 @@ const handleSOSTrigger = async (emergency) => {
     message: `🚨 URGENT SOS ALERT from ${emergency.userName} (${emergency.address}) at ${emergency.time || 'just now'}! GPS: ${emergency.latitude},${emergency.longitude}`
   };
 
-  tier1ResponderIds.forEach(rId => {
+  // 1. Emit Socket.IO real-time alert to all connected members
+  recipientList.forEach(rId => {
     io.to(`room:user:${rId}`).emit('NEW_EMERGENCY_ALERT', alertPayload);
+    io.to(`room:user:${rId}`).emit('EMERGENCY_ESCALATED', alertPayload);
   });
   io.to('room:admin').emit('NEW_EMERGENCY_ALERT', alertPayload);
 
@@ -172,38 +195,74 @@ const handleSOSTrigger = async (emergency) => {
     status: 'PENDING_LOCAL',
     emergency,
     googleMapsUrl,
-    message: 'SOS Alert active! Alerting your linked neighbors and security guards...'
+    message: 'SOS Alert active! Alerting your connected members and emergency responders...'
   });
 
-  // Start 60-second escalation countdown
+  // 2. Store in-app Notifications for all connected members
+  try {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Kolkata' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+
+    for (const rId of recipientList) {
+      if (String(rId) !== String(emergency.userId)) {
+        if (isDb) {
+          await Notification.create({
+            recipientUserId: rId,
+            senderUserId: emergency.userId,
+            senderName: emergency.userName,
+            type: 'EMERGENCY_ALERT',
+            title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
+            message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
+            status: 'UNREAD',
+            createdAt: now,
+            date: dateStr,
+            time: timeStr
+          });
+        } else {
+          memoryStore.notifications.push({
+            _id: 'notif_sos_' + Date.now() + '_' + Math.floor(Math.random() * 10000),
+            recipientUserId: rId,
+            senderUserId: emergency.userId,
+            senderName: emergency.userName,
+            type: 'EMERGENCY_ALERT',
+            title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
+            message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
+            status: 'UNREAD',
+            createdAt: now,
+            date: dateStr,
+            time: timeStr
+          });
+        }
+      }
+    }
+  } catch (notifErr) {
+    console.error('[SOS Notification Error]:', notifErr);
+  }
+
+  // Start 60-second escalation timer
   const timerId = setTimeout(async () => {
     try {
       let currentAlert;
-      if (isDbConnected()) {
+      if (isDb) {
         currentAlert = await Emergency.findById(emergency._id);
       } else {
         currentAlert = memoryStore.emergencies.find(e => e._id.toString() === emergency._id.toString());
       }
 
       if (currentAlert && currentAlert.status === 'PENDING_LOCAL') {
-        console.log(`[Escalation Timer Fired] Alert ID ${emergency.alertId} timed out after 60s without acceptance. Escalating to linked Family Members & Volunteers!`);
+        console.log(`[Escalation Timer Fired] Alert ID ${emergency.alertId} timed out after 60s without acceptance.`);
 
         currentAlert.status = 'ESCALATED_VOLUNTEER';
         currentAlert.tier2Notified = true;
         currentAlert.escalatedAt = new Date();
 
-        if (isDbConnected()) {
+        if (isDb) {
           await currentAlert.save();
         }
 
         const alertObj = currentAlert.toObject ? currentAlert.toObject() : { ...currentAlert };
         alertObj.googleMapsUrl = googleMapsUrl;
-
-        // Tier 2: Escalated to linked Family Members and Volunteers (plus re-notify Tier 1)
-        const tier2ResponderIds = await getLinkedResponderUserIds(emergency.userId, ['family_member', 'volunteer']);
-        const allLinkedResponderIds = Array.from(new Set([...tier1ResponderIds, ...tier2ResponderIds]));
-
-        console.log(`[Tier 2 SOS Escalated] Notifying ${allLinkedResponderIds.length} linked responders (Family/Volunteers).`);
 
         const escalatedPayload = {
           tier: 2,
@@ -212,7 +271,7 @@ const handleSOSTrigger = async (emergency) => {
           message: `⚠️ ESCALATED EMERGENCY! No response within 60s for ${currentAlert.userName}. Location: ${googleMapsUrl}`
         };
 
-        allLinkedResponderIds.forEach(rId => {
+        recipientList.forEach(rId => {
           io.to(`room:user:${rId}`).emit('EMERGENCY_ESCALATED', escalatedPayload);
         });
         io.to('room:admin').emit('EMERGENCY_ESCALATED', escalatedPayload);
