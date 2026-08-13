@@ -18,9 +18,8 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-// Disable Mongoose command buffering globally so queries fail fast or fallback instantly instead of waiting 10,000ms
-mongoose.set('bufferCommands', false);
-try { mongoose.set('bufferTimeoutMS', 0); } catch (e) {}
+// Enable standard Mongoose buffering so queries wait briefly for connection establishment
+mongoose.set('bufferCommands', true);
 
 let mongoServer = null;
 
@@ -35,9 +34,9 @@ const connectDB = async () => {
 
   if (!cached.promise) {
     const opts = {
-      serverSelectionTimeoutMS: 5000,
-      connectTimeoutMS: 5000,
-      bufferCommands: false
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+      bufferCommands: true
     };
 
     cached.promise = mongoose.connect(targetUri, opts).then((mongooseInstance) => {

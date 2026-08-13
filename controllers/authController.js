@@ -32,18 +32,58 @@ exports.register = async (req, res) => {
     const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
     const existingMemUser = memoryStore.users.find(u => u.email === cleanEmail || (u.phone && u.phone === userPhone));
 
-    if (isDbConnected) {
-      try {
-        const existingUser = await User.findOne({
-          $or: [
-            { email: cleanEmail },
-            { phone: userPhone }
-          ]
-        });
-        if (existingUser || existingMemUser) {
-          return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
-        }
+    // 1. Check if user already exists in MongoDB
+    let existingUser = null;
+    try {
+      existingUser = await User.findOne({
+        $or: [
+          { email: cleanEmail },
+          { phone: userPhone }
+        ]
+      });
+    } catch (e) {
+      console.warn('[DB Find Existing Error]:', e.message);
+    }
 
+    if (existingUser || existingMemUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'An account with this email address or phone number is already registered. Please sign in.'
+      });
+    }
+
+    // 2. Create user in MongoDB Atlas
+    try {
+      user = await User.create({
+        name: name || cleanEmail.split('@')[0],
+        email: cleanEmail,
+        phone: userPhone,
+        password: cleanPassword,
+        role: role || 'senior_citizen',
+        address: address || 'Springboard Community',
+        apartmentNumber: apartmentNumber || 'A-101',
+        latitude: latitude || 12.9716,
+        longitude: longitude || 77.5946,
+        medicalInfo: medicalInfo || '',
+        active: true
+      });
+
+      if (role === 'neighbor') {
+        await Neighbor.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, apartmentNumber: user.apartmentNumber });
+      } else if (role === 'security_guard') {
+        await SecurityGuard.create({ userId: user._id, name: user.name, phone: user.phone, apartment: user.apartmentNumber, dutyStatus: 'ON_DUTY' });
+      } else if (role === 'volunteer') {
+        await Volunteer.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, availability: 'AVAILABLE' });
+      }
+      console.log(`[Database Register Success] User '${user.name}' (${user.email}) stored in MongoDB Atlas.`);
+    } catch (dbErr) {
+      console.error('[DB Register Critical Error]:', dbErr.message);
+      if (dbErr.code === 11000) {
+        return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
+      }
+      // If DB creation failed, retry connectDB and User.create once more
+      try {
+        await connectDB();
         user = await User.create({
           name: name || cleanEmail.split('@')[0],
           email: cleanEmail,
@@ -57,43 +97,13 @@ exports.register = async (req, res) => {
           medicalInfo: medicalInfo || '',
           active: true
         });
-
-        if (role === 'neighbor') {
-          await Neighbor.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, apartmentNumber: user.apartmentNumber });
-        } else if (role === 'security_guard') {
-          await SecurityGuard.create({ userId: user._id, name: user.name, phone: user.phone, apartment: user.apartmentNumber, dutyStatus: 'ON_DUTY' });
-        } else if (role === 'volunteer') {
-          await Volunteer.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, availability: 'AVAILABLE' });
-        }
-      } catch (dbErr) {
-        console.error('[DB Register Error]:', dbErr.message);
-        user = null;
+      } catch (retryErr) {
+        console.error('[DB Register Retry Error]:', retryErr.message);
+        return res.status(500).json({ success: false, message: 'Failed to create account in database. Please check your internet connection and try again.' });
       }
     }
 
-    if (!user) {
-      if (existingMemUser) {
-        return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
-      }
-      user = {
-        _id: 'mem_user_' + Date.now(),
-        name: name || cleanEmail.split('@')[0],
-        email: cleanEmail,
-        phone: userPhone,
-        password: cleanPassword,
-        role: role || 'senior_citizen',
-        address: address || 'Springboard Community',
-        apartmentNumber: apartmentNumber || 'A-101',
-        latitude: latitude || 12.9716,
-        longitude: longitude || 77.5946,
-        medicalInfo: medicalInfo || '',
-        active: true,
-        dutyStatus: role === 'security_guard' ? 'ON_DUTY' : undefined,
-        availability: role === 'volunteer' ? 'AVAILABLE' : undefined
-      };
-    }
-
-    // Keep memoryStore in sync with MongoDB created user
+    // 3. Keep memoryStore in sync with MongoDB created user
     const userObj = user.toObject ? user.toObject() : { ...user };
     userObj.rawPassword = cleanPassword;
     const memIndex = memoryStore.users.findIndex(u => u.email === cleanEmail);
