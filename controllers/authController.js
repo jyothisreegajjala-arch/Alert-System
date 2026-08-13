@@ -11,6 +11,7 @@ const generateToken = (id) => {
 };
 
 // Register user
+// Register user
 exports.register = async (req, res) => {
   try {
     const { name, email, phone, password, role, address, apartmentNumber, latitude, longitude, medicalInfo } = req.body;
@@ -21,20 +22,27 @@ exports.register = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide email and password' });
     }
 
+    const connectDB = require('../config/db');
+    await connectDB();
+
     const memoryStore = require('../config/memoryStore');
     const isDbConnected = require('mongoose').connection.readyState === 1;
     let user = null;
 
-    const existingMemUser = memoryStore.users.find(u => u.email === cleanEmail);
+    const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
+    const existingMemUser = memoryStore.users.find(u => u.email === cleanEmail || (u.phone && u.phone === userPhone));
 
     if (isDbConnected) {
       try {
-        const existingUser = await User.findOne({ email: cleanEmail });
+        const existingUser = await User.findOne({
+          $or: [
+            { email: cleanEmail },
+            { phone: userPhone }
+          ]
+        });
         if (existingUser || existingMemUser) {
-          return res.status(400).json({ success: false, message: 'Email address is already registered' });
+          return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
         }
-
-        const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
 
         user = await User.create({
           name: name || cleanEmail.split('@')[0],
@@ -58,16 +66,15 @@ exports.register = async (req, res) => {
           await Volunteer.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, availability: 'AVAILABLE' });
         }
       } catch (dbErr) {
-        console.error('[DB Register Fallback]:', dbErr.message);
+        console.error('[DB Register Error]:', dbErr.message);
         user = null;
       }
     }
 
     if (!user) {
       if (existingMemUser) {
-        return res.status(400).json({ success: false, message: 'Email address is already registered' });
+        return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
       }
-      const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
       user = {
         _id: 'mem_user_' + Date.now(),
         name: name || cleanEmail.split('@')[0],
@@ -161,10 +168,14 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide email/phone and password' });
     }
 
+    const connectDB = require('../config/db');
+    await connectDB();
+
     const memoryStore = require('../config/memoryStore');
-    const isDbConnected = require('mongoose').connection.readyState === 1;
+    let isDbConnected = require('mongoose').connection.readyState === 1;
     let user = null;
 
+    // 1. Check MongoDB Atlas for matching User account
     if (isDbConnected) {
       try {
         const dbUser = await User.findOne({
@@ -184,17 +195,17 @@ exports.login = async (req, res) => {
           }
         }
       } catch (dbErr) {
-        console.error('[DB Login Fallback]:', dbErr.message);
-        user = null;
+        console.error('[DB Login Query Error]:', dbErr.message);
       }
     }
 
-    // Fallback to memoryStore if DB did not return a matching user
+    // 2. Fallback check in memoryStore if DB did not return a matching user
     if (!user) {
       const memUser = memoryStore.users.find(u =>
         (u.email && u.email.toLowerCase() === cleanEmail) ||
         (u.phone && (u.phone === rawInput || u.phone === cleanEmail))
       );
+
       if (memUser) {
         let passwordMatches = false;
         if (memUser.rawPassword && memUser.rawPassword === cleanPassword) {
@@ -238,9 +249,36 @@ exports.login = async (req, res) => {
             console.error('[Auto-Backport DB Error]:', e.message);
           }
         }
-      } else {
-        return res.status(401).json({ success: false, message: 'Account not found. Please register your account first.' });
       }
+    }
+
+    // 3. Final Retry check in MongoDB if account was still not found
+    if (!user) {
+      try {
+        await connectDB();
+        const retryUser = await User.findOne({
+          $or: [
+            { email: cleanEmail },
+            { phone: rawInput },
+            { phone: cleanEmail }
+          ]
+        }).select('+password');
+
+        if (retryUser) {
+          const isMatch = await retryUser.matchPassword(cleanPassword);
+          if (isMatch) {
+            user = retryUser;
+          } else {
+            return res.status(401).json({ success: false, message: 'Invalid email/phone or password' });
+          }
+        }
+      } catch (retryErr) {
+        console.error('[Retry DB Login Error]:', retryErr.message);
+      }
+    }
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Account not found. Please register your account first.' });
     }
 
     if (user.active === false) {
