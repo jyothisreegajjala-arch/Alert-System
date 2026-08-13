@@ -278,6 +278,28 @@ async function exportEmergenciesCSV() {
   }
 }
 
+// Download/Export Master CSV File (All User Details + All Emergency Alerts)
+async function exportAllDataCSV() {
+  try {
+    const token = SafeReach.getToken();
+    const response = await fetch('/api/admin/export-all-csv', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error('Master export failed');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `safereach_master_users_and_emergencies_${Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    SafeReach.showToast('Master CSV (Users + Emergency Alerts) downloaded successfully for Excel.', 'success');
+  } catch (err) {
+    SafeReach.showToast('Failed to export master CSV data: ' + err.message, 'danger');
+  }
+}
+
 // Download Sample CSV Template
 function downloadSampleCSV() {
   const sampleCSV = 'Name,Email,Phone,Password,Role,Address,ApartmentNumber,MedicalInfo\n' +
@@ -303,4 +325,5 @@ window.triggerCSVImport = triggerCSVImport;
 window.handleCSVFileSelect = handleCSVFileSelect;
 window.exportUsersCSV = exportUsersCSV;
 window.exportEmergenciesCSV = exportEmergenciesCSV;
+window.exportAllDataCSV = exportAllDataCSV;
 window.downloadSampleCSV = downloadSampleCSV;

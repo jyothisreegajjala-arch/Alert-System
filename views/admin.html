@@ -111,15 +111,19 @@
           <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
           
           <button onclick="triggerCSVImport()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
-            <span>📥</span> Import CSV Data to Database
+            <span>📥</span> Import CSV File to Database
+          </button>
+
+          <button onclick="exportAllDataCSV()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700; background: linear-gradient(135deg, #10b981, #059669);">
+            <span>📁</span> Export All Data (Users + Emergencies) CSV
           </button>
           
           <button onclick="exportUsersCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
-            <span>📊</span> Export Users CSV (Excel)
+            <span>👥</span> Export Users Details CSV
           </button>
           
           <button onclick="exportEmergenciesCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
-            <span>🚨</span> Export Emergency Logs CSV
+            <span>🚨</span> Export Emergency Alerts CSV
           </button>
 
           <button onclick="downloadSampleCSV()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
