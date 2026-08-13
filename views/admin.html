@@ -95,6 +95,40 @@
       </div>
     </div>
 
+    <!-- CSV Data Import & Export Panel for Excel Integration -->
+    <div class="glass-card" style="margin-bottom:2.5rem; border: 1px solid rgba(59, 130, 246, 0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h3 style="color:#fff; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+            <span>📊</span> Excel CSV Data Operations & Import
+          </h3>
+          <p style="font-size:0.85rem; color:var(--dark-muted); margin:0;">
+            Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+          <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
+          
+          <button onclick="triggerCSVImport()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
+            <span>📥</span> Import CSV Data to Database
+          </button>
+          
+          <button onclick="exportUsersCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+            <span>📊</span> Export Users CSV (Excel)
+          </button>
+          
+          <button onclick="exportEmergenciesCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+            <span>🚨</span> Export Emergency Logs CSV
+          </button>
+
+          <button onclick="downloadSampleCSV()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+            <span>📄</span> Download CSV Template
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- User Management Table -->
     <div class="glass-card">
       <div class="filter-toolbar">

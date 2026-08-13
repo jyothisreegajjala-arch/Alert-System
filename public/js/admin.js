@@ -160,5 +160,147 @@ function initSystemStreamLog() {
   }
 }
 
+// CSV File Operations & Integration with Excel
+
+function triggerCSVImport() {
+  const fileInput = document.getElementById('csv-file-input');
+  if (fileInput) {
+    fileInput.click();
+  }
+}
+
+function parseCSVText(text) {
+  const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+  if (lines.length === 0) return [];
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, '').toLowerCase());
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const regex = /(?:,|\r?\n|^)(?:"([^"]*(?:""[^"]*)*)"|([^",\r\n]*))/g;
+    const values = [];
+    let match;
+    while ((match = regex.exec(lines[i])) !== null) {
+      if (match[0] === '' && values.length === 0) continue;
+      let val = match[1] !== undefined ? match[1].replace(/""/g, '"') : match[2];
+      values.push((val || '').trim());
+    }
+    if (values.length > 0) {
+      const obj = {};
+      headers.forEach((h, idx) => {
+        obj[h] = values[idx] || '';
+      });
+      rows.push(obj);
+    }
+  }
+  return rows;
+}
+
+async function handleCSVFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const csvText = e.target.result;
+      const parsedData = parseCSVText(csvText);
+
+      if (parsedData.length === 0) {
+        SafeReach.showToast('CSV file is empty or formatted incorrectly.', 'warning');
+        return;
+      }
+
+      SafeReach.showToast(`Importing ${parsedData.length} records into database...`, 'info');
+
+      const res = await SafeReach.api('/api/admin/users/import-csv', {
+        method: 'POST',
+        body: JSON.stringify({ usersData: parsedData })
+      });
+
+      if (res.success) {
+        SafeReach.showToast(res.message, 'success');
+        loadAdminStats();
+        loadUsersTable();
+      } else {
+        SafeReach.showToast(res.message || 'Import failed', 'danger');
+      }
+    } catch (err) {
+      console.error('CSV parse error:', err);
+      SafeReach.showToast('Failed to process CSV file: ' + err.message, 'danger');
+    } finally {
+      event.target.value = '';
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+// Download/Export Users CSV for Excel
+async function exportUsersCSV() {
+  try {
+    const token = SafeReach.getToken();
+    const response = await fetch('/api/admin/users/export-csv', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error('Export failed');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `safereach_users_directory_${Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    SafeReach.showToast('Users directory CSV downloaded successfully for Excel.', 'success');
+  } catch (err) {
+    SafeReach.showToast('Failed to export CSV: ' + err.message, 'danger');
+  }
+}
+
+// Download/Export Emergency Logs CSV for Excel
+async function exportEmergenciesCSV() {
+  try {
+    const token = SafeReach.getToken();
+    const response = await fetch('/api/admin/emergencies/export-csv', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) throw new Error('Export failed');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `safereach_emergency_logs_${Date.now()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    SafeReach.showToast('Emergency logs CSV downloaded successfully for Excel.', 'success');
+  } catch (err) {
+    SafeReach.showToast('Failed to export emergency logs: ' + err.message, 'danger');
+  }
+}
+
+// Download Sample CSV Template
+function downloadSampleCSV() {
+  const sampleCSV = 'Name,Email,Phone,Password,Role,Address,ApartmentNumber,MedicalInfo\n' +
+    'Ramesh Sharma,ramesh.s@example.com,9876543210,password123,senior_citizen,Sunrise Heights,A-102,Hypertension\n' +
+    'Vikram Singh,vikram.guard@example.com,9876543211,password123,security_guard,Sunrise Heights Gatehouse,A-Gatehouse,\n' +
+    'Priya Patel,priya.n@example.com,9876543212,password123,neighbor,Sunrise Heights,A-103,\n' +
+    'Anil Kumar,anil.vol@example.com,9876543213,password123,volunteer,Community Center,Block B,\n';
+
+  const blob = new Blob([sampleCSV], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'safereach_user_import_template.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  SafeReach.showToast('CSV import template downloaded for Excel.', 'info');
+}
+
 window.toggleUserStatus = toggleUserStatus;
 window.deleteUserAccount = deleteUserAccount;
+window.triggerCSVImport = triggerCSVImport;
+window.handleCSVFileSelect = handleCSVFileSelect;
+window.exportUsersCSV = exportUsersCSV;
+window.exportEmergenciesCSV = exportEmergenciesCSV;
+window.downloadSampleCSV = downloadSampleCSV;
