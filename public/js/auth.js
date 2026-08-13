@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (selectedRole === 'senior_citizen' || selectedRole === 'child') {
         const f = document.getElementById('field-medical');
         if (f) f.style.display = 'block';
+      } else if (selectedRole === 'admin') {
+        const f = document.getElementById('field-admin');
+        if (f) f.style.display = 'block';
       }
     });
   }

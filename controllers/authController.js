@@ -34,10 +34,12 @@ exports.register = async (req, res) => {
           return res.status(400).json({ success: false, message: 'Email address is already registered' });
         }
 
+        const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
+
         user = await User.create({
           name: name || cleanEmail.split('@')[0],
           email: cleanEmail,
-          phone: phone || '9876543210',
+          phone: userPhone,
           password: cleanPassword,
           role: role || 'senior_citizen',
           address: address || 'Springboard Community',
@@ -65,11 +67,12 @@ exports.register = async (req, res) => {
       if (existingMemUser) {
         return res.status(400).json({ success: false, message: 'Email address is already registered' });
       }
+      const userPhone = phone ? phone.trim() : ('98' + Math.floor(10000000 + Math.random() * 90000000));
       user = {
         _id: 'mem_user_' + Date.now(),
         name: name || cleanEmail.split('@')[0],
         email: cleanEmail,
-        phone: phone || '9876543210',
+        phone: userPhone,
         password: cleanPassword,
         role: role || 'senior_citizen',
         address: address || 'Springboard Community',

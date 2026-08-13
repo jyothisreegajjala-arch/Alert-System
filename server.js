@@ -104,7 +104,8 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
     const seniorIdStr = seniorUserId.toString();
 
     if (isDbConnected) {
-      const query = { seniorUserId };
+      // Find ONLY LinkRequests with status 'ACCEPTED'
+      const query = { seniorUserId, status: 'ACCEPTED' };
       if (targetRoles && targetRoles.length > 0) {
         query.targetRole = { $in: targetRoles };
       }
@@ -115,8 +116,12 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
           userIds.add(link.responderUserId.toString());
         } else {
           const check = [];
-          if (link.targetEmail && !link.targetEmail.includes('@safereach.com')) check.push({ email: link.targetEmail.toLowerCase() });
-          if (link.targetPhone) check.push({ phone: link.targetPhone });
+          if (link.targetEmail && link.targetEmail.trim().length > 3 && !link.targetEmail.includes('@safereach.com')) {
+            check.push({ email: link.targetEmail.trim().toLowerCase() });
+          }
+          if (link.targetPhone && link.targetPhone.trim().length >= 5 && link.targetPhone !== '9876543210') {
+            check.push({ phone: link.targetPhone.trim() });
+          }
           if (check.length > 0) {
             const matchUser = await User.findOne({ $or: check });
             if (matchUser) userIds.add(matchUser._id.toString());
@@ -124,8 +129,10 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
         }
       }
     } else {
-      const links = memoryStore.linkRequests.filter(l =>
+      const memoryStore = require('./config/memoryStore');
+      const links = (memoryStore.linkRequests || []).filter(l =>
         l.seniorUserId && l.seniorUserId.toString() === seniorIdStr &&
+        l.status === 'ACCEPTED' &&
         (!targetRoles || targetRoles.includes(l.targetRole))
       );
 
@@ -133,9 +140,9 @@ const getLinkedResponderUserIds = async (seniorUserId, targetRoles) => {
         if (link.responderUserId) {
           userIds.add(link.responderUserId.toString());
         } else {
-          const matchUser = memoryStore.users.find(u =>
-            (u.email && link.targetEmail && u.email.toLowerCase() === link.targetEmail.toLowerCase()) ||
-            (u.phone && link.targetPhone && u.phone === link.targetPhone)
+          const matchUser = (memoryStore.users || []).find(u =>
+            (u.email && link.targetEmail && link.targetEmail.trim().length > 3 && u.email.toLowerCase() === link.targetEmail.trim().toLowerCase()) ||
+            (u.phone && link.targetPhone && link.targetPhone.trim().length >= 5 && link.targetPhone !== '9876543210' && u.phone === link.targetPhone.trim())
           );
           if (matchUser) userIds.add(matchUser._id.toString());
         }
@@ -155,26 +162,12 @@ const handleSOSTrigger = async (emergency) => {
   const googleMapsUrl = `https://www.google.com/maps?q=${emergency.latitude},${emergency.longitude}`;
   emergency.googleMapsUrl = googleMapsUrl;
 
-  // Get ALL connected members (Family, Neighbors, Guards, Volunteers)
+  // Get ONLY connected network members with ACCEPTED connection status
   const allLinkedResponderIds = await getLinkedResponderUserIds(emergency.userId);
-  console.log(`[SOS Alert] Sending alert to ${allLinkedResponderIds.length} connected network members.`);
+  console.log(`[SOS Alert] Sending alert to ${allLinkedResponderIds.length} connected network members with ACCEPTED links.`);
 
-  // Also include general community responders by role
   const isDb = mongoose.connection.readyState === 1;
-  let targetUserIds = new Set(allLinkedResponderIds);
-
-  if (isDb) {
-    const roleUsers = await User.find({ role: { $in: ['family_member', 'neighbor', 'security_guard', 'volunteer'] } });
-    roleUsers.forEach(u => targetUserIds.add(u._id.toString()));
-  } else {
-    memoryStore.users.forEach(u => {
-      if (['family_member', 'neighbor', 'security_guard', 'volunteer'].includes(u.role)) {
-        targetUserIds.add((u._id || u.id).toString());
-      }
-    });
-  }
-
-  const recipientList = Array.from(targetUserIds);
+  const recipientList = Array.from(new Set(allLinkedResponderIds));
 
   const alertPayload = {
     tier: 1,
@@ -198,7 +191,7 @@ const handleSOSTrigger = async (emergency) => {
     message: 'SOS Alert active! Alerting your connected members and emergency responders...'
   });
 
-  // 2. Store in-app Notifications for all connected members
+  // 2. Store in-app Notifications for all connected members (with deduplication)
   try {
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'Asia/Kolkata' });
@@ -207,32 +200,50 @@ const handleSOSTrigger = async (emergency) => {
     for (const rId of recipientList) {
       if (String(rId) !== String(emergency.userId)) {
         if (isDb) {
-          await Notification.create({
+          const tenSecAgo = new Date(now.getTime() - 10000);
+          const existingNotif = await Notification.findOne({
             recipientUserId: rId,
             senderUserId: emergency.userId,
-            senderName: emergency.userName,
             type: 'EMERGENCY_ALERT',
-            title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
-            message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-            status: 'UNREAD',
-            createdAt: now,
-            date: dateStr,
-            time: timeStr
+            createdAt: { $gte: tenSecAgo }
           });
+
+          if (!existingNotif) {
+            await Notification.create({
+              recipientUserId: rId,
+              senderUserId: emergency.userId,
+              senderName: emergency.userName,
+              type: 'EMERGENCY_ALERT',
+              title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
+              message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
+              status: 'UNREAD',
+              createdAt: now,
+              date: dateStr,
+              time: timeStr
+            });
+          }
         } else {
-          memoryStore.notifications.push({
-            _id: 'notif_sos_' + Date.now() + '_' + Math.floor(Math.random() * 10000),
-            recipientUserId: rId,
-            senderUserId: emergency.userId,
-            senderName: emergency.userName,
-            type: 'EMERGENCY_ALERT',
-            title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
-            message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-            status: 'UNREAD',
-            createdAt: now,
-            date: dateStr,
-            time: timeStr
-          });
+          const recentNotif = (memoryStore.notifications || []).find(n =>
+            String(n.recipientUserId) === String(rId) &&
+            String(n.senderUserId) === String(emergency.userId) &&
+            n.type === 'EMERGENCY_ALERT' &&
+            n.time === timeStr
+          );
+          if (!recentNotif) {
+            memoryStore.notifications.push({
+              _id: 'notif_sos_' + Date.now() + '_' + Math.floor(Math.random() * 10000),
+              recipientUserId: rId,
+              senderUserId: emergency.userId,
+              senderName: emergency.userName,
+              type: 'EMERGENCY_ALERT',
+              title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
+              message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
+              status: 'UNREAD',
+              createdAt: now,
+              date: dateStr,
+              time: timeStr
+            });
+          }
         }
       }
     }

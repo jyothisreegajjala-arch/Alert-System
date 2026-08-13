@@ -1220,6 +1220,15 @@ function renderNotificationList() {
   else if (activeNotifFilter === 'ACCEPTED') filtered = currentNotifications.filter(n => n.status === 'ACCEPTED');
   else if (activeNotifFilter === 'READ') filtered = currentNotifications.filter(n => n.status === 'READ');
 
+  // Client-side deduplication safeguard
+  const seenNotifs = new Set();
+  filtered = filtered.filter(n => {
+    const key = `${n.senderName}_${n.type}_${n.message}_${n.time || n.date || ''}`;
+    if (seenNotifs.has(key)) return false;
+    seenNotifs.add(key);
+    return true;
+  });
+
   if (filtered.length === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding:2.5rem; color:var(--dark-muted);">

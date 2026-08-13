@@ -91,7 +91,7 @@ exports.triggerSOS = async (req, res) => {
     res.status(201).json({
       success: true,
       emergency: emergencyObject,
-      message: 'SOS Emergency alert broadcasted to nearby Neighbors and Security Guards.'
+      message: 'SOS Emergency alert broadcasted exclusively to your connected network members.'
     });
   } catch (err) {
     console.error('Trigger SOS Error:', err);
@@ -266,19 +266,24 @@ exports.getActiveEmergencies = async (req, res) => {
       if (userRole === 'senior_citizen' || userRole === 'child') {
         filter.userId = userId;
       } else if (userRole !== 'admin') {
+        const userPhone = req.user.phone && req.user.phone !== '9876543210' ? req.user.phone : '____NONE____';
+        const userEmail = req.user.email ? req.user.email.toLowerCase() : '____NONE____';
+
         const userLinks = await LinkRequest.find({
           $or: [
             { responderUserId: userId },
-            { targetEmail: req.user.email ? req.user.email.toLowerCase() : '' },
-            { targetPhone: req.user.phone }
-          ]
+            { targetEmail: userEmail },
+            { targetPhone: userPhone }
+          ],
+          status: 'ACCEPTED'
         });
 
         const seniorIds = userLinks.map(l => l.seniorUserId);
-        filter.$or = [
-          { userId: { $in: seniorIds } },
-          { _id: { $exists: true } }
-        ];
+
+        if (seniorIds.length === 0) {
+          return res.status(200).json({ success: true, count: 0, emergencies: [] });
+        }
+        filter.userId = { $in: seniorIds };
       }
 
       emergencies = await Emergency.find(filter).sort({ createdAt: -1 });
@@ -289,8 +294,21 @@ exports.getActiveEmergencies = async (req, res) => {
 
       if (userRole === 'senior_citizen' || userRole === 'child') {
         emergencies = allActive.filter(e => e.userId.toString() === userId.toString());
-      } else {
+      } else if (userRole === 'admin') {
         emergencies = allActive;
+      } else {
+        const userPhone = req.user.phone && req.user.phone !== '9876543210' ? req.user.phone : '____NONE____';
+        const userEmail = (req.user.email || '').toLowerCase();
+        const connectedLinks = (memoryStore.linkRequests || []).filter(l =>
+          l.status === 'ACCEPTED' &&
+          (
+            (l.responderUserId && l.responderUserId.toString() === userId.toString()) ||
+            (l.targetEmail && l.targetEmail.toLowerCase() === userEmail) ||
+            (l.targetPhone && l.targetPhone === userPhone)
+          )
+        );
+        const seniorIdStrs = connectedLinks.map(l => l.seniorUserId.toString());
+        emergencies = allActive.filter(e => seniorIdStrs.includes(e.userId.toString()));
       }
     }
 
@@ -321,16 +339,20 @@ exports.getEmergencyHistory = async (req, res) => {
       if (userRole === 'senior_citizen' || userRole === 'child') {
         filter.userId = userId;
       } else if (userRole !== 'admin') {
+        const userPhone = req.user.phone && req.user.phone !== '9876543210' ? req.user.phone : '____NONE____';
+        const userEmail = req.user.email ? req.user.email.toLowerCase() : '____NONE____';
+
         const acceptedLinks = await LinkRequest.find({
           $or: [
             { responderUserId: userId },
-            { targetEmail: req.user.email ? req.user.email.toLowerCase() : '' },
-            { targetPhone: req.user.phone }
+            { targetEmail: userEmail },
+            { targetPhone: userPhone }
           ],
           status: 'ACCEPTED'
         });
 
         const seniorIds = acceptedLinks.map(l => l.seniorUserId);
+
         if (seniorIds.length === 0) {
           return res.status(200).json({ success: true, count: 0, emergencies: [] });
         }
@@ -345,15 +367,17 @@ exports.getEmergencyHistory = async (req, res) => {
       } else if (userRole === 'admin') {
         emergencies = memoryStore.emergencies;
       } else {
-        const acceptedLinks = memoryStore.linkRequests.filter(l =>
+        const userPhone = req.user.phone && req.user.phone !== '9876543210' ? req.user.phone : '____NONE____';
+        const userEmail = (req.user.email || '').toLowerCase();
+        const connectedLinks = (memoryStore.linkRequests || []).filter(l =>
           l.status === 'ACCEPTED' &&
           (
             (l.responderUserId && l.responderUserId.toString() === userId.toString()) ||
-            (l.targetEmail && l.targetEmail.toLowerCase() === (req.user.email || '').toLowerCase()) ||
-            (l.targetPhone && l.targetPhone === req.user.phone)
+            (l.targetEmail && l.targetEmail.toLowerCase() === userEmail) ||
+            (l.targetPhone && l.targetPhone === userPhone)
           )
         );
-        const seniorIdStrs = acceptedLinks.map(l => l.seniorUserId.toString());
+        const seniorIdStrs = connectedLinks.map(l => l.seniorUserId.toString());
         emergencies = memoryStore.emergencies.filter(e => seniorIdStrs.includes(e.userId.toString()));
       }
     }

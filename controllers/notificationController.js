@@ -10,26 +10,47 @@ exports.getUserNotifications = async (req, res) => {
     let notifications = [];
 
     if (isDbConnected) {
-      notifications = await Notification.find({
-        $or: [
-          { recipientUserId: user._id },
-          { recipientRole: user.role },
-          { targetEmail: user.email ? user.email.toLowerCase() : '' },
-          { senderUserId: user._id },
-          { type: 'EMERGENCY_ALERT' }
-        ]
-      }).sort({ createdAt: -1 });
+      let filter = {};
+      if (user.role !== 'admin') {
+        const orConditions = [
+          { recipientUserId: user._id }
+        ];
+        if (user.email) orConditions.push({ targetEmail: user.email.toLowerCase() });
+        if (user.phone) orConditions.push({ targetPhone: user.phone });
+        filter = { $or: orConditions };
+      }
+      notifications = await Notification.find(filter).sort({ createdAt: -1 });
     } else {
       const memoryStore = require('../config/memoryStore');
       const userIdStr = (user._id || user.id || '').toString();
-      notifications = (memoryStore.notifications || []).filter(n =>
-        (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
-        n.recipientRole === user.role ||
-        (n.targetEmail && n.targetEmail.toLowerCase() === (user.email || '').toLowerCase()) ||
-        (n.senderUserId && n.senderUserId.toString() === userIdStr) ||
-        n.type === 'EMERGENCY_ALERT'
-      );
+      const userEmail = (user.email || '').toLowerCase();
+      const userPhone = user.phone || '';
+
+      if (user.role === 'admin') {
+        notifications = (memoryStore.notifications || []);
+      } else {
+        notifications = (memoryStore.notifications || []).filter(n =>
+          (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
+          (userEmail && n.targetEmail && n.targetEmail.toLowerCase() === userEmail) ||
+          (userPhone && n.targetPhone && n.targetPhone === userPhone)
+        );
+      }
     }
+
+    // Deduplicate notifications so identical alerts created at the same time are shown only ONCE
+    const seenKeys = new Set();
+    const uniqueNotifications = notifications.filter(n => {
+      const sender = n.senderName || (n.senderUserId ? n.senderUserId.toString() : '');
+      const type = n.type || 'ALERT';
+      const msg = n.message || '';
+      const timeVal = n.time || n.date || '';
+      const key = `${sender}_${type}_${msg}_${timeVal}`;
+      if (seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
+
+    notifications = uniqueNotifications;
 
     const pendingCount = notifications.filter(n => n.status === 'PENDING').length;
     const acceptedCount = notifications.filter(n => n.status === 'ACCEPTED').length;
