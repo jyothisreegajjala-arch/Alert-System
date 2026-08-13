@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema(
   {
-    recipientUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    recipientUserId: { type: mongoose.Schema.Types.Mixed, ref: 'User' },
     recipientRole: { type: String },
     targetEmail: { type: String },
-    senderUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    senderUserId: { type: mongoose.Schema.Types.Mixed, ref: 'User' },
     senderName: { type: String },
     senderRole: { type: String },
     emergencyType: { type: String },
@@ -14,7 +14,7 @@ const notificationSchema = new mongoose.Schema(
     message: { type: String, required: true },
     type: { type: String, default: 'NOTIFICATION' },
     status: { type: String, enum: ['PENDING', 'ACCEPTED', 'DECLINED', 'UNREAD', 'READ'], default: 'PENDING' },
-    linkRequestId: { type: mongoose.Schema.Types.ObjectId, ref: 'LinkRequest' },
+    linkRequestId: { type: mongoose.Schema.Types.Mixed, ref: 'LinkRequest' },
     date: { type: String },
     time: { type: String }
   },

@@ -21,7 +21,12 @@ const protect = async (req, res, next) => {
 
     if (isDbConnected) {
       try {
-        req.user = await User.findById(decoded.id);
+        const mongoose = require('mongoose');
+        if (mongoose.Types.ObjectId.isValid(decoded.id)) {
+          req.user = await User.findById(decoded.id);
+        } else {
+          req.user = await User.findOne({ $or: [{ _id: decoded.id }, { email: decoded.id }] });
+        }
       } catch (e) {
         req.user = null;
       }

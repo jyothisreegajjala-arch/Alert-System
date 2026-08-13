@@ -338,22 +338,33 @@ exports.updateProfile = async (req, res) => {
     });
 
     const isDbConnected = require('mongoose').connection.readyState === 1;
-    let user;
+    const mongoose = require('mongoose');
+    let user = null;
 
     if (isDbConnected) {
       const userId = (req.user._id || req.user.id).toString();
-      user = await User.findByIdAndUpdate(userId, fieldsToUpdate, { new: true, runValidators: true });
+      const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
+
+      if (isValidObjectId) {
+        user = await User.findByIdAndUpdate(userId, fieldsToUpdate, { new: true, runValidators: true });
+      }
+      if (!user && req.user.email) {
+        user = await User.findOneAndUpdate({ email: req.user.email }, fieldsToUpdate, { new: true });
+      }
+
       if (user && user.role === 'security_guard' && user.dutyStatus !== undefined) {
         await SecurityGuard.findOneAndUpdate({ userId: user._id }, { dutyStatus: user.dutyStatus });
       } else if (user && user.role === 'volunteer' && user.availability !== undefined) {
         await Volunteer.findOneAndUpdate({ userId: user._id }, { availability: user.availability });
       }
-    } else {
+    }
+
+    if (!user) {
       user = Object.assign(req.user, fieldsToUpdate);
     }
 
     // Automatically create PENDING Link Requests if Senior Citizen updated contacts
-    if (user && user.role === 'senior_citizen') {
+    if (user && (user.role === 'senior_citizen' || user.role === 'child')) {
       const contactsToProcess = [];
       if (req.body.familyContactName && (req.body.familyPhone || req.body.familyEmail)) {
         contactsToProcess.push({
@@ -361,7 +372,7 @@ exports.updateProfile = async (req, res) => {
           targetPhone: req.body.familyPhone || '',
           targetEmail: (req.body.familyEmail || '').trim().toLowerCase(),
           targetRole: 'family_member',
-          relationship: req.body.familyRelationship || 'Son'
+          relationship: req.body.familyRelationship || 'Family Member'
         });
       }
       if (req.body.neighborName && (req.body.neighborPhone || req.body.neighborEmail)) {
@@ -394,26 +405,37 @@ exports.updateProfile = async (req, res) => {
 
       if (isDbConnected) {
         for (const c of contactsToProcess) {
-          const exists = await LinkRequest.findOne({
-            seniorUserId: user._id,
-            $or: [{ targetEmail: c.targetEmail.toLowerCase() }, { targetPhone: c.targetPhone }]
-          });
-          if (!exists) {
-            const matchingUser = await User.findOne({
-              $or: [{ email: c.targetEmail.toLowerCase() }, { phone: c.targetPhone }]
-            });
-            await LinkRequest.create({
+          const queryConditions = [];
+          if (c.targetEmail) queryConditions.push({ targetEmail: c.targetEmail.toLowerCase() });
+          if (c.targetPhone) queryConditions.push({ targetPhone: c.targetPhone });
+
+          if (queryConditions.length > 0) {
+            const exists = await LinkRequest.findOne({
               seniorUserId: user._id,
-              seniorName: user.name,
-              seniorAddress: user.address || user.apartmentNumber || 'Springboard Community',
-              targetName: c.targetName,
-              targetEmail: c.targetEmail.toLowerCase(),
-              targetPhone: c.targetPhone,
-              targetRole: c.targetRole,
-              relationship: c.relationship,
-              responderUserId: matchingUser ? matchingUser._id : null,
-              status: 'PENDING'
+              $or: queryConditions
             });
+            if (!exists) {
+              const userMatchConditions = [];
+              if (c.targetEmail) userMatchConditions.push({ email: c.targetEmail.toLowerCase() });
+              if (c.targetPhone) userMatchConditions.push({ phone: c.targetPhone });
+
+              let matchingUser = null;
+              if (userMatchConditions.length > 0) {
+                matchingUser = await User.findOne({ $or: userMatchConditions });
+              }
+              await LinkRequest.create({
+                seniorUserId: user._id,
+                seniorName: user.name,
+                seniorAddress: user.address || user.apartmentNumber || 'Springboard Community',
+                targetName: c.targetName,
+                targetEmail: c.targetEmail ? c.targetEmail.toLowerCase() : '',
+                targetPhone: c.targetPhone || '',
+                targetRole: c.targetRole,
+                relationship: c.relationship,
+                responderUserId: matchingUser ? matchingUser._id : null,
+                status: 'PENDING'
+              });
+            }
           }
         }
       } else {
@@ -421,18 +443,20 @@ exports.updateProfile = async (req, res) => {
         for (const c of contactsToProcess) {
           const exists = memoryStore.linkRequests.find(r =>
             r.seniorUserId === user._id &&
-            (r.targetEmail === c.targetEmail.toLowerCase() || r.targetPhone === c.targetPhone)
+            ((c.targetEmail && r.targetEmail === c.targetEmail.toLowerCase()) || (c.targetPhone && r.targetPhone === c.targetPhone))
           );
           if (!exists) {
-            const matchingUser = memoryStore.users.find(u => u.email === c.targetEmail.toLowerCase() || u.phone === c.targetPhone);
+            const matchingUser = memoryStore.users.find(u =>
+              (c.targetEmail && u.email === c.targetEmail.toLowerCase()) || (c.targetPhone && u.phone === c.targetPhone)
+            );
             memoryStore.linkRequests.push({
-              _id: 'mem_link_' + Date.now(),
+              _id: 'mem_link_' + Date.now() + Math.random().toString(36).substr(2, 4),
               seniorUserId: user._id,
               seniorName: user.name,
               seniorAddress: user.address || user.apartmentNumber || 'Springboard Community',
               targetName: c.targetName,
-              targetEmail: c.targetEmail.toLowerCase(),
-              targetPhone: c.targetPhone,
+              targetEmail: c.targetEmail ? c.targetEmail.toLowerCase() : '',
+              targetPhone: c.targetPhone || '',
               targetRole: c.targetRole,
               relationship: c.relationship,
               responderUserId: matchingUser ? matchingUser._id : null,

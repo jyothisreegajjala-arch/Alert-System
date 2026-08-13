@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const linkRequestSchema = new mongoose.Schema(
   {
-    seniorUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    seniorUserId: { type: mongoose.Schema.Types.Mixed, ref: 'User', required: true },
     seniorName: { type: String, required: true },
     seniorAddress: { type: String },
     targetName: { type: String, required: true },
@@ -10,7 +10,7 @@ const linkRequestSchema = new mongoose.Schema(
     targetPhone: { type: String, default: '', trim: true },
     targetRole: { type: String, required: true },
     relationship: { type: String, default: 'Community Contact' },
-    responderUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    responderUserId: { type: mongoose.Schema.Types.Mixed, ref: 'User' },
     status: { type: String, enum: ['PENDING', 'ACCEPTED', 'REJECTED'], default: 'PENDING' },
     requestDate: { type: String }
   },

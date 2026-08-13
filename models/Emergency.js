@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const emergencySchema = new mongoose.Schema(
   {
     alertId: { type: String, required: true, unique: true },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: mongoose.Schema.Types.Mixed, ref: 'User', required: true },
     userName: { type: String, required: true },
     userPhone: { type: String },
     userRole: { type: String },
@@ -22,7 +22,7 @@ const emergencySchema = new mongoose.Schema(
     tier1Notified: { type: Boolean, default: true },
     tier2Notified: { type: Boolean, default: false },
     acceptedBy: {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      userId: { type: mongoose.Schema.Types.Mixed, ref: 'User' },
       name: { type: String },
       phone: { type: String },
       role: { type: String }
