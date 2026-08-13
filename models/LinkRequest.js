@@ -14,7 +14,7 @@ const linkRequestSchema = new mongoose.Schema(
     status: { type: String, enum: ['PENDING', 'ACCEPTED', 'REJECTED'], default: 'PENDING' },
     requestDate: { type: String }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 linkRequestSchema.index({ targetEmail: 1, status: 1 });

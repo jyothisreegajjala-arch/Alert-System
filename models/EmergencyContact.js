@@ -8,7 +8,7 @@ const emergencyContactSchema = new mongoose.Schema(
     relationship: { type: String, default: 'Contact' },
     familyUserId: { type: mongoose.Schema.Types.Mixed, ref: 'User' }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.models.EmergencyContact || mongoose.model('EmergencyContact', emergencyContactSchema);

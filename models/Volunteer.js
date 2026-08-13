@@ -8,7 +8,7 @@ const volunteerSchema = new mongoose.Schema(
     address: { type: String },
     availability: { type: String, default: 'AVAILABLE' }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.models.Volunteer || mongoose.model('Volunteer', volunteerSchema);

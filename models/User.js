@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
     emergencyContactPhone: { type: String, default: '' },
     emergencyContactRelationship: { type: String, default: '' }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {

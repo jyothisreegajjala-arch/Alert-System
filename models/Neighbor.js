@@ -8,7 +8,7 @@ const neighborSchema = new mongoose.Schema(
     address: { type: String },
     apartmentNumber: { type: String }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.models.Neighbor || mongoose.model('Neighbor', neighborSchema);

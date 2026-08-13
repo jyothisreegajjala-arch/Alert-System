@@ -34,7 +34,7 @@ const emergencySchema = new mongoose.Schema(
     resolutionNotes: { type: String, default: '' },
     googleMapsUrl: { type: String }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.models.Emergency || mongoose.model('Emergency', emergencySchema);

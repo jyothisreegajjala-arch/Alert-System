@@ -8,7 +8,7 @@ const securityGuardSchema = new mongoose.Schema(
     apartment: { type: String },
     dutyStatus: { type: String, default: 'ON_DUTY' }
   },
-  { timestamps: true, bufferCommands: false }
+  { timestamps: true }
 );
 
 module.exports = mongoose.models.SecurityGuard || mongoose.model('SecurityGuard', securityGuardSchema);
