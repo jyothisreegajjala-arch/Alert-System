@@ -110,26 +110,110 @@ exports.toggleUserStatus = async (req, res) => {
   }
 };
 
-// Delete user
+// Delete user account permanently from database
 exports.deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
     const isDbConnected = require('mongoose').connection.readyState === 1;
+    const memoryStore = require('../config/memoryStore');
+    let deletedUser = null;
 
     if (isDbConnected) {
-      const user = await User.findByIdAndDelete(userId);
-      if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-      await Neighbor.deleteMany({ userId });
-      await SecurityGuard.deleteMany({ userId });
-      await Volunteer.deleteMany({ userId });
-    } else {
-      const memoryStore = require('../config/memoryStore');
-      const idx = memoryStore.users.findIndex(u => u._id.toString() === userId.toString());
-      if (idx !== -1) memoryStore.users.splice(idx, 1);
+      try {
+        const mongoose = require('mongoose');
+        const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
+
+        if (isValidObjectId) {
+          deletedUser = await User.findById(userId);
+        }
+        if (!deletedUser) {
+          deletedUser = await User.findOne({ $or: [{ _id: userId }, { email: userId }] });
+        }
+
+        if (deletedUser) {
+          const userEmail = deletedUser.email;
+          const userPhone = deletedUser.phone;
+          const targetId = deletedUser._id;
+
+          // 1. Permanently remove User document from MongoDB Atlas
+          await User.deleteOne({ _id: targetId });
+
+          // 2. Permanently remove all role profiles linked to this user
+          await Neighbor.deleteMany({ $or: [{ userId: targetId }, { phone: userPhone }] });
+          await SecurityGuard.deleteMany({ $or: [{ userId: targetId }, { phone: userPhone }] });
+          await Volunteer.deleteMany({ $or: [{ userId: targetId }, { phone: userPhone }] });
+          
+          // 3. Permanently remove emergency contacts and connection requests
+          const EmergencyContact = require('../models/EmergencyContact');
+          const LinkRequest = require('../models/LinkRequest');
+          await EmergencyContact.deleteMany({ $or: [{ userId: targetId }, { seniorUserId: targetId }] });
+          await LinkRequest.deleteMany({
+            $or: [
+              { seniorUserId: targetId },
+              { responderUserId: targetId },
+              { targetEmail: userEmail },
+              { targetPhone: userPhone }
+            ]
+          });
+
+          // 4. Remove notifications linked to user
+          try {
+            const Notification = require('../models/Notification');
+            await Notification.deleteMany({ $or: [{ userId: targetId }, { recipientId: targetId }] });
+          } catch (e) {}
+
+          console.log(`[Database Delete] User '${deletedUser.name}' (${deletedUser.email}) permanently removed from MongoDB.`);
+        }
+      } catch (dbErr) {
+        console.error('[DB Delete User Error]:', dbErr.message);
+      }
     }
-    return res.status(200).json({ success: true, message: 'User deleted' });
+
+    // Always ensure memoryStore is also purged of this user and their cached data
+    const memIdx = memoryStore.users.findIndex(u =>
+      (u._id && u._id.toString() === userId.toString()) ||
+      (deletedUser && u.email === deletedUser.email)
+    );
+
+    if (memIdx !== -1) {
+      const memUser = memoryStore.users[memIdx];
+      memoryStore.users.splice(memIdx, 1);
+
+      const targetMemId = memUser._id || userId;
+      memoryStore.neighbors = memoryStore.neighbors.filter(n => n.userId !== targetMemId && (!memUser || n.phone !== memUser.phone));
+      memoryStore.securityGuards = memoryStore.securityGuards.filter(g => g.userId !== targetMemId && (!memUser || g.phone !== memUser.phone));
+      memoryStore.volunteers = memoryStore.volunteers.filter(v => v.userId !== targetMemId && (!memUser || v.phone !== memUser.phone));
+      memoryStore.linkRequests = memoryStore.linkRequests.filter(r =>
+        r.seniorUserId !== targetMemId &&
+        r.responderUserId !== targetMemId &&
+        (!memUser || (r.targetEmail !== memUser.email && r.targetPhone !== memUser.phone))
+      );
+      console.log(`[MemoryStore Delete] User '${memUser.name}' purged from memory cache.`);
+    }
+
+    if (!deletedUser && memIdx === -1) {
+      if (isDbConnected) {
+        try {
+          const directDel = await User.findByIdAndDelete(userId);
+          if (directDel) {
+            await Neighbor.deleteMany({ userId });
+            await SecurityGuard.deleteMany({ userId });
+            await Volunteer.deleteMany({ userId });
+            return res.status(200).json({ success: true, message: `User account '${directDel.name}' permanently deleted from MongoDB database.` });
+          }
+        } catch (e) {}
+      }
+      return res.status(404).json({ success: false, message: 'User account not found in database.' });
+    }
+
+    const userName = deletedUser ? deletedUser.name : 'User';
+    return res.status(200).json({
+      success: true,
+      message: `User account '${userName}' permanently deleted from MongoDB database.`
+    });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to delete user' });
+    console.error('Delete User Controller Error:', err);
+    res.status(500).json({ success: false, message: 'Failed to delete user account: ' + err.message });
   }
 };
 
