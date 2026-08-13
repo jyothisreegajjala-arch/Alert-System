@@ -8,6 +8,15 @@ const SafeReach = {
     localStorage.removeItem('safereach_token');
     localStorage.removeItem('safereach_user');
   },
+  logout: () => {
+    SafeReach.clearAuth();
+    if (typeof SafeReach.showToast === 'function') {
+      SafeReach.showToast('Signed out successfully.', 'info');
+    }
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 150);
+  },
   getUser: () => {
     const u = localStorage.getItem('safereach_user');
     return u ? JSON.parse(u) : null;
@@ -233,6 +242,9 @@ const CareConnectTheme = {
 };
 
 window.CareConnectTheme = CareConnectTheme;
+window.logout = function() {
+  SafeReach.logout();
+};
 
 // Apply theme preference immediately
 if (document.body) {
