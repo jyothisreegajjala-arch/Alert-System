@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const DEFAULT_MONGO_URI = 'mongodb+srv://jyothisreegajjala_db_user:Chitti%407739@cluster0.gvxao6d.mongodb.net/safereach?retryWrites=true&w=majority&appName=Cluster0';
+const DEFAULT_MONGO_URI = 'mongodb+srv://jyothisreegajjala_db_user:Chiiti81777739@cluster0.gvxao6d.mongodb.net/safereach?retryWrites=true&w=majority&appName=Cluster0';
 
 module.exports = {
   PORT: process.env.PORT || 3000,

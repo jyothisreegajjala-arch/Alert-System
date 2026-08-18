@@ -10,7 +10,7 @@ if (process.platform === 'win32' && !process.env.VERCEL) {
   } catch (e) {}
 }
 
-const DEFAULT_ATLAS_URI = 'mongodb+srv://jyothisreegajjala_db_user:Chitti%407739@cluster0.gvxao6d.mongodb.net/safereach?retryWrites=true&w=majority&appName=Cluster0';
+const DEFAULT_ATLAS_URI = 'mongodb+srv://jyothisreegajjala_db_user:Chiiti81777739@cluster0.gvxao6d.mongodb.net/safereach?retryWrites=true&w=majority&appName=Cluster0';
 
 // Global cache for serverless environments (Vercel)
 let cached = global.mongoose;
@@ -42,8 +42,18 @@ const connectDB = async () => {
     cached.promise = mongoose.connect(targetUri, opts).then((mongooseInstance) => {
       console.log(`[Database] SafeReach connected to Live MongoDB: ${mongooseInstance.connection.host}`);
       return mongooseInstance;
-    }).catch((err) => {
+    }).catch(async (err) => {
       console.error(`[Database] Connection error: ${err.message}`);
+      if (targetUri !== DEFAULT_ATLAS_URI) {
+        console.log('[Database] Retrying with DEFAULT_ATLAS_URI...');
+        try {
+          const fallbackInstance = await mongoose.connect(DEFAULT_ATLAS_URI, opts);
+          console.log(`[Database] SafeReach connected using DEFAULT_ATLAS_URI: ${fallbackInstance.connection.host}`);
+          return fallbackInstance;
+        } catch (fallbackErr) {
+          console.error(`[Database] Fallback connection error: ${fallbackErr.message}`);
+        }
+      }
       cached.promise = null;
       return null;
     });

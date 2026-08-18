@@ -52,38 +52,9 @@ exports.register = async (req, res) => {
       });
     }
 
-    // 2. Create user in MongoDB Atlas
-    try {
-      user = await User.create({
-        name: name || cleanEmail.split('@')[0],
-        email: cleanEmail,
-        phone: userPhone,
-        password: cleanPassword,
-        role: role || 'senior_citizen',
-        address: address || 'Springboard Community',
-        apartmentNumber: apartmentNumber || 'A-101',
-        latitude: latitude || 12.9716,
-        longitude: longitude || 77.5946,
-        medicalInfo: medicalInfo || '',
-        active: true
-      });
-
-      if (role === 'neighbor') {
-        await Neighbor.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, apartmentNumber: user.apartmentNumber });
-      } else if (role === 'security_guard') {
-        await SecurityGuard.create({ userId: user._id, name: user.name, phone: user.phone, apartment: user.apartmentNumber, dutyStatus: 'ON_DUTY' });
-      } else if (role === 'volunteer') {
-        await Volunteer.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, availability: 'AVAILABLE' });
-      }
-      console.log(`[Database Register Success] User '${user.name}' (${user.email}) stored in MongoDB Atlas.`);
-    } catch (dbErr) {
-      console.error('[DB Register Critical Error]:', dbErr.message);
-      if (dbErr.code === 11000) {
-        return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
-      }
-      // If DB creation failed, retry connectDB and User.create once more
+    // 2. Create user in MongoDB Atlas (or fallback to Memory Store if DB disconnected/errored)
+    if (require('mongoose').connection.readyState === 1) {
       try {
-        await connectDB();
         user = await User.create({
           name: name || cleanEmail.split('@')[0],
           email: cleanEmail,
@@ -97,10 +68,44 @@ exports.register = async (req, res) => {
           medicalInfo: medicalInfo || '',
           active: true
         });
-      } catch (retryErr) {
-        console.error('[DB Register Retry Error]:', retryErr.message);
-        return res.status(500).json({ success: false, message: 'Failed to create account in database. Please check your internet connection and try again.' });
+
+        if (role === 'neighbor') {
+          await Neighbor.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, apartmentNumber: user.apartmentNumber });
+        } else if (role === 'security_guard') {
+          await SecurityGuard.create({ userId: user._id, name: user.name, phone: user.phone, apartment: user.apartmentNumber, dutyStatus: 'ON_DUTY' });
+        } else if (role === 'volunteer') {
+          await Volunteer.create({ userId: user._id, name: user.name, phone: user.phone, address: user.address, availability: 'AVAILABLE' });
+        }
+        console.log(`[Database Register Success] User '${user.name}' (${user.email}) stored in MongoDB Atlas.`);
+      } catch (dbErr) {
+        console.error('[DB Register Error]:', dbErr.message);
+        if (dbErr.code === 11000) {
+          return res.status(400).json({ success: false, message: 'An account with this email address or phone number is already registered. Please sign in.' });
+        }
+        user = null;
       }
+    }
+
+    // 3. Fallback to memoryStore user creation if DB registration was not completed
+    if (!user) {
+      console.log(`[MemoryStore Register Fallback] Storing user '${cleanEmail}' in memoryStore...`);
+      const memUserObj = {
+        _id: 'mem_' + Date.now() + Math.random().toString(36).substr(2, 5),
+        name: name || cleanEmail.split('@')[0],
+        email: cleanEmail,
+        phone: userPhone,
+        password: cleanPassword,
+        rawPassword: cleanPassword,
+        role: role || 'senior_citizen',
+        address: address || 'Springboard Community',
+        apartmentNumber: apartmentNumber || 'A-101',
+        latitude: latitude || 12.9716,
+        longitude: longitude || 77.5946,
+        medicalInfo: medicalInfo || '',
+        active: true,
+        createdAt: new Date()
+      };
+      user = memUserObj;
     }
 
     // 3. Keep memoryStore in sync with MongoDB created user
