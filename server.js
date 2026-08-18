@@ -38,9 +38,13 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Serve static frontend files
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/views', express.static(path.join(__dirname, 'views')));
+// Serve static frontend files with no-cache headers to prevent browser caching stale code
+app.use('/public', express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res) => { res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); }
+}));
+app.use('/views', express.static(path.join(__dirname, 'views'), {
+  setHeaders: (res) => { res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); }
+}));
 
 // Serve view HTML files directly with array route aliases
 app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
