@@ -8,14 +8,25 @@ const Volunteer = require('../models/Volunteer');
 exports.getStats = async (req, res) => {
   try {
     const isDbConnected = require('mongoose').connection.readyState === 1;
-    let totalUsers = 0, totalNeighbors = 0, totalSecurityGuards = 0, totalVolunteers = 0;
+    let totalUsers = 0, totalNeighbors = 0, totalSecurityGuards = 0, totalVolunteers = 0, totalFamilyMembers = 0;
     let activeEmergencies = 0, totalResolved = 0, totalEmergencies = 0, avgResponseTimeSec = 0;
 
     if (isDbConnected) {
       totalUsers = await User.countDocuments();
-      totalNeighbors = await Neighbor.countDocuments();
-      totalSecurityGuards = await SecurityGuard.countDocuments();
-      totalVolunteers = await Volunteer.countDocuments();
+      totalNeighbors = await User.countDocuments({ role: 'neighbor' });
+      const neighborDocCount = await Neighbor.countDocuments();
+      if (neighborDocCount > totalNeighbors) totalNeighbors = neighborDocCount;
+
+      totalSecurityGuards = await User.countDocuments({ role: 'security_guard' });
+      const guardDocCount = await SecurityGuard.countDocuments();
+      if (guardDocCount > totalSecurityGuards) totalSecurityGuards = guardDocCount;
+
+      totalVolunteers = await User.countDocuments({ role: 'volunteer' });
+      const volDocCount = await Volunteer.countDocuments();
+      if (volDocCount > totalVolunteers) totalVolunteers = volDocCount;
+
+      totalFamilyMembers = await User.countDocuments({ role: 'family_member' });
+
       activeEmergencies = await Emergency.countDocuments({ status: { $in: ['PENDING_LOCAL', 'ACCEPTED', 'ESCALATED_VOLUNTEER'] } });
       totalResolved = await Emergency.countDocuments({ status: 'RESOLVED' });
       totalEmergencies = await Emergency.countDocuments();
@@ -26,9 +37,10 @@ exports.getStats = async (req, res) => {
     } else {
       const memoryStore = require('../config/memoryStore');
       totalUsers = memoryStore.users.length;
-      totalNeighbors = memoryStore.neighbors.length;
-      totalSecurityGuards = memoryStore.securityGuards.length;
-      totalVolunteers = memoryStore.volunteers.length;
+      totalNeighbors = memoryStore.users.filter(u => u.role === 'neighbor').length || memoryStore.neighbors.length;
+      totalSecurityGuards = memoryStore.users.filter(u => u.role === 'security_guard').length || memoryStore.securityGuards.length;
+      totalVolunteers = memoryStore.users.filter(u => u.role === 'volunteer').length || memoryStore.volunteers.length;
+      totalFamilyMembers = memoryStore.users.filter(u => u.role === 'family_member').length;
       activeEmergencies = memoryStore.emergencies.filter(e => ['PENDING_LOCAL', 'ACCEPTED', 'ESCALATED_VOLUNTEER'].includes(e.status)).length;
       totalResolved = memoryStore.emergencies.filter(e => e.status === 'RESOLVED').length;
       totalEmergencies = memoryStore.emergencies.length;
@@ -41,6 +53,7 @@ exports.getStats = async (req, res) => {
         totalNeighbors,
         totalSecurityGuards,
         totalVolunteers,
+        totalFamilyMembers,
         activeEmergencies,
         totalResolved,
         totalEmergencies,

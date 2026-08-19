@@ -24,6 +24,9 @@ async function loadAdminStats() {
     document.getElementById('kpi-neighbors').textContent = stats.totalNeighbors || 0;
     document.getElementById('kpi-guards').textContent = stats.totalSecurityGuards || 0;
     document.getElementById('kpi-volunteers').textContent = stats.totalVolunteers || 0;
+    if (document.getElementById('kpi-family-members')) {
+      document.getElementById('kpi-family-members').textContent = stats.totalFamilyMembers || 0;
+    }
     document.getElementById('kpi-active-sos').textContent = stats.activeEmergencies || 0;
     document.getElementById('kpi-avg-response').textContent = `${stats.avgResponseTimeSec || 0}s`;
   } catch (err) {

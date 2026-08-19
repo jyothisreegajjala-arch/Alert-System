@@ -43,6 +43,7 @@
 .kpi-icon.neighbors { background: linear-gradient(135deg, #34c759, #28a745); }
 .kpi-icon.guards { background: linear-gradient(135deg, #af52de, #5856d6); }
 .kpi-icon.volunteers { background: linear-gradient(135deg, #ff9500, #ff6b00); }
+.kpi-icon.family { background: linear-gradient(135deg, #ff2d55, #e01e5a); }
 .kpi-icon.emergencies { background: linear-gradient(135deg, #ff3b30, #d9261c); }
 
 .kpi-details h4 {
