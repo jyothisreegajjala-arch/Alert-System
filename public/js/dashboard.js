@@ -162,41 +162,37 @@ function playNotificationSound() {
   } catch (e) {}
 }
 
-// Render Dashboard View according to Role
+// Render Dashboard View
 function renderRoleDashboard() {
-  const role = currentUser.role;
+  if (!currentUser) return;
+  const role = currentUser.role || 'senior_citizen';
 
-  const profileBar = document.getElementById('user-profile-bar');
-  const emergencyLogsBtn = document.getElementById('btn-emergency-logs');
   const seniorSosView = document.getElementById('view-senior-sos');
   const responderFeed = document.getElementById('view-responder-feed');
   const mapSection = document.getElementById('view-map-section');
   const historySection = document.getElementById('history');
   const locationWidget = document.getElementById('location-widget-section');
+  const seniorLinkRequests = document.getElementById('senior-link-requests-section');
 
-  // Explicitly enable Live Location Widget & Map for ALL roles
+  // Remove d-none inside tab containers
   if (locationWidget) locationWidget.classList.remove('d-none');
   if (mapSection) mapSection.classList.remove('d-none');
+  if (historySection) historySection.classList.remove('d-none');
+  if (seniorLinkRequests) seniorLinkRequests.classList.remove('d-none');
 
-  // Senior Citizen or Child View
   if (role === 'senior_citizen' || role === 'child') {
-    if (profileBar) profileBar.classList.remove('d-none');
-    if (emergencyLogsBtn) emergencyLogsBtn.classList.add('d-none');
-
-    if (responderFeed) responderFeed.classList.add('d-none');
-    if (historySection) historySection.classList.add('d-none');
-
     if (seniorSosView) seniorSosView.classList.remove('d-none');
+    if (responderFeed) responderFeed.classList.add('d-none');
     initSOSButtonEngine();
-  } 
-  // Responders (Neighbor / Security / Volunteer / Family Member / Admin)
-  else {
-    if (profileBar) profileBar.classList.remove('d-none');
-    if (emergencyLogsBtn) emergencyLogsBtn.classList.remove('d-none');
-    if (responderFeed) responderFeed.classList.remove('d-none');
-    if (historySection) historySection.classList.remove('d-none');
-
+  } else {
     if (seniorSosView) seniorSosView.classList.add('d-none');
+    if (responderFeed) responderFeed.classList.remove('d-none');
+  }
+
+  // Ensure initial tab selection via CareConnectNav
+  if (window.CareConnectNav && window.CareConnectNav.init) {
+    const initialTab = (role === 'senior_citizen' || role === 'child') ? 'tab-dashboard' : 'tab-alerts';
+    CareConnectNav.switchTab(initialTab, false);
   }
 }
 
@@ -344,23 +340,36 @@ async function loadActiveEmergencies() {
     }
 
     const alertsContainer = document.getElementById('active-alerts-feed');
-    if (!alertsContainer) return;
+    const streamContainer = document.getElementById('active-alerts-feed-stream');
+    if (!alertsContainer && !streamContainer) return;
 
     if (!data.emergencies || data.emergencies.length === 0) {
-      alertsContainer.innerHTML = `
+      const emptyHtml = `
         <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
           <span style="font-size:2rem;">🛡️</span>
           <p style="margin-top:0.5rem;">No active emergency alerts in your community right now.</p>
         </div>
       `;
+      if (alertsContainer) alertsContainer.innerHTML = emptyHtml;
+      if (streamContainer) streamContainer.innerHTML = emptyHtml;
       return;
     }
 
-    alertsContainer.innerHTML = '';
-    data.emergencies.forEach(emergency => {
-      const card = createAlertCard(emergency);
-      alertsContainer.appendChild(card);
-    });
+    if (alertsContainer) {
+      alertsContainer.innerHTML = '';
+      data.emergencies.forEach(emergency => {
+        const card = createAlertCard(emergency);
+        alertsContainer.appendChild(card);
+      });
+    }
+
+    if (streamContainer) {
+      streamContainer.innerHTML = '';
+      data.emergencies.forEach(emergency => {
+        const card = createAlertCard(emergency);
+        streamContainer.appendChild(card);
+      });
+    }
 
     // If map section exists and is visible, center map on first active emergency
     const mapSection = document.getElementById('view-map-section');
