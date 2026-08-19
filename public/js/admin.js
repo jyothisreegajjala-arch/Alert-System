@@ -21,6 +21,9 @@ async function loadAdminStats() {
     const stats = data.stats;
 
     document.getElementById('kpi-total-users').textContent = stats.totalUsers || 0;
+    if (document.getElementById('kpi-senior-citizens')) {
+      document.getElementById('kpi-senior-citizens').textContent = stats.totalSeniors || 0;
+    }
     document.getElementById('kpi-neighbors').textContent = stats.totalNeighbors || 0;
     document.getElementById('kpi-guards').textContent = stats.totalSecurityGuards || 0;
     document.getElementById('kpi-volunteers').textContent = stats.totalVolunteers || 0;

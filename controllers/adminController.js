@@ -8,11 +8,12 @@ const Volunteer = require('../models/Volunteer');
 exports.getStats = async (req, res) => {
   try {
     const isDbConnected = require('mongoose').connection.readyState === 1;
-    let totalUsers = 0, totalNeighbors = 0, totalSecurityGuards = 0, totalVolunteers = 0, totalFamilyMembers = 0;
+    let totalUsers = 0, totalSeniors = 0, totalNeighbors = 0, totalSecurityGuards = 0, totalVolunteers = 0, totalFamilyMembers = 0;
     let activeEmergencies = 0, totalResolved = 0, totalEmergencies = 0, avgResponseTimeSec = 0;
 
     if (isDbConnected) {
       totalUsers = await User.countDocuments();
+      totalSeniors = await User.countDocuments({ role: 'senior_citizen' });
       totalNeighbors = await User.countDocuments({ role: 'neighbor' });
       const neighborDocCount = await Neighbor.countDocuments();
       if (neighborDocCount > totalNeighbors) totalNeighbors = neighborDocCount;
@@ -37,6 +38,7 @@ exports.getStats = async (req, res) => {
     } else {
       const memoryStore = require('../config/memoryStore');
       totalUsers = memoryStore.users.length;
+      totalSeniors = memoryStore.users.filter(u => u.role === 'senior_citizen').length;
       totalNeighbors = memoryStore.users.filter(u => u.role === 'neighbor').length || memoryStore.neighbors.length;
       totalSecurityGuards = memoryStore.users.filter(u => u.role === 'security_guard').length || memoryStore.securityGuards.length;
       totalVolunteers = memoryStore.users.filter(u => u.role === 'volunteer').length || memoryStore.volunteers.length;
@@ -50,6 +52,7 @@ exports.getStats = async (req, res) => {
       success: true,
       stats: {
         totalUsers,
+        totalSeniors,
         totalNeighbors,
         totalSecurityGuards,
         totalVolunteers,

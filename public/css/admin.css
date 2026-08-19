@@ -40,6 +40,7 @@
 }
 
 .kpi-icon.users { background: linear-gradient(135deg, #007aff, #0056b3); }
+.kpi-icon.seniors { background: linear-gradient(135deg, #00c7be, #009688); }
 .kpi-icon.neighbors { background: linear-gradient(135deg, #34c759, #28a745); }
 .kpi-icon.guards { background: linear-gradient(135deg, #af52de, #5856d6); }
 .kpi-icon.volunteers { background: linear-gradient(135deg, #ff9500, #ff6b00); }
