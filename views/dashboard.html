@@ -3,188 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="brand">CareConnect - Emergency Console</title>
-  <!-- Google Fonts Unicode Support, Socket.IO, Leaflet JS & CSS -->
+  <title>CareConnect - Emergency Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="/public/css/style.css?v=20260820_force_refresh_v6">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_editprofile_light_v9">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_sidebar_v10">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_sidebar_v10">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   <style>
     .d-none { display: none !important; }
-    .language-selector-wrapper { display: flex; align-items: center; gap: 0.4rem; }
-    .language-select-input { background: rgba(15, 23, 42, 0.9); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; padding: 0.35rem 0.5rem; font-size: 0.88rem; cursor: pointer; }
-    .floating-assist-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; gap: 0.75rem; flex-wrap: wrap; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Header -->
-  <nav class="navbar">
-    <div class="container nav-content">
-      <a href="/" class="brand-logo">
-        <div class="logo-icon">🆘</div>
-        <span data-i18n="brand">CareConnect</span>
-      </a>
-      <div class="nav-actions">
-        <!-- Language Selector Dropdown (Requirement 8) -->
-        <div id="nav-language-selector-container"></div>
-
-        <!-- Light / Dark Mode Toggle Button -->
-        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-        </button>
-
-        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
-          👁️ Accessibility
-        </button>
-
-        <!-- Real-Time Notifications Button with Red Badge (Requirement 1, 3) -->
-        <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
-          <span>🔔</span> <span data-i18n="notifications">Notifications</span>
-          <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
-        </button>
-
-        <div id="duty-status-container"></div>
-        <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="sign_out">Sign Out</button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Dashboard Wrapper -->
-  <div class="container dashboard-container">
+  <!-- Full App Layout with Fixed Left Sidebar -->
+  <div class="app-layout">
     
-    <!-- User Profile Banner -->
-    <div id="user-profile-bar" class="user-profile-bar d-none">
-      <div class="user-info-meta">
-        <div id="user-avatar" class="avatar-circle">U</div>
-        <div class="user-details">
-          <h2 id="user-display-name">Loading Profile...</h2>
-          <p id="user-display-role" data-i18n="app_tagline">CareConnect Emergency System</p>
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop"></div>
+
+    <!-- Fixed Left-Side Navigation Sidebar -->
+    <aside id="app-sidebar" class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-icon">🛡️</div>
+          <span class="sidebar-brand-name">CareConnect</span>
         </div>
       </div>
-      <div style="display:flex; gap:0.75rem; align-items:center;">
-        <button id="btn-edit-profile" onclick="openEditProfileModal()" class="btn btn-primary btn-sm">✏️ <span data-i18n="profile">Edit Profile & Contacts</span></button>
-        <a id="btn-emergency-logs" href="#history" class="btn btn-secondary btn-sm d-none">📜 <span data-i18n="reports">Emergency Logs</span></a>
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm">🚪 <span data-i18n="sign_out">Logout</span></button>
-      </div>
-    </div>
 
-    <!-- Active Emergency Tracker Banner (For Senior/Child) -->
-    <div id="active-sos-tracker" class="d-none"></div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+          <span>🏠</span> <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+          <span>🚨</span> <span>Emergency Alerts</span>
+        </a>
+        <a class="nav-item" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
+          <span>📍</span> <span>Live GPS</span>
+        </a>
+        <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+          <span>👥</span> <span>Contacts</span>
+        </a>
+        <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+          <span>📊</span> <span>Reports & Logs</span>
+        </a>
+        <a class="nav-item" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
+          <span>👤</span> <span>Profile</span>
+        </a>
+        <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
+          <span>⚙️</span> <span>Settings</span>
+        </a>
+      </nav>
 
-    <!-- Responder Account Link Requests Notification Banner -->
-    <div id="responder-link-requests-container" class="d-none" style="margin-bottom:2rem;"></div>
-
-    <!-- ROLE VIEW 1: SENIOR CITIZEN & CHILD SOS TRIGGER HUB (FIRST & MOST PROMINENT) -->
-    <div id="view-senior-sos" class="d-none">
-      <div class="sos-hub">
-        <h1 class="sos-title" data-i18n="brand">CARE CONNECT</h1>
-        
-        <!-- 3-Second Press & Hold SOS Button -->
-        <div class="sos-button-wrapper">
-          <svg class="sos-svg-ring" viewBox="0 0 280 280">
-            <circle class="sos-ring-bg" cx="140" cy="140" r="126"></circle>
-            <circle id="sos-ring-progress" class="sos-ring-progress" cx="140" cy="140" r="126"></circle>
-          </svg>
-          <button id="sos-press-btn" class="sos-btn" aria-label="Press and hold SOS">
-            <span class="sos-text" style="display:flex; align-items:center; gap:0.4rem;">
-              <span>🚨</span><span>SOS</span>
-            </span>
-          </button>
-        </div>
-
-        <div class="main-sos-subtext-group">
-          <span class="main-sos-line1">Press and Hold for 3 Seconds</span>
-          <span class="main-sos-line2">For Emergency Assistance</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- GPS & CURRENT LOCATION CARD (Requirements 4, 9, 10, 12) -->
-    <div id="location-widget-section" class="glass-card" style="margin-bottom:2rem; padding:1.25rem;">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
-        <h4 style="color:#fff; margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.15rem;">
-          <span>📡</span> <span data-i18n="live_gps_title">Live GPS Location & Controls</span>
-        </h4>
-        <button type="button" id="btn-get-location" onclick="SafeReachLocation.refreshLocationWidget()" class="btn btn-primary btn-sm">
-          📍 <span data-i18n="get_current_location">Get Current Location</span>
+      <div class="sidebar-footer">
+        <button onclick="logout()" class="btn btn-outline-danger btn-sm" style="width:100%; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+          🚪 <span>Logout</span>
         </button>
       </div>
-      <div id="location-status-text" class="location-status status-neutral" style="font-size:0.9rem; color:#94a3b8; margin-bottom:0.5rem;">
-        Click "Get Current Location" to fetch your live high-accuracy GPS coordinates.
-      </div>
-      <div id="location-info-display" class="d-none"></div>
-    </div>
+    </aside>
 
-    <!-- SENIOR CITIZEN LINK REQUESTS & NETWORK STATUS SECTION -->
-    <div id="senior-link-requests-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.5rem;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
-        <h3 style="color:#fff; font-weight:800; font-size:1.3rem; display:flex; align-items:center; gap:0.5rem;">
-          <span>📋</span> <span data-i18n="emergency_contacts">Account Link Requests & Safety Network Status</span>
-        </h3>
-        <button onclick="openAddContactModal()" class="btn btn-primary btn-sm">➕ Add Contact</button>
-      </div>
+    <!-- Main Content Area -->
+    <div class="main-content-area">
+      
+      <!-- Top Navbar Header -->
+      <nav class="navbar">
+        <div class="container nav-content">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <!-- Mobile Hamburger Menu Button -->
+            <button id="btn-sidebar-mobile" onclick="CareConnectNav.toggleMobileSidebar()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center;" aria-label="Toggle Mobile Menu">
+              ☰
+            </button>
+            <span style="font-weight:700; color:#133E2B; font-size:1.1rem;">Emergency Console</span>
+          </div>
 
-      <div id="senior-link-requests-content">
-        <div style="text-align:center; padding:1.5rem; color:var(--dark-muted);">Loading link requests...</div>
-      </div>
-    </div>
+          <div class="nav-actions">
+            <!-- Language Selector Dropdown -->
+            <div id="nav-language-selector-container"></div>
 
-    <!-- ROLE VIEW 2: COMMUNITY RESPONDERS (NEIGHBOR / SECURITY / VOLUNTEER / FAMILY) -->
-    <div id="view-responder-feed" class="d-none" style="margin-bottom:2.5rem;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
-        <h3 style="font-size:1.4rem; color:#fff; font-weight:800;">🚨 <span data-i18n="active_emergency">Active Community Emergency Alerts</span></h3>
-        <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm">🔄 Refresh Feed</button>
-      </div>
+            <!-- Light / Dark Mode Toggle Button -->
+            <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+              <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+            </button>
 
-      <!-- Feed Container -->
-      <div id="active-alerts-feed">
-        <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
-          <p>Scanning active emergency alerts in your area...</p>
+            <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+              👁️ Accessibility
+            </button>
+
+            <!-- Real-Time Notifications Button with Red Badge -->
+            <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
+              <span>🔔</span> <span data-i18n="notifications">Notifications</span>
+              <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
+            </button>
+
+            <div id="duty-status-container"></div>
+            <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="sign_out">Sign Out</button>
+          </div>
         </div>
+      </nav>
+
+      <!-- Container Body for Tab Panels -->
+      <div class="container dashboard-container">
+        
+        <!-- Active Emergency Tracker Banner (For Senior/Child) -->
+        <div id="active-sos-tracker" class="d-none"></div>
+
+        <!-- Responder Account Link Requests Notification Banner -->
+        <div id="responder-link-requests-container" class="d-none" style="margin-bottom:2rem;"></div>
+
+        <!-- TAB PANEL 1: DASHBOARD (SOS HUB & ACTIVE ALERTS) -->
+        <div id="tab-dashboard" class="dashboard-tab-panel active">
+          <!-- Senior Citizen SOS Trigger Hub (Most Prominent) -->
+          <div id="view-senior-sos" class="d-none">
+            <div class="sos-hub">
+              <h1 class="sos-title" data-i18n="brand">CARE CONNECT</h1>
+              
+              <!-- 3-Second Press & Hold SOS Button -->
+              <div class="sos-button-wrapper">
+                <svg class="sos-svg-ring" viewBox="0 0 280 280">
+                  <circle class="sos-ring-bg" cx="140" cy="140" r="126"></circle>
+                  <circle id="sos-ring-progress" class="sos-ring-progress" cx="140" cy="140" r="126"></circle>
+                </svg>
+                <button id="sos-press-btn" class="sos-btn" aria-label="Press and hold SOS">
+                  <span class="sos-text" style="display:flex; align-items:center; gap:0.4rem;">
+                    <span>🚨</span><span>SOS</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="main-sos-subtext-group">
+                <span class="main-sos-line1">Press and Hold for 3 Seconds</span>
+                <span class="main-sos-line2">For Emergency Assistance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 2: EMERGENCY ALERTS -->
+        <div id="tab-alerts" class="dashboard-tab-panel">
+          <div id="view-responder-feed" class="d-none" style="margin-bottom:2.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+              <h3 style="font-size:1.4rem; color:#133E2B; font-weight:800;">🚨 <span data-i18n="active_emergency">Active Community Emergency Alerts</span></h3>
+              <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm">🔄 Refresh Feed</button>
+            </div>
+
+            <!-- Feed Container -->
+            <div id="active-alerts-feed">
+              <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
+                <p>Scanning active emergency alerts in your area...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 3: LIVE GPS -->
+        <div id="tab-gps" class="dashboard-tab-panel">
+          <!-- GPS Controls Card -->
+          <div id="location-widget-section" class="glass-card" style="margin-bottom:2rem; padding:1.25rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
+              <h4 style="color:#133E2B; margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.15rem;">
+                <span>📡</span> <span data-i18n="live_gps_title">Live GPS Location & Controls</span>
+              </h4>
+              <button type="button" id="btn-get-location" onclick="SafeReachLocation.refreshLocationWidget()" class="btn btn-primary btn-sm">
+                📍 <span data-i18n="get_current_location">Get Current Location</span>
+              </button>
+            </div>
+            <div id="location-status-text" class="location-status status-neutral" style="font-size:0.9rem; color:#3A6B52; margin-bottom:0.5rem;">
+              Click "Get Current Location" to fetch your live high-accuracy GPS coordinates.
+            </div>
+            <div id="location-info-display" class="d-none"></div>
+          </div>
+
+          <!-- Map View Container -->
+          <div id="view-map-section" class="glass-card" style="margin-bottom:2.5rem; padding:1.25rem;">
+            <h4 style="color:#133E2B; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>🗺️</span> <span data-i18n="live_gps_title">Live Community Emergency Location Map</span>
+            </h4>
+            <div id="map-container">
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 4: CONTACTS -->
+        <div id="tab-contacts" class="dashboard-tab-panel">
+          <div id="senior-link-requests-section" class="glass-card" style="margin-bottom:2.5rem; padding:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+              <h3 style="color:#133E2B; font-weight:800; font-size:1.3rem; display:flex; align-items:center; gap:0.5rem;">
+                <span>📋</span> <span data-i18n="emergency_contacts">Account Link Requests & Safety Network Status</span>
+              </h3>
+              <button onclick="openAddContactModal()" class="btn btn-primary btn-sm">➕ Add Contact</button>
+            </div>
+
+            <div id="senior-link-requests-content">
+              <div style="text-align:center; padding:1.5rem; color:var(--dark-muted);">Loading link requests...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 5: REPORTS & LOGS -->
+        <div id="tab-reports" class="dashboard-tab-panel">
+          <div id="history" class="glass-card">
+            <h3 style="color:#133E2B; font-weight:700; margin-bottom:1rem;">📜 <span data-i18n="history">Emergency History & Audit Log</span></h3>
+            <div style="overflow-x:auto;">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Alert ID</th>
+                    <th>User Name</th>
+                    <th>Date & Time</th>
+                    <th>Location Address</th>
+                    <th>Status</th>
+                    <th>Accepted By</th>
+                    <th>Response Time</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <tr>
+                    <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
+                      Loading emergency logs...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 6: PROFILE -->
+        <div id="tab-profile" class="dashboard-tab-panel">
+          <div id="user-profile-bar" class="user-profile-bar">
+            <div class="user-info-meta">
+              <div id="user-avatar" class="avatar-circle">U</div>
+              <div class="user-details">
+                <h2 id="user-display-name">Loading Profile...</h2>
+                <p id="user-display-role" data-i18n="app_tagline">CareConnect Emergency System</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+              <button id="btn-edit-profile" onclick="openEditProfileModal()" class="btn btn-primary btn-sm">✏️ <span data-i18n="profile">Edit Profile & Contacts</span></button>
+              <button onclick="logout()" class="btn btn-outline-danger btn-sm">🚪 <span data-i18n="sign_out">Logout</span></button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <!-- Map View Container -->
-    <div id="view-map-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.25rem;">
-      <h4 style="color:#fff; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
-        <span>🗺️</span> <span data-i18n="live_gps_title">Live Community Emergency Location Map</span>
-      </h4>
-      <div id="map-container">
-        <div id="map"></div>
-      </div>
-    </div>
-
-    <!-- History Section -->
-    <div id="history" class="glass-card d-none">
-      <h3 style="color:#fff; font-weight:700; margin-bottom:1rem;">📜 <span data-i18n="history">Emergency History & Audit Log</span></h3>
-      <div style="overflow-x:auto;">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Alert ID</th>
-              <th>User Name</th>
-              <th>Date & Time</th>
-              <th>Location Address</th>
-              <th>Status</th>
-              <th>Accepted By</th>
-              <th>Response Time</th>
-            </tr>
-          </thead>
-          <tbody id="history-table-body">
-            <tr>
-              <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
-                Loading emergency logs...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
   </div>
 
   <!-- DYNAMIC ROLE-BASED EDIT PROFILE MODAL -->
@@ -207,7 +271,6 @@
   </div>
 
   <!-- ADD PRIVATE NETWORK CONTACT MODAL FOR SENIOR CITIZENS -->
-  <!-- Add Private Network Contact Modal -->
   <div id="add-contact-modal" class="modal-backdrop d-none">
     <div class="modal-content" style="max-width: 550px; background: #FFFFFF; border: 1px solid #D8E5EA; border-radius: 16px; box-shadow: 0 15px 40px rgba(23, 50, 77, 0.15); color: #17324D;">
       <div class="modal-header" style="background: #F8FBFC; border-bottom: 1px solid #D8E5EA; padding: 1.15rem 1.5rem; border-top-left-radius: 16px; border-top-right-radius: 16px;">
@@ -266,7 +329,7 @@
     </div>
   </div>
 
-  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL (Requirements 1, 3) -->
+  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL -->
   <div id="notifications-modal" class="modal-backdrop d-none">
     <div class="modal-content" style="max-width: 750px;">
       <div class="modal-header">
@@ -277,7 +340,6 @@
       </div>
 
       <div class="modal-body">
-        <!-- Filter Tabs & Count Metrics -->
         <div style="display:flex; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap; align-items:center;">
           <button type="button" id="tab-notif-all" class="btn btn-sm notif-tab-btn active" onclick="filterNotifications('all')">
             📋 All
@@ -293,7 +355,6 @@
           </button>
         </div>
 
-        <!-- Notification List Container -->
         <div id="notifications-list-content">
           <div style="text-align:center; padding:2rem; color:var(--dark-muted);">Loading notifications...</div>
         </div>
@@ -305,7 +366,7 @@
     </div>
   </div>
 
-  <!-- Floating Voice Assistant & Speech-to-Text Bar (Requirements 5, 6, 7) -->
+  <!-- Floating Voice Assistant & Speech-to-Text Bar -->
   <div class="floating-assist-bar">
     <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">
       🔊 Voice Assistant
@@ -315,7 +376,7 @@
     </button>
   </div>
 
-  <!-- Socket.IO, Leaflet JS & CareConnect Multilingual Scripts -->
+  <!-- Socket.IO, Leaflet JS, SidebarNav & CareConnect Scripts -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/public/js/i18n.js"></script>
@@ -326,6 +387,7 @@
   <script src="/public/js/location.js"></script>
   <script src="/public/js/sos.js"></script>
   <script src="/public/js/map.js"></script>
+  <script src="/public/js/sidebarNav.js"></script>
   <script src="/public/js/dashboard.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {

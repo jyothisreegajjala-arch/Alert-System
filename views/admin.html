@@ -7,198 +7,260 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css?v=20260820_force_refresh_v6">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_force_refresh_v6">
-  <link rel="stylesheet" href="/public/css/admin.css?v=20260820_force_refresh_v6">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_sidebar_v10">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_sidebar_v10">
+  <link rel="stylesheet" href="/public/css/admin.css?v=20260820_sidebar_v10">
 </head>
 <body>
 
-  <!-- Navigation Header -->
-  <nav class="navbar">
-    <div class="container nav-content">
-      <a href="/admin" class="brand-logo">
-        <div class="logo-icon">👑</div>
-        <span>SafeReach Admin</span>
-      </a>
-      <div class="nav-actions">
-        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+  <!-- App Layout with Fixed Left Sidebar -->
+  <div class="app-layout">
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop"></div>
+
+    <!-- Fixed Left-Side Navigation Sidebar -->
+    <aside id="app-sidebar" class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-icon">👑</div>
+          <span class="sidebar-brand-name">SafeReach Admin</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+          <span>🏠</span> <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+          <span>👥</span> <span>User Directory</span>
+        </a>
+        <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+          <span>📊</span> <span>Excel & Reports</span>
+        </a>
+        <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+          <span>📡</span> <span>System Stream</span>
+        </a>
+        <a href="/dashboard" class="nav-item">
+          <span>📱</span> <span>Emergency Console</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button onclick="logout()" class="btn btn-outline-danger btn-sm" style="width:100%; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+          🚪 <span>Sign Out</span>
         </button>
-        <a href="/dashboard" class="btn btn-secondary btn-sm">📱 Emergency Console</a>
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm">Sign Out</button>
       </div>
-    </div>
-  </nav>
+    </aside>
 
-  <div class="container dashboard-container">
-    <div class="admin-header">
-      <h1 style="font-size:2rem; font-weight:800; color:#fff;">System Administration & Analytics</h1>
-      <p style="color:var(--dark-muted);">Monitor real-time network telemetry, manage users, and review emergency response metrics.</p>
-    </div>
+    <!-- Main Content Area -->
+    <div class="main-content-area">
 
-    <!-- KPI Metric Cards Grid -->
-    <div class="admin-kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-icon users">👥</div>
-        <div class="kpi-details">
-          <h4>Total Users</h4>
-          <div id="kpi-total-users" class="kpi-value">0</div>
+      <!-- Navigation Header -->
+      <nav class="navbar">
+        <div class="container nav-content">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <button id="btn-sidebar-mobile" onclick="CareConnectNav.toggleMobileSidebar()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Mobile Menu">
+              ☰
+            </button>
+            <span style="font-weight:700; color:#133E2B; font-size:1.1rem;">Admin Administration</span>
+          </div>
+          <div class="nav-actions">
+            <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+              <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+            </button>
+            <a href="/dashboard" class="btn btn-secondary btn-sm">📱 Emergency Console</a>
+            <button onclick="logout()" class="btn btn-outline-danger btn-sm">Sign Out</button>
+          </div>
         </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon seniors">👵</div>
-        <div class="kpi-details">
-          <h4>Senior Citizens</h4>
-          <div id="kpi-senior-citizens" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon neighbors">🏡</div>
-        <div class="kpi-details">
-          <h4>Neighbors</h4>
-          <div id="kpi-neighbors" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon guards">👮</div>
-        <div class="kpi-details">
-          <h4>Security Guards</h4>
-          <div id="kpi-guards" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon volunteers">🤝</div>
-        <div class="kpi-details">
-          <h4>Volunteers</h4>
-          <div id="kpi-volunteers" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon family">👨‍👩‍👧</div>
-        <div class="kpi-details">
-          <h4>Family Members</h4>
-          <div id="kpi-family-members" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon emergencies">🚨</div>
-        <div class="kpi-details">
-          <h4>Active Emergencies</h4>
-          <div id="kpi-active-sos" class="kpi-value">0</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon users" style="background:linear-gradient(135deg, #34c759, #10b981);">⚡</div>
-        <div class="kpi-details">
-          <h4>Avg Response Time</h4>
-          <div id="kpi-avg-response" class="kpi-value">0s</div>
-        </div>
-      </div>
-    </div>
+      </nav>
 
-    <!-- Real-Time System Event Terminal -->
-    <div class="glass-card" style="margin-bottom:2.5rem;">
-      <h3 style="color:#fff; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
-        <span>📡</span> Real-Time System Event Stream
-      </h3>
-      <div id="admin-log-terminal" class="system-log-terminal">
-        <div class="log-entry">
-          <span class="log-time">[System]</span>
-          <span class="log-msg-info">Connecting to SafeReach socket stream...</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- CSV Data Import & Export Panel for Excel Integration -->
-    <div class="glass-card" style="margin-bottom:2.5rem; border: 1px solid rgba(59, 130, 246, 0.4);">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
-        <div>
-          <h3 style="color:#fff; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
-            <span>📊</span> Excel CSV Data Operations & Import
-          </h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted); margin:0;">
-            Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
-          </p>
+      <div class="container dashboard-container">
+        
+        <div class="admin-header">
+          <h1 style="font-size:2rem; font-weight:800; color:#133E2B;">System Administration & Analytics</h1>
+          <p style="color:#3A6B52;">Monitor real-time network telemetry, manage users, and review emergency response metrics.</p>
         </div>
 
-        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
-          <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
-          
-          <button onclick="triggerCSVImport()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
-            <span>📥</span> Import CSV File to Database
-          </button>
-
-          <button onclick="exportAllDataCSV()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700; background: linear-gradient(135deg, #10b981, #059669);">
-            <span>📁</span> Export All Data (Users + Emergencies) CSV
-          </button>
-          
-          <button onclick="exportUsersCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
-            <span>👥</span> Export Users Details CSV
-          </button>
-          
-          <button onclick="exportEmergenciesCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
-            <span>🚨</span> Export Emergency Alerts CSV
-          </button>
-
-          <button onclick="downloadSampleCSV()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
-            <span>📄</span> Download CSV Template
-          </button>
+        <!-- TAB PANEL 1: DASHBOARD (KPIS & LOGS) -->
+        <div id="tab-dashboard" class="dashboard-tab-panel active">
+          <!-- KPI Metric Cards Grid -->
+          <div class="admin-kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon users">👥</div>
+              <div class="kpi-details">
+                <h4>Total Users</h4>
+                <div id="kpi-total-users" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon seniors">👵</div>
+              <div class="kpi-details">
+                <h4>Senior Citizens</h4>
+                <div id="kpi-senior-citizens" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon neighbors">🏡</div>
+              <div class="kpi-details">
+                <h4>Neighbors</h4>
+                <div id="kpi-neighbors" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon guards">👮</div>
+              <div class="kpi-details">
+                <h4>Security Guards</h4>
+                <div id="kpi-guards" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon volunteers">🤝</div>
+              <div class="kpi-details">
+                <h4>Volunteers</h4>
+                <div id="kpi-volunteers" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon family">👨‍👩‍👧</div>
+              <div class="kpi-details">
+                <h4>Family Members</h4>
+                <div id="kpi-family-members" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon emergencies">🚨</div>
+              <div class="kpi-details">
+                <h4>Active Emergencies</h4>
+                <div id="kpi-active-sos" class="kpi-value">0</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon users" style="background:#1B7B50;">⚡</div>
+              <div class="kpi-details">
+                <h4>Avg Response Time</h4>
+                <div id="kpi-avg-response" class="kpi-value">0s</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- User Management Table -->
-    <div class="glass-card">
-      <div class="filter-toolbar">
-        <div>
-          <h3 style="color:#fff; font-weight:700;">👥 User Account Directory</h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted);">Manage access, status, and credentials across all 7 user roles.</p>
+        <!-- TAB PANEL 2: USER DIRECTORY -->
+        <div id="tab-contacts" class="dashboard-tab-panel">
+          <!-- User Management Table -->
+          <div class="glass-card">
+            <div class="filter-toolbar">
+              <div>
+                <h3 style="color:#133E2B; font-weight:700;">👥 User Account Directory</h3>
+                <p style="font-size:0.85rem; color:#3A6B52;">Manage access, status, and credentials across all 7 user roles.</p>
+              </div>
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="user-search-input" placeholder="Search by name, email, or phone...">
+              </div>
+            </div>
+
+            <!-- Role Filter Pills -->
+            <div class="role-filter-pills" style="margin-bottom:1.25rem;">
+              <button class="pill-btn active" data-role="all">All Roles</button>
+              <button class="pill-btn" data-role="senior_citizen">Senior Citizens</button>
+              <button class="pill-btn" data-role="child">Children</button>
+              <button class="pill-btn" data-role="family_member">Family</button>
+              <button class="pill-btn" data-role="neighbor">Neighbors</button>
+              <button class="pill-btn" data-role="security_guard">Security Guards</button>
+              <button class="pill-btn" data-role="volunteer">Volunteers</button>
+              <button class="pill-btn" data-role="admin">Admins</button>
+            </div>
+
+            <div style="overflow-x:auto;">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Apartment / Address</th>
+                    <th>Account Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-table-body">
+                  <tr>
+                    <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
+                      Loading user directory...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="user-search-input" placeholder="Search by name, email, or phone...">
+
+        <!-- TAB PANEL 3: EXCEL & REPORTS -->
+        <div id="tab-reports" class="dashboard-tab-panel">
+          <!-- CSV Data Import & Export Panel for Excel Integration -->
+          <div class="glass-card" style="margin-bottom:2.5rem; border: 1px solid #C3E6D5;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h3 style="color:#133E2B; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+                  <span>📊</span> Excel CSV Data Operations & Import
+                </h3>
+                <p style="font-size:0.85rem; color:#3A6B52; margin:0;">
+                  Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
+                </p>
+              </div>
+
+              <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+                <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
+                
+                <button onclick="triggerCSVImport()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
+                  <span>📥</span> Import CSV File to Database
+                </button>
+
+                <button onclick="exportAllDataCSV()" class="btn btn-primary btn-sm" style="display:flex; align-items:center; gap:0.4rem; font-weight:700; background:#1B7B50;">
+                  <span>📁</span> Export All Data (Users + Emergencies) CSV
+                </button>
+                
+                <button onclick="exportUsersCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+                  <span>👥</span> Export Users Details CSV
+                </button>
+                
+                <button onclick="exportEmergenciesCSV()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+                  <span>🚨</span> Export Emergency Alerts CSV
+                </button>
+
+                <button onclick="downloadSampleCSV()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;">
+                  <span>📄</span> Download CSV Template
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Role Filter Pills -->
-      <div class="role-filter-pills" style="margin-bottom:1.25rem;">
-        <button class="pill-btn active" data-role="all">All Roles</button>
-        <button class="pill-btn" data-role="senior_citizen">Senior Citizens</button>
-        <button class="pill-btn" data-role="child">Children</button>
-        <button class="pill-btn" data-role="family_member">Family</button>
-        <button class="pill-btn" data-role="neighbor">Neighbors</button>
-        <button class="pill-btn" data-role="security_guard">Security Guards</button>
-        <button class="pill-btn" data-role="volunteer">Volunteers</button>
-        <button class="pill-btn" data-role="admin">Admins</button>
-      </div>
+        <!-- TAB PANEL 4: SYSTEM STREAM -->
+        <div id="tab-alerts" class="dashboard-tab-panel">
+          <!-- Real-Time System Event Terminal -->
+          <div class="glass-card" style="margin-bottom:2.5rem;">
+            <h3 style="color:#133E2B; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>📡</span> Real-Time System Event Stream
+            </h3>
+            <div id="admin-log-terminal" class="system-log-terminal">
+              <div class="log-entry">
+                <span class="log-time">[System]</span>
+                <span class="log-msg-info">Connecting to SafeReach socket stream...</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div style="overflow-x:auto;">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Role</th>
-              <th>Apartment / Address</th>
-              <th>Account Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="admin-users-table-body">
-            <tr>
-              <td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">
-                Loading user directory...
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/public/js/app.js"></script>
+  <script src="/public/js/sidebarNav.js"></script>
   <script src="/public/js/admin.js"></script>
 </body>
 </html>
