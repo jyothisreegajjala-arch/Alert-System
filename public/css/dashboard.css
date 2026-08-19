@@ -359,8 +359,8 @@
 }
 
 .modal-content {
-  background: var(--dark-card);
-  border: 1px solid var(--dark-border);
+  background: #FFFFFF;
+  border: 1px solid #D8E5EA;
   border-radius: var(--radius-lg);
   max-width: 820px;
   width: 95vw;
@@ -368,9 +368,10 @@
   height: auto;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 10px 35px rgba(23, 50, 77, 0.15);
   animation: modalSlideIn 0.25s ease-out;
   overflow: hidden;
+  color: #17324D;
 }
 
 #edit-profile-form {
@@ -388,16 +389,16 @@
 
 .modal-header {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--dark-border);
+  border-bottom: 1px solid #D8E5EA;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 23, 42, 0.95);
+  background: #F8FBFC;
   flex-shrink: 0;
 }
 
 .modal-header h3 {
-  color: #ffffff;
+  color: #17324D;
   font-size: 1.2rem;
   font-weight: 800;
   display: flex;
@@ -408,7 +409,7 @@
 .modal-close-btn {
   background: transparent;
   border: none;
-  color: var(--dark-muted);
+  color: #60758A;
   font-size: 1.6rem;
   cursor: pointer;
   padding: 0.2rem 0.6rem;
@@ -417,8 +418,8 @@
 }
 
 .modal-close-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: #17324D;
+  background: #E8F0F3;
 }
 
 .modal-body {
@@ -427,6 +428,17 @@
   flex: 1;
   max-height: calc(88vh - 130px);
   -webkit-overflow-scrolling: touch;
+  background: #FFFFFF;
+  color: #17324D;
+}
+
+.modal-body p {
+  color: #60758A;
+}
+
+.modal-body label {
+  color: #17324D;
+  font-weight: 700;
 }
 
 /* Custom Scrollbar for Modal Body */
@@ -435,46 +447,46 @@
 }
 
 .modal-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
+  background: #F8FBFC;
   border-radius: 4px;
 }
 
 .modal-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: #CBD5E1;
   border-radius: 4px;
 }
 
 .modal-body::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+  background: #087F8C;
 }
 
 .edit-section-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--dark-border);
+  background: #F8FBFC;
+  border: 1px solid #D8E5EA;
   border-radius: var(--radius-md);
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
 .edit-section-title {
-  color: var(--secondary);
+  color: #087F8C;
   font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 0.85rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #D8E5EA;
   padding-bottom: 0.5rem;
 }
 
 .modal-footer {
   padding: 1rem 1.25rem;
-  border-top: 1px solid var(--dark-border);
+  border-top: 1px solid #D8E5EA;
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
-  background: rgba(15, 23, 42, 0.95);
+  background: #F8FBFC;
   flex-shrink: 0;
   flex-wrap: wrap;
 }
