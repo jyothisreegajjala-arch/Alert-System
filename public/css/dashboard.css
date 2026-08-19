@@ -580,69 +580,96 @@
    Clean, Modern & Professional Styling
    FOR "Add Private Network Contact" & Edit Profile Modals
    ==================================================== */
-#add-contact-modal .modal-content {
+#add-contact-modal .modal-content,
+#edit-profile-modal .modal-content {
   background: #FFFFFF !important;
   border: 1px solid #D8E5EA !important;
   color: #17324D !important;
   box-shadow: 0 10px 35px rgba(23, 50, 77, 0.15) !important;
 }
 
-#add-contact-modal .modal-header {
+#add-contact-modal .modal-header,
+#edit-profile-modal .modal-header {
   background: #F8FBFC !important;
   border-bottom: 1px solid #D8E5EA !important;
   color: #17324D !important;
 }
 
-#add-contact-modal .modal-header h3 {
+#add-contact-modal .modal-header h3,
+#edit-profile-modal .modal-header h3,
+#edit-profile-modal-title {
   color: #17324D !important;
   font-weight: 800;
 }
 
-#add-contact-modal .modal-close-btn {
+#add-contact-modal .modal-close-btn,
+#edit-profile-modal .modal-close-btn {
   color: #60758A !important;
 }
 
-#add-contact-modal .modal-close-btn:hover {
+#add-contact-modal .modal-close-btn:hover,
+#edit-profile-modal .modal-close-btn:hover {
   color: #17324D !important;
   background: #E8F0F3 !important;
 }
 
-#add-contact-modal .modal-body {
+#add-contact-modal .modal-body,
+#edit-profile-modal .modal-body {
   background: #FFFFFF !important;
   color: #17324D !important;
 }
 
-#add-contact-modal p {
+#add-contact-modal p,
+#edit-profile-modal p {
   color: #60758A !important;
 }
 
-#add-contact-modal label {
+#add-contact-modal label,
+#edit-profile-modal label {
   color: #17324D !important;
   font-weight: 700;
 }
 
 #add-contact-modal .form-control,
-#add-contact-modal select {
+#edit-profile-modal .form-control,
+#add-contact-modal select,
+#edit-profile-modal select {
   background: #F8FBFC !important;
   color: #17324D !important;
   border: 1px solid #D8E5EA !important;
   border-radius: 8px !important;
 }
 
-#add-contact-modal .form-control::placeholder {
+#add-contact-modal .form-control::placeholder,
+#edit-profile-modal .form-control::placeholder {
   color: #94A3B8 !important;
 }
 
 #add-contact-modal .form-control:focus,
-#add-contact-modal select:focus {
+#edit-profile-modal .form-control:focus,
+#add-contact-modal select:focus,
+#edit-profile-modal select:focus {
   border-color: #087F8C !important;
   box-shadow: 0 0 0 3px rgba(8, 127, 140, 0.15) !important;
   outline: none;
 }
 
-#add-contact-modal .modal-footer {
+#add-contact-modal .modal-footer,
+#edit-profile-modal .modal-footer {
   background: #F8FBFC !important;
   border-top: 1px solid #D8E5EA !important;
+}
+
+#edit-profile-modal .edit-section-card {
+  background: #F8FBFC !important;
+  border: 1px solid #D8E5EA !important;
+  border-radius: 10px !important;
+}
+
+#edit-profile-modal .edit-section-title {
+  color: #087F8C !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid #D8E5EA !important;
 }
 
 #add-contact-modal .btn-primary,
@@ -659,13 +686,15 @@
   border-color: #066A75 !important;
 }
 
-#add-contact-modal .btn-secondary {
+#add-contact-modal .btn-secondary,
+#edit-profile-modal .btn-secondary {
   background: #E8F0F3 !important;
   color: #17324D !important;
   border: 1px solid #D8E5EA !important;
 }
 
-#add-contact-modal .btn-secondary:hover {
+#add-contact-modal .btn-secondary:hover,
+#edit-profile-modal .btn-secondary:hover {
   background: #dbe7ec !important;
 }
 
