@@ -580,109 +580,93 @@
    Clean, Modern & Professional Styling
    FOR "Add Private Network Contact" & Edit Profile Modals
    ==================================================== */
-#add-contact-modal .modal-content,
-#edit-profile-modal .modal-content {
+#add-contact-modal .modal-content {
   background: #FFFFFF !important;
-  border: 1px solid #C3E6D5 !important;
-  color: #133E2B !important;
-  box-shadow: 0 10px 35px rgba(19, 62, 43, 0.15) !important;
+  border: 1px solid #D8E5EA !important;
+  color: #17324D !important;
+  box-shadow: 0 10px 35px rgba(23, 50, 77, 0.15) !important;
 }
 
-#add-contact-modal .modal-header,
-#edit-profile-modal .modal-header {
-  background: #F0F9F5 !important;
-  border-bottom: 1px solid #C3E6D5 !important;
-  color: #133E2B !important;
+#add-contact-modal .modal-header {
+  background: #F8FBFC !important;
+  border-bottom: 1px solid #D8E5EA !important;
+  color: #17324D !important;
 }
 
-#add-contact-modal .modal-header h3,
-#edit-profile-modal .modal-header h3 {
-  color: #133E2B !important;
+#add-contact-modal .modal-header h3 {
+  color: #17324D !important;
   font-weight: 800;
 }
 
-#add-contact-modal .modal-close-btn,
-#edit-profile-modal .modal-close-btn {
-  color: #3A6B52 !important;
+#add-contact-modal .modal-close-btn {
+  color: #60758A !important;
 }
 
-#add-contact-modal .modal-close-btn:hover,
-#edit-profile-modal .modal-close-btn:hover {
-  color: #133E2B !important;
-  background: #E6F4ED !important;
+#add-contact-modal .modal-close-btn:hover {
+  color: #17324D !important;
+  background: #E8F0F3 !important;
 }
 
-#add-contact-modal .modal-body,
-#edit-profile-modal .modal-body {
+#add-contact-modal .modal-body {
   background: #FFFFFF !important;
-  color: #133E2B !important;
+  color: #17324D !important;
 }
 
-#add-contact-modal p,
-#edit-profile-modal p {
-  color: #3A6B52 !important;
+#add-contact-modal p {
+  color: #60758A !important;
 }
 
-#add-contact-modal label,
-#edit-profile-modal label {
-  color: #133E2B !important;
+#add-contact-modal label {
+  color: #17324D !important;
   font-weight: 700;
 }
 
 #add-contact-modal .form-control,
-#edit-profile-modal .form-control,
-#add-contact-modal select,
-#edit-profile-modal select {
-  background: #F0F9F5 !important;
-  color: #133E2B !important;
-  border: 1px solid #C3E6D5 !important;
+#add-contact-modal select {
+  background: #F8FBFC !important;
+  color: #17324D !important;
+  border: 1px solid #D8E5EA !important;
   border-radius: 8px !important;
 }
 
-#add-contact-modal .form-control::placeholder,
-#edit-profile-modal .form-control::placeholder {
-  color: #7AA38E !important;
+#add-contact-modal .form-control::placeholder {
+  color: #94A3B8 !important;
 }
 
 #add-contact-modal .form-control:focus,
-#edit-profile-modal .form-control:focus,
-#add-contact-modal select:focus,
-#edit-profile-modal select:focus {
-  border-color: #1B7B50 !important;
-  box-shadow: 0 0 0 3px rgba(27, 123, 80, 0.15) !important;
+#add-contact-modal select:focus {
+  border-color: #087F8C !important;
+  box-shadow: 0 0 0 3px rgba(8, 127, 140, 0.15) !important;
   outline: none;
 }
 
-#add-contact-modal .modal-footer,
-#edit-profile-modal .modal-footer {
-  background: #F0F9F5 !important;
-  border-top: 1px solid #C3E6D5 !important;
+#add-contact-modal .modal-footer {
+  background: #F8FBFC !important;
+  border-top: 1px solid #D8E5EA !important;
 }
 
 #add-contact-modal .btn-primary,
 #form-add-contact .btn-primary {
-  background: #1B7B50 !important;
+  background: #087F8C !important;
   color: #FFFFFF !important;
-  border: 1px solid #1B7B50 !important;
-  box-shadow: 0 2px 6px rgba(27, 123, 80, 0.2) !important;
+  border: 1px solid #087F8C !important;
+  box-shadow: 0 2px 6px rgba(8, 127, 140, 0.25) !important;
 }
 
 #add-contact-modal .btn-primary:hover,
 #form-add-contact .btn-primary:hover {
-  background: #145E3D !important;
-  border-color: #145E3D !important;
+  background: #066A75 !important;
+  border-color: #066A75 !important;
 }
 
-#add-contact-modal .btn-secondary,
-#edit-profile-modal .btn-secondary {
-  background: #E6F4ED !important;
-  color: #133E2B !important;
-  border: 1px solid #C3E6D5 !important;
+#add-contact-modal .btn-secondary {
+  background: #E8F0F3 !important;
+  color: #17324D !important;
+  border: 1px solid #D8E5EA !important;
 }
 
-#add-contact-modal .btn-secondary:hover,
-#edit-profile-modal .btn-secondary:hover {
-  background: #D4EFE2 !important;
+#add-contact-modal .btn-secondary:hover {
+  background: #dbe7ec !important;
 }
 
 @media (max-width: 768px) {
