@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_lightblue_v1">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   <style>
     .auth-wrapper {
@@ -17,15 +17,15 @@
       align-items: center;
       justify-content: center;
       padding: 2rem 1rem;
-      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 1));
+      background: #f8fafc; color: #0f172a;
     }
     .auth-card {
       width: 100%;
       max-width: 480px;
     }
     .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark-muted); margin-bottom: 0.4rem; }
-    .form-control { width: 100%; padding: 0.85rem 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--dark-border); border-radius: var(--radius-md); color: #ffffff; font-size: 0.95rem; outline: none; transition: var(--transition); }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.4rem; }
+    .form-control { width: 100%; padding: 0.85rem 1rem; background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; border: 1px solid var(--dark-border); border-radius: var(--radius-md); color: #ffffff; font-size: 0.95rem; outline: none; transition: var(--transition); }
     .form-control:focus { border-color: var(--secondary); background: rgba(255, 255, 255, 0.08); }
     .top-lang-bar { margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap; width: 100%; max-width: 480px; }
     @media (max-width: 480px) {
@@ -51,8 +51,8 @@
           <div class="logo-icon">🆘</div>
           <span data-i18n="brand">CareConnect</span>
         </a>
-        <h2 style="font-size:1.5rem; color:#fff; font-weight:700;" data-i18n="welcome">Welcome Back</h2>
-        <p style="font-size:0.88rem; color:var(--dark-muted);" data-i18n="app_tagline">Sign in to access your community emergency console</p>
+        <h2 style="font-size:1.5rem; color: #0f172a; font-weight:700;" data-i18n="welcome">Welcome Back</h2>
+        <p style="font-size:0.88rem; color: #475569;" data-i18n="app_tagline">Sign in to access your community emergency console</p>
       </div>
 
       <form id="login-form">
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--dark-muted);">
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color: #475569;">
         Don't have an account? <a href="/register" style="font-weight:600;" data-i18n="register">Register Here</a>
       </div>
     </div>

@@ -39,13 +39,13 @@
   flex-shrink: 0;
 }
 
-.kpi-icon.users { background: linear-gradient(135deg, #007aff, #0056b3); }
-.kpi-icon.seniors { background: linear-gradient(135deg, #00c7be, #009688); }
-.kpi-icon.neighbors { background: linear-gradient(135deg, #34c759, #28a745); }
-.kpi-icon.guards { background: linear-gradient(135deg, #af52de, #5856d6); }
-.kpi-icon.volunteers { background: linear-gradient(135deg, #ff9500, #ff6b00); }
-.kpi-icon.family { background: linear-gradient(135deg, #ff2d55, #e01e5a); }
-.kpi-icon.emergencies { background: linear-gradient(135deg, #ff3b30, #d9261c); }
+.kpi-icon.users { background: linear-gradient(135deg, #0284c7, #0369a1); }
+.kpi-icon.seniors { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+.kpi-icon.neighbors { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.kpi-icon.guards { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.kpi-icon.volunteers { background: linear-gradient(135deg, #f97316, #ea580c); }
+.kpi-icon.family { background: linear-gradient(135deg, #ec4899, #db2777); }
+.kpi-icon.emergencies { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
 .kpi-details h4 {
   font-size: 0.82rem;
