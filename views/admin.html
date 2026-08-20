@@ -13,67 +13,63 @@
 </head>
 <body>
 
-  <!-- App Layout with Fixed Left Sidebar -->
-  <div class="app-layout">
+  <!-- App Layout -->
+  <div class="app-layout" style="flex-direction:column;">
 
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="sidebar-backdrop"></div>
 
-    <!-- Fixed Left-Side Navigation Sidebar -->
-    <aside id="app-sidebar" class="app-sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo">
+    <!-- Top Horizontal Navigation Bar -->
+    <nav class="navbar app-header-nav">
+      <div class="header-nav-container">
+        <!-- Brand Logo -->
+        <a href="/admin" class="brand-logo" style="margin-right:1rem;">
           <div class="logo-icon">👑</div>
           <span class="sidebar-brand-name">SafeReach Admin</span>
+        </a>
+
+        <!-- Horizontal Single-Row Navigation Menu Options -->
+        <nav class="horizontal-nav-list">
+          <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+            <span>🏠</span> <span>Dashboard</span>
+          </a>
+          <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+            <span>👥</span> <span>User Directory</span>
+          </a>
+          <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+            <span>📊</span> <span>Excel & Reports</span>
+          </a>
+          <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+            <span>📡</span> <span>System Stream</span>
+          </a>
+          <a href="/dashboard" class="nav-item">
+            <span>📱</span> <span>Emergency Console</span>
+          </a>
+        </nav>
+
+        <!-- Right Corner Actions & Sign Out Button -->
+        <div class="header-actions-right">
+          <!-- Language Selector Dropdown -->
+          <div id="admin-language-selector-container"></div>
+
+          <!-- Light / Dark Mode Toggle Button -->
+          <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+            <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+          </button>
+
+          <!-- Emergency Console Link -->
+          <a href="/dashboard" class="btn btn-secondary btn-sm">📱 Console</a>
+
+          <!-- Sign Out Button at the Last Corner -->
+          <button onclick="logout()" class="btn btn-outline-danger btn-sm nav-signout-btn" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
+            🚪 <span>Sign Out</span>
+          </button>
         </div>
       </div>
+    </nav>
 
-      <nav class="sidebar-nav">
-        <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
-          <span>🏠</span> <span>Dashboard</span>
-        </a>
-        <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
-          <span>👥</span> <span>User Directory</span>
-        </a>
-        <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
-          <span>📊</span> <span>Excel & Reports</span>
-        </a>
-        <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
-          <span>📡</span> <span>System Stream</span>
-        </a>
-        <a href="/dashboard" class="nav-item">
-          <span>📱</span> <span>Emergency Console</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm" style="width:100%; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
-          🚪 <span>Sign Out</span>
-        </button>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="main-content-area">
-
-      <!-- Navigation Header -->
-      <nav class="navbar">
-        <div class="container nav-content">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <button id="btn-sidebar-mobile" onclick="CareConnectNav.toggleMobileSidebar()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Mobile Menu">
-              ☰
-            </button>
-            <span style="font-weight:700; color:#133E2B; font-size:1.1rem;">Admin Administration</span>
-          </div>
-          <div class="nav-actions">
-            <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-              <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-            </button>
-            <a href="/dashboard" class="btn btn-secondary btn-sm">📱 Emergency Console</a>
-            <button onclick="logout()" class="btn btn-outline-danger btn-sm">Sign Out</button>
-          </div>
-        </div>
-      </nav>
+    <!-- Main Content Area (Full Width) -->
+    <div class="main-content-area" style="margin-left:0;">
 
       <div class="container dashboard-container">
         
@@ -259,8 +255,17 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="/public/js/i18n.js"></script>
+  <script src="/public/js/accessibility.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/sidebarNav.js"></script>
   <script src="/public/js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.CareConnectI18n) {
+        CareConnectI18n.renderLanguageSelector('admin-language-selector-container');
+      }
+    });
+  </script>
 </body>
 </html>
