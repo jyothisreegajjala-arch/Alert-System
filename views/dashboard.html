@@ -272,7 +272,7 @@
         <div id="edit-profile-modal-body" class="modal-body" style="padding: 1.5rem; background: #FFFFFF;">
           <!-- Dynamically populated based on user role -->
         </div>
-        <div class="modal-footer" style="background: #F8FBFC; border-top: 1px solid #D8E5EA; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+        <div class="modal-footer">
           <button type="button" onclick="closeEditProfileModal()" class="btn btn-secondary" style="background: #E8F0F3; color: #17324D; border: 1px solid #D8E5EA; border-radius: 8px; padding: 0.65rem 1.25rem; font-weight: 600; cursor: pointer;">Cancel</button>
           <button type="submit" class="btn btn-success" style="background: #1B7B50; color: #FFFFFF; border: 1px solid #1B7B50; border-radius: 8px; padding: 0.65rem 1.35rem; font-weight: 700; cursor: pointer; box-shadow: 0 3px 10px rgba(27, 123, 80, 0.25);">💾 Save Profile Changes</button>
         </div>
@@ -291,32 +291,32 @@
       </div>
 
       <form id="form-add-contact" onsubmit="handleAddContactSubmit(event)">
-        <div class="modal-body" style="padding: 1.5rem; background: #FFFFFF;">
-          <p style="color: #4A607A; font-size: 0.92rem; margin-bottom: 1.25rem; line-height: 1.5;">
+        <div class="modal-body">
+          <p style="color:var(--dark-muted); font-size:0.9rem; margin-bottom:1rem;">
             Add a contact to your private emergency network. They will receive a connection request asking to confirm.
           </p>
 
           <div class="form-group" style="margin-bottom: 1.15rem;">
-            <label for="contact-name" style="font-weight: 700; color: #17324D; display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Full Name *</label>
-            <input type="text" id="contact-name" class="form-control" placeholder="e.g. Rahul Vance" required style="background: #F8FBFC; border: 1px solid #D8E5EA; color: #17324D; border-radius: 8px; padding: 0.65rem 0.85rem; width: 100%; font-size: 0.92rem;" />
+            <label for="contact-name" style="font-weight:700;">Full Name *</label>
+            <input type="text" id="contact-name" class="form-control" placeholder="e.g. Rahul Vance" required />
           </div>
 
-          <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.15rem;">
+          <div class="grid-2">
             <div class="form-group">
-              <label for="contact-email" style="font-weight: 700; color: #17324D; display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Email Address *</label>
-              <input type="email" id="contact-email" class="form-control" placeholder="contact@example.com" required style="background: #F8FBFC; border: 1px solid #D8E5EA; color: #17324D; border-radius: 8px; padding: 0.65rem 0.85rem; width: 100%; font-size: 0.92rem;" />
+              <label for="contact-email" style="font-weight:700;">Email Address *</label>
+              <input type="email" id="contact-email" class="form-control" placeholder="contact@example.com" required />
             </div>
 
             <div class="form-group">
-              <label for="contact-phone" style="font-weight: 700; color: #17324D; display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Phone Number *</label>
-              <input type="tel" id="contact-phone" class="form-control" placeholder="+1 (555) 000-1111" required style="background: #F8FBFC; border: 1px solid #D8E5EA; color: #17324D; border-radius: 8px; padding: 0.65rem 0.85rem; width: 100%; font-size: 0.92rem;" />
+              <label for="contact-phone" style="font-weight:700;">Phone Number *</label>
+              <input type="tel" id="contact-phone" class="form-control" placeholder="+1 (555) 000-1111" required />
             </div>
           </div>
 
-          <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.5rem;">
+          <div class="grid-2">
             <div class="form-group">
-              <label for="contact-role" style="font-weight: 700; color: #17324D; display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Role / Category *</label>
-              <select id="contact-role" class="form-control" required style="background: #F8FBFC; border: 1px solid #D8E5EA; color: #17324D; border-radius: 8px; padding: 0.65rem 0.85rem; width: 100%; font-size: 0.92rem;">
+              <label for="contact-role" style="font-weight:700;">Role / Category *</label>
+              <select id="contact-role" class="form-control" required>
                 <option value="family_member">Family Member (Tier 2)</option>
                 <option value="neighbor">Neighbor (Tier 1)</option>
                 <option value="security_guard">Security Guard (Tier 1)</option>
@@ -325,15 +325,15 @@
             </div>
 
             <div class="form-group">
-              <label for="contact-rel" style="font-weight: 700; color: #17324D; display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Relationship / Notes</label>
-              <input type="text" id="contact-rel" class="form-control" placeholder="e.g. Son / Apt 4C / Gate 1 Guard" style="background: #F8FBFC; border: 1px solid #D8E5EA; color: #17324D; border-radius: 8px; padding: 0.65rem 0.85rem; width: 100%; font-size: 0.92rem;" />
+              <label for="contact-rel" style="font-weight:700;">Relationship / Notes</label>
+              <input type="text" id="contact-rel" class="form-control" placeholder="e.g. Son / Apt 4C / Gate 1 Guard" />
             </div>
           </div>
         </div>
 
-        <div class="modal-footer" style="background: #F8FBFC; border-top: 1px solid #D8E5EA; padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-          <button type="button" onclick="closeAddContactModal()" class="btn btn-secondary" style="background: #E8F0F3; color: #17324D; border: 1px solid #D8E5EA; border-radius: 8px; padding: 0.65rem 1.25rem; font-weight: 600; cursor: pointer;">Cancel</button>
-          <button type="submit" class="btn btn-primary" style="background: #087F8C; color: #FFFFFF; border: 1px solid #087F8C; border-radius: 8px; padding: 0.65rem 1.35rem; font-weight: 700; cursor: pointer; box-shadow: 0 3px 10px rgba(8, 127, 140, 0.25);">Send Connection Request</button>
+        <div class="modal-footer">
+          <button type="button" onclick="closeAddContactModal()" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Connection Request</button>
         </div>
       </form>
     </div>

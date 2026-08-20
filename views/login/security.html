@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css?v=20260820_nav_fixed_v12">
+  <link rel="stylesheet" href="/public/css/style.css">
   <style>
     .auth-wrapper {
       min-height: 100vh;
@@ -15,7 +15,7 @@
       align-items: center;
       justify-content: center;
       padding: 2rem 1rem;
-      background: #F4F9F6; color: #133E2B;
+      background: radial-gradient(circle at center, rgba(255, 149, 0, 0.15), rgba(15, 23, 42, 1));
     }
     .auth-card {
       width: 100%;
@@ -29,23 +29,23 @@
       display: block;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #3A6B52;
+      color: var(--dark-muted);
       margin-bottom: 0.4rem;
     }
     .form-control {
       width: 100%;
       padding: 0.85rem 1rem;
-      background: #F0F9F5; border: 1px solid #C3E6D5; color: #133E2B;
-      border: 1px solid #C3E6D5;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--dark-border);
       border-radius: var(--radius-md);
-      color: #133E2B;fff;
+      color: #ffffff;
       font-size: 0.95rem;
       outline: none;
       transition: var(--transition);
     }
     .form-control:focus {
       border-color: #ff9500;
-      background: #F0F9F5; border: 1px solid #C3E6D5; color: #133E2B;
+      background: rgba(255, 255, 255, 0.08);
     }
   </style>
 </head>
@@ -58,8 +58,8 @@
           <div class="logo-icon" style="background:#ff9500;">👮</div>
           <span>SafeReach</span>
         </a>
-        <h2 style="font-size:1.5rem; color: #133E2B; font-weight:800;">Security Guard Gatehouse Console</h2>
-        <p style="font-size:0.88rem; color: #3A6B52;">On-duty emergency response and gatehouse tracking</p>
+        <h2 style="font-size:1.5rem; color:#fff; font-weight:800;">Security Guard Gatehouse Console</h2>
+        <p style="font-size:0.88rem; color:var(--dark-muted);">On-duty emergency response and gatehouse tracking</p>
       </div>
 
       <form id="login-form">
@@ -84,8 +84,8 @@
         </button>
       </div>
 
-      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color: #3A6B52; display:flex; justify-content:space-between;">
-        <a href="/login" style="color: #3A6B52;">← All Role Logins</a>
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--dark-muted); display:flex; justify-content:space-between;">
+        <a href="/login" style="color:var(--dark-muted);">← All Role Logins</a>
         <a href="/register" style="font-weight:600;">Register New Account</a>
       </div>
     </div>
