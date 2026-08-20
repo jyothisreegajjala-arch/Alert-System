@@ -36,6 +36,9 @@
 <body>
 
   <div class="auth-wrapper">
+    <div style="margin-bottom: 1.25rem; display: flex; justify-content: center; width: 100%; max-width: 480px;">
+      <div id="login-language-selector-container"></div>
+    </div>
     <div class="glass-card auth-card">
       <div style="text-align:center; margin-bottom: 2rem;">
         <a href="/" class="brand-logo" style="justify-content:center; margin-bottom:0.75rem;">
@@ -89,5 +92,12 @@
   <script src="/public/js/accessibility.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.CareConnectI18n) {
+        CareConnectI18n.renderLanguageSelector('login-language-selector-container');
+      }
+    });
+  </script>
 </body>
 </html>
