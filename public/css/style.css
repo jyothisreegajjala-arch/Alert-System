@@ -536,3 +536,124 @@ a:hover {
   justify-content: flex-end;
   gap: 0.75rem;
 }
+
+/* Neomorphic Language Selector & Dropdown Popover */
+.language-selector-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a !important;
+  background: var(--neo-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  border-radius: var(--radius-md);
+  box-shadow: 4px 4px 10px var(--neo-shadow-dark), -4px -4px 10px var(--neo-shadow-light) !important;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.lang-trigger-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light) !important;
+  color: #0284c7 !important;
+}
+
+.lang-trigger-btn:active {
+  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
+}
+
+.lang-popover-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 270px;
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 2500;
+  background: var(--neo-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: var(--radius-lg);
+  box-shadow: 10px 10px 25px var(--neo-shadow-dark), -10px -10px 25px var(--neo-shadow-light) !important;
+  padding: 0.85rem;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.lang-popover-header {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0284c7 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.4rem 0.5rem 0.6rem 0.5rem;
+  border-bottom: 1px solid rgba(184, 196, 214, 0.4);
+  margin-bottom: 0.5rem;
+}
+
+.lang-line-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.lang-line-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--neo-bg);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-line-item:hover {
+  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
+  color: #0284c7 !important;
+}
+
+.lang-line-item.selected {
+  background: var(--neo-bg) !important;
+  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
+  border: 1px solid rgba(2, 132, 199, 0.4) !important;
+}
+
+.lang-line-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lang-line-flag {
+  font-size: 1.3rem;
+}
+
+.lang-line-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.lang-line-native {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a !important;
+}
+
+.lang-line-name {
+  font-size: 0.78rem;
+  color: #64748b !important;
+}
+
+.lang-line-check {
+  color: #0284c7 !important;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
