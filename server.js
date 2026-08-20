@@ -38,13 +38,17 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Serve static frontend files with no-cache headers to prevent browser caching stale code
-app.use('/public', express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res) => { res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); }
-}));
-app.use('/views', express.static(path.join(__dirname, 'views'), {
-  setHeaders: (res) => { res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); }
-}));
+// Disable caching for all responses to ensure Vercel live deployments update instantly
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
+// Serve static frontend files
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/views', express.static(path.join(__dirname, 'views')));
 
 // Serve view HTML files directly with array route aliases
 app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
