@@ -537,7 +537,7 @@ a:hover {
   gap: 0.75rem;
 }
 
-/* Neomorphic Language Selector & Dropdown Popover */
+/* Clean Modern Language Selector & Dropdown Popover */
 .language-selector-wrapper {
   position: relative;
   display: inline-block;
@@ -546,54 +546,52 @@ a:hover {
 .lang-trigger-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  gap: 0.55rem;
+  padding: 0.55rem 1rem !important;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #0f172a !important;
-  background: var(--neo-bg) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
-  border-radius: var(--radius-md);
-  box-shadow: 4px 4px 10px var(--neo-shadow-dark), -4px -4px 10px var(--neo-shadow-light) !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .lang-trigger-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light) !important;
+  border-color: #0284c7 !important;
   color: #0284c7 !important;
-}
-
-.lang-trigger-btn:active {
-  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15) !important;
+  transform: translateY(-1px);
 }
 
 .lang-popover-menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: 270px;
+  min-width: 280px;
   max-height: 380px;
   overflow-y: auto;
   z-index: 2500;
-  background: var(--neo-bg) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  border-radius: var(--radius-lg);
-  box-shadow: 10px 10px 25px var(--neo-shadow-dark), -10px -10px 25px var(--neo-shadow-light) !important;
-  padding: 0.85rem;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.16) !important;
+  padding: 0.85rem !important;
   animation: fadeIn 0.2s ease-in-out;
 }
 
 .lang-popover-header {
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
   color: #0284c7 !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 0.4rem 0.5rem 0.6rem 0.5rem;
-  border-bottom: 1px solid rgba(184, 196, 214, 0.4);
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.6rem 0.75rem 0.6rem !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  margin-bottom: 0.5rem !important;
+  text-align: left;
 }
 
 .lang-line-list {
@@ -606,23 +604,24 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 0.85rem;
-  border-radius: var(--radius-sm);
-  background: var(--neo-bg);
-  border: 1px solid transparent;
+  padding: 0.65rem 0.85rem !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  border: 1px solid transparent !important;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .lang-line-item:hover {
-  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
-  color: #0284c7 !important;
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  transform: translateX(2px);
 }
 
 .lang-line-item.selected {
-  background: var(--neo-bg) !important;
-  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
-  border: 1px solid rgba(2, 132, 199, 0.4) !important;
+  background: #f0f9ff !important;
+  border: 1px solid #0284c7 !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.12) !important;
 }
 
 .lang-line-left {
@@ -633,27 +632,31 @@ a:hover {
 
 .lang-line-flag {
   font-size: 1.3rem;
+  line-height: 1;
 }
 
 .lang-line-details {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
   text-align: left;
 }
 
 .lang-line-native {
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
   color: #0f172a !important;
 }
 
 .lang-line-name {
-  font-size: 0.78rem;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
   color: #64748b !important;
 }
 
 .lang-line-check {
   color: #0284c7 !important;
-  font-weight: 900;
-  font-size: 1.1rem;
+  font-weight: 900 !important;
+  font-size: 1.1rem !important;
+  margin-left: auto;
 }
