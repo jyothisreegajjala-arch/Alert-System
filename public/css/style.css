@@ -913,3 +913,78 @@ html, body {
     padding: 0.5rem !important;
   }
 }
+
+/* Centered Voice Command & Voice Assistant Bar System */
+.floating-assist-bar {
+  position: fixed !important;
+  bottom: 1.25rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 2000 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.75rem !important;
+  padding: 0.55rem 1.1rem !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16) !important;
+}
+
+.floating-assist-bar button {
+  border-radius: 9999px !important;
+  padding: 0.5rem 1.1rem !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.floating-assist-bar #btn-voice-command {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+
+.floating-assist-bar #btn-voice-command:hover {
+  background: #0369a1 !important;
+  transform: scale(1.04) !important;
+}
+
+.floating-assist-bar #btn-voice-assistant {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.floating-assist-bar #btn-voice-assistant:hover {
+  background: #f1f5f9 !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+.header-voice-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  margin: 0 auto !important;
+}
+
+.header-voice-center button {
+  border-radius: 20px !important;
+  padding: 0.45rem 0.85rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  white-space: nowrap !important;
+}

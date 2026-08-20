@@ -7,9 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v7_mobile_neat">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v7_mobile_neat">
-  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v7_mobile_neat">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v8_centered_voice">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v8_centered_voice">
+  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v8_centered_voice">
 </head>
 <body>
 
@@ -252,10 +252,20 @@
 
       </div>
     </div>
+  <!-- Floating Centered Voice Assistant & Speech-to-Text Bar -->
+  <div class="floating-assist-bar">
+    <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">
+      🔊 Voice Assistant
+    </button>
+    <button type="button" id="btn-voice-command" onclick="CareConnectVoiceCommands.toggleListening()" class="btn btn-primary btn-sm" data-i18n="voice_command_btn">
+      🎙️ Voice Command
+    </button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/public/js/i18n.js"></script>
+  <script src="/public/js/voiceAssistant.js"></script>
+  <script src="/public/js/voiceCommands.js"></script>
   <script src="/public/js/accessibility.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/sidebarNav.js"></script>
