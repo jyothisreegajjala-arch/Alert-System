@@ -47,8 +47,8 @@ const CareConnectNav = (() => {
     targetPanel.classList.add('active');
     targetPanel.style.display = 'block';
 
-    // Update active class on sidebar links
-    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+    // Update active class on nav links
+    const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       if (item.getAttribute('data-tab') === tabId) {
         item.classList.add('active');

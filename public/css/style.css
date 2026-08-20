@@ -684,3 +684,81 @@ a:hover {
   margin-left: 0.25rem !important;
   flex-shrink: 0;
 }
+
+/* Top Horizontal Single-Row Navigation Header */
+.app-header-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1500;
+  background: var(--neo-bg) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 6px 6px 16px var(--neo-shadow-dark), -6px -6px 16px var(--neo-shadow-light) !important;
+  padding: 0.75rem 1.5rem !important;
+}
+
+.header-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.horizontal-nav-list {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: none;
+}
+
+.horizontal-nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-nav-list .nav-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.6rem 1rem !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--neo-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+  white-space: nowrap !important;
+  box-shadow: 4px 4px 10px var(--neo-shadow-dark), -4px -4px 10px var(--neo-shadow-light) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.horizontal-nav-list .nav-item:hover {
+  box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light) !important;
+  color: #0284c7 !important;
+  transform: translateY(-1px);
+}
+
+.horizontal-nav-list .nav-item.active {
+  background: var(--neo-bg) !important;
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
+  border: 1px solid rgba(2, 132, 199, 0.4) !important;
+}
+
+.header-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-left: auto;
+}
+
+.nav-signout-btn {
+  border-radius: var(--radius-md) !important;
+  padding: 0.55rem 1rem !important;
+}

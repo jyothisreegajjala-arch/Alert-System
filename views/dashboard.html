@@ -17,92 +17,78 @@
 </head>
 <body>
 
-  <!-- Full App Layout with Fixed Left Sidebar -->
-  <div class="app-layout">
+  <!-- Full App Layout -->
+  <div class="app-layout" style="flex-direction:column;">
     
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="sidebar-backdrop"></div>
 
-    <!-- Fixed Left-Side Navigation Sidebar -->
-    <aside id="app-sidebar" class="app-sidebar">
-      <div class="sidebar-header">
-        <div class="brand-logo">
+    <!-- Top Horizontal Navigation Bar -->
+    <nav class="navbar app-header-nav">
+      <div class="header-nav-container">
+        <!-- Brand Logo -->
+        <a href="/" class="brand-logo" style="margin-right:1rem;">
           <div class="logo-icon">🛡️</div>
           <span class="sidebar-brand-name">CareConnect</span>
+        </a>
+
+        <!-- Horizontal Single-Row Navigation Menu Options -->
+        <nav class="horizontal-nav-list">
+          <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+            <span>🏠</span> <span>Dashboard</span>
+          </a>
+          <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+            <span>🚨</span> <span>Emergency Alerts</span>
+          </a>
+          <a class="nav-item" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
+            <span>📍</span> <span>Live GPS</span>
+          </a>
+          <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+            <span>👥</span> <span>Contacts</span>
+          </a>
+          <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+            <span>📊</span> <span>Reports & Logs</span>
+          </a>
+          <a class="nav-item" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
+            <span>👤</span> <span>Profile</span>
+          </a>
+          <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
+            <span>⚙️</span> <span>Settings</span>
+          </a>
+        </nav>
+
+        <!-- Right Corner Actions & Sign Out Button -->
+        <div class="header-actions-right">
+          <!-- Language Selector Dropdown -->
+          <div id="nav-language-selector-container"></div>
+
+          <!-- Light / Dark Mode Toggle Button -->
+          <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+            <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+          </button>
+
+          <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+            👁️ Accessibility
+          </button>
+
+          <!-- Real-Time Notifications Button -->
+          <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
+            <span>🔔</span> <span data-i18n="notifications">Notifications</span>
+            <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
+          </button>
+
+          <div id="duty-status-container"></div>
+
+          <!-- Sign Out Button at the Last Corner -->
+          <button onclick="logout()" class="btn btn-outline-danger btn-sm nav-signout-btn" data-i18n="sign_out" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
+            🚪 <span>Sign Out</span>
+          </button>
         </div>
       </div>
+    </nav>
 
-      <nav class="sidebar-nav">
-        <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
-          <span>🏠</span> <span>Dashboard</span>
-        </a>
-        <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
-          <span>🚨</span> <span>Emergency Alerts</span>
-        </a>
-        <a class="nav-item" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
-          <span>📍</span> <span>Live GPS</span>
-        </a>
-        <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
-          <span>👥</span> <span>Contacts</span>
-        </a>
-        <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
-          <span>📊</span> <span>Reports & Logs</span>
-        </a>
-        <a class="nav-item" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
-          <span>👤</span> <span>Profile</span>
-        </a>
-        <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
-          <span>⚙️</span> <span>Settings</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm" style="width:100%; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
-          🚪 <span>Logout</span>
-        </button>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="main-content-area">
-      
-      <!-- Top Navbar Header -->
-      <nav class="navbar">
-        <div class="container nav-content">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <!-- Mobile Hamburger Menu Button -->
-            <button id="btn-sidebar-mobile" onclick="CareConnectNav.toggleMobileSidebar()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center;" aria-label="Toggle Mobile Menu">
-              ☰
-            </button>
-            <span style="font-weight:700; color:#133E2B; font-size:1.1rem;">Emergency Console</span>
-          </div>
-
-          <div class="nav-actions">
-            <!-- Language Selector Dropdown -->
-            <div id="nav-language-selector-container"></div>
-
-            <!-- Light / Dark Mode Toggle Button -->
-            <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-              <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-            </button>
-
-            <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
-              👁️ Accessibility
-            </button>
-
-            <!-- Real-Time Notifications Button with Red Badge -->
-            <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
-              <span>🔔</span> <span data-i18n="notifications">Notifications</span>
-              <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
-            </button>
-
-            <div id="duty-status-container"></div>
-            <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="sign_out">Sign Out</button>
-          </div>
-        </div>
-      </nav>
-
-      <!-- Container Body for Tab Panels -->
+    <!-- Main Content Area (Full Width) -->
+    <div class="main-content-area" style="margin-left:0;">
       <div class="container dashboard-container">
         
         <!-- Active Emergency Tracker Banner (For Senior/Child) -->
