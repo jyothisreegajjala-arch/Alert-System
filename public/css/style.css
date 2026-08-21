@@ -1,12 +1,16 @@
-/* SafeReach / CareConnect - Neomorphism (Soft UI) Modern Healthcare Design System */
+/* SafeReach / CareConnect - Modern Glassmorphism Healthcare Design System */
 
 :root {
-  --neo-bg: #e6eef8;
-  --neo-shadow-dark: #b8c4d6;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 10px 30px 0 rgba(2, 132, 199, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  --glass-shadow-hover: 0 16px 40px 0 rgba(2, 132, 199, 0.15), 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+
+  --neo-bg: #e0f2fe;
+  --neo-shadow-dark: rgba(2, 132, 199, 0.12);
   --neo-shadow-light: #ffffff;
-  --neo-shadow-dark-deep: #9faec7;
-  --neo-inset-dark: rgba(159, 174, 199, 0.6);
-  --neo-inset-light: rgba(255, 255, 255, 0.9);
+  --neo-shadow-dark-deep: rgba(2, 132, 199, 0.2);
 
   --primary: #0284c7;
   --primary-hover: #0369a1;
@@ -17,27 +21,10 @@
   --warning: #ea580c;
   --danger: #ef4444;
   
-  --dark-bg: #e6eef8;
-  --dark-card: #e6eef8;
-  --dark-border: rgba(255, 255, 255, 0.6);
-  --dark-text: #0f172a;
-  --dark-muted: #475569;
-  
-  --light-bg: #e6eef8;
-  --light-card: #e6eef8;
-  --light-border: rgba(255, 255, 255, 0.6);
-  --light-text: #0f172a;
-  --light-muted: #475569;
-  --section-light-blue: #e6eef8;
-  
   --radius-sm: 10px;
   --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
-  
-  --shadow-sm: 4px 4px 10px #b8c4d6, -4px -4px 10px #ffffff;
-  --shadow-md: 8px 8px 18px #b8c4d6, -8px -8px 18px #ffffff;
-  --shadow-lg: 12px 12px 28px #b8c4d6, -12px -12px 28px #ffffff;
   
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -51,7 +38,7 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--neo-bg) !important;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e0f2fe 40%, #f8fafc 100%) fixed !important;
   color: #0f172a !important;
   line-height: 1.6;
   min-height: 100vh;
@@ -84,13 +71,15 @@ a:hover {
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background: var(--neo-bg);
+  background: linear-gradient(135deg, #f0f7ff 0%, #e0f2fe 40%, #f8fafc 100%) fixed;
 }
 
 .app-sidebar {
   width: 250px;
-  background: var(--neo-bg) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.85) !important;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -98,17 +87,17 @@ a:hover {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  box-shadow: 6px 0 16px var(--neo-shadow-dark), -6px 0 16px var(--neo-shadow-light) !important;
+  box-shadow: 4px 0 24px rgba(2, 132, 199, 0.06) !important;
   transition: transform 0.3s ease;
 }
 
 .sidebar-header {
   padding: 1.25rem 1.25rem;
-  border-bottom: 1px solid rgba(184, 196, 214, 0.4);
+  border-bottom: 1px solid rgba(184, 196, 214, 0.3);
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--neo-bg);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .sidebar-brand-name {
@@ -139,29 +128,31 @@ a:hover {
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 4px 4px 10px var(--neo-shadow-dark), -4px -4px 10px var(--neo-shadow-light);
-  background: var(--neo-bg);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .sidebar-nav .nav-item:hover {
-  box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
   color: #0284c7 !important;
-  transform: translateY(-1px);
+  border-color: rgba(2, 132, 199, 0.25) !important;
+  transform: translateX(3px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1) !important;
 }
 
 .sidebar-nav .nav-item.active {
-  background: var(--neo-bg) !important;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.14), rgba(14, 165, 233, 0.22)) !important;
   color: #0284c7 !important;
   font-weight: 800;
-  box-shadow: inset 3px 3px 7px var(--neo-shadow-dark), inset -3px -3px 7px var(--neo-shadow-light) !important;
-  border: 1px solid rgba(2, 132, 199, 0.3) !important;
+  border: 1px solid rgba(2, 132, 199, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.15) !important;
 }
 
 .sidebar-footer {
   padding: 1rem 1.25rem;
-  border-top: 1px solid rgba(184, 196, 214, 0.4);
-  background: var(--neo-bg);
+  border-top: 1px solid rgba(184, 196, 214, 0.3);
+  background: rgba(255, 255, 255, 0.4);
   color: #334155 !important;
 }
 
@@ -172,7 +163,6 @@ a:hover {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--neo-bg);
 }
 
 .dashboard-tab-panel {
@@ -217,14 +207,16 @@ a:hover {
   }
 }
 
-/* Top Navbar Styling */
+/* Top Navbar Glassmorphism */
 .navbar {
-  background: var(--neo-bg) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
   padding: 0.85rem 1.5rem;
   position: relative !important;
   z-index: 1000;
-  box-shadow: 6px 6px 16px var(--neo-shadow-dark), -6px -6px 16px var(--neo-shadow-light) !important;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06) !important;
 }
 
 .nav-content {
@@ -249,15 +241,14 @@ a:hover {
 .brand-logo .logo-icon {
   width: 42px;
   height: 42px;
-  background: var(--neo-bg) !important;
+  background: rgba(2, 132, 199, 0.1) !important;
   color: #0284c7 !important;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 4px 4px 10px var(--neo-shadow-dark), -4px -4px 10px var(--neo-shadow-light);
+  border: 1px solid rgba(2, 132, 199, 0.2);
 }
 
 .nav-links {
@@ -276,23 +267,26 @@ a:hover {
   color: #0284c7 !important;
 }
 
-/* Neomorphic Card Surface Design */
-.glass-card, .card, .modal-content, .user-profile-bar, .alert-card, .kpi-card, .workflow-step-card, .location-widget-card {
-  background: var(--neo-bg) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+/* Glassmorphism Card Surface Design */
+.glass-card, .card, .modal-content, .user-profile-bar, .alert-card, .kpi-card, .workflow-step-card, .location-widget-card, .edit-section-card, .welcome-banner {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 8px 8px 18px var(--neo-shadow-dark), -8px -8px 18px var(--neo-shadow-light) !important;
+  box-shadow: 0 10px 30px 0 rgba(2, 132, 199, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
   transition: var(--transition);
 }
 
 .glass-card:hover, .card:hover, .workflow-step-card:hover, .kpi-card:hover {
   transform: translateY(-3px);
-  box-shadow: 12px 12px 24px var(--neo-shadow-dark), -12px -12px 24px var(--neo-shadow-light) !important;
-  border-color: rgba(2, 132, 199, 0.3) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 16px 40px 0 rgba(2, 132, 199, 0.15), 0 2px 6px 0 rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(2, 132, 199, 0.35) !important;
 }
 
-/* Neomorphic Buttons */
+/* Glassmorphism Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -302,25 +296,27 @@ a:hover {
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: var(--neo-bg);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
   color: #0f172a;
-  box-shadow: 5px 5px 12px var(--neo-shadow-dark), -5px -5px 12px var(--neo-shadow-light);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: var(--transition);
   user-select: none;
 }
 
-.btn:active {
-  box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light) !important;
-  transform: translateY(1px);
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35) !important;
 }
 
-.btn-primary {
-  background: linear-gradient(145deg, #0284c7, #0369a1) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 5px 5px 14px rgba(2, 132, 199, 0.4), -5px -5px 14px var(--neo-shadow-light) !important;
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0369a1, #0284c7) !important;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45) !important;
+  transform: translateY(-1px);
 }
 
 .btn-primary:hover {
@@ -441,56 +437,60 @@ a:hover {
   color: #ea580c !important;
 }
 
-/* Forms & Neomorphic Depressed Controls */
+/* Glassmorphism Controls & Inputs */
 .form-control, .form-select, select, input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
-  background: var(--neo-bg) !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
   color: #0f172a !important;
-  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
   outline: none;
-  box-shadow: inset 4px 4px 8px var(--neo-shadow-dark), inset -4px -4px 8px var(--neo-shadow-light) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(2, 132, 199, 0.04) !important;
   transition: var(--transition);
 }
 
 .form-control:focus, input:focus, select:focus {
   border-color: #0284c7 !important;
-  box-shadow: inset 4px 4px 8px var(--neo-shadow-dark), inset -4px -4px 8px var(--neo-shadow-light), 0 0 0 3.5px rgba(2, 132, 199, 0.25) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.18), 0 4px 12px rgba(2, 132, 199, 0.08) !important;
 }
 
 .form-control::placeholder, input::placeholder {
   color: #64748b !important;
 }
 
-/* Tables */
+/* Glassmorphism Tables */
 .table th, .history-table th {
-  background: var(--neo-bg) !important;
-  color: #1e293b !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  color: #0f172a !important;
   font-weight: 700;
   padding: 0.85rem 1rem;
-  border-bottom: 2px solid var(--neo-shadow-dark) !important;
+  border-bottom: 2px solid rgba(2, 132, 199, 0.2) !important;
 }
 
 .table td, .history-table td {
   color: #0f172a !important;
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid rgba(184, 196, 214, 0.4) !important;
+  border-bottom: 1px solid rgba(184, 196, 214, 0.3) !important;
 }
 
 .table tr:hover, .history-table tr:hover td {
-  background: rgba(255, 255, 255, 0.4) !important;
+  background: rgba(2, 132, 199, 0.04) !important;
 }
 
-/* Modals */
+/* Glassmorphism Modals */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -499,18 +499,20 @@ a:hover {
 }
 
 .modal-content {
-  background: var(--neo-bg) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 600px;
-  box-shadow: 12px 12px 32px var(--neo-shadow-dark), -12px -12px 32px var(--neo-shadow-light) !important;
+  box-shadow: 0 25px 60px rgba(2, 132, 199, 0.15), 0 10px 25px rgba(0, 0, 0, 0.08) !important;
 }
 
 .modal-header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(184, 196, 214, 0.4) !important;
-  background: var(--neo-bg) !important;
+  border-bottom: 1px solid rgba(184, 196, 214, 0.3) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
