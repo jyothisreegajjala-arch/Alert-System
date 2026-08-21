@@ -7,9 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v22_clear_history">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v22_clear_history">
-  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v22_clear_history">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v23_left_nav_corner">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v23_left_nav_corner">
+  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v23_left_nav_corner">
 </head>
 <body>
 
@@ -33,17 +33,23 @@
           <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
             <span>🏠</span> <span>Dashboard</span>
           </a>
+          <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+            <span>🚨</span> <span>Emergency Alerts</span>
+          </a>
+          <a class="nav-item" data-tab="tab-gps" onclick="window.location.href='/dashboard#tab-gps'">
+            <span>📍</span> <span>Live GPS</span>
+          </a>
           <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
-            <span>👥</span> <span>User Directory</span>
+            <span>👥</span> <span>Contacts</span>
           </a>
           <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
-            <span>📊</span> <span>Excel & Reports</span>
+            <span>📊</span> <span>Reports & Logs</span>
           </a>
-          <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
-            <span>📡</span> <span>System Stream</span>
+          <a class="nav-item" data-tab="tab-profile" onclick="openEditProfileModal()">
+            <span>👤</span> <span>Profile</span>
           </a>
-          <a href="/dashboard" class="nav-item">
-            <span>📱</span> <span>Emergency Console</span>
+          <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
+            <span>⚙️</span> <span>Settings</span>
           </a>
         </nav>
 

@@ -833,8 +833,8 @@ a:hover {
 .header-nav-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: 1.25rem;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -847,6 +847,7 @@ a:hover {
   gap: 0.6rem !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
+  margin-right: auto !important;
   scrollbar-width: none;
 }
 
