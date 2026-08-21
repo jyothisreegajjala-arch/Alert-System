@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v23_left_nav_corner">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v23_left_nav_corner">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v24_vertical_left_sidebar">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v24_vertical_left_sidebar">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   <style>
     .d-none { display: none !important; }
@@ -17,76 +17,75 @@
 </head>
 <body>
 
-  <!-- Full App Layout -->
-  <div class="app-layout" style="flex-direction:column;">
+  <!-- Full App Layout with Vertical Left Sidebar -->
+  <div class="app-layout" style="display:flex; flex-direction:row;">
     
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="sidebar-backdrop"></div>
 
-    <!-- Top Horizontal Navigation Bar -->
-    <nav class="navbar app-header-nav">
-      <div class="header-nav-container">
-        <!-- Brand Logo -->
-        <a href="/" class="brand-logo" style="margin-right:1rem;">
-          <div class="logo-icon">🛡️</div>
-          <span class="sidebar-brand-name">CareConnect</span>
+    <!-- Vertical Left Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="/" class="brand-logo" style="display:flex; align-items:center; gap:0.55rem; text-decoration:none;">
+          <div class="logo-icon" style="font-size:1.6rem;">🛡️</div>
+          <span class="sidebar-brand-name" style="font-size:1.2rem; font-weight:800; color:#0f172a;">CareConnect</span>
         </a>
-
-        <!-- Horizontal Single-Row Navigation Menu Options -->
-        <nav class="horizontal-nav-list">
-          <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
-            <span>🏠</span> <span>Dashboard</span>
-          </a>
-          <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
-            <span>🚨</span> <span>Emergency Alerts</span>
-          </a>
-          <a class="nav-item" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
-            <span>📍</span> <span>Live GPS</span>
-          </a>
-          <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
-            <span>👥</span> <span>Contacts</span>
-          </a>
-          <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
-            <span>📊</span> <span>Reports & Logs</span>
-          </a>
-          <a class="nav-item" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
-            <span>👤</span> <span>Profile</span>
-          </a>
-          <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
-            <span>⚙️</span> <span>Settings</span>
-          </a>
-        </nav>
-
-        <!-- Right Corner Actions & Sign Out Button -->
-        <div class="header-actions-right">
-          <!-- Light / Dark Mode Toggle Button -->
-          <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-            <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-          </button>
-
-          <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
-            👁️ Accessibility
-          </button>
-
-          <!-- Real-Time Notifications Button -->
-          <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
-            <span>🔔</span> <span data-i18n="notifications">Notifications</span>
-            <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
-          </button>
-
-          <div id="duty-status-container"></div>
-
-          <!-- Sign Out Button at the Last Corner -->
-          <button onclick="logout()" class="btn btn-outline-danger btn-sm nav-signout-btn" data-i18n="sign_out" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
-            🚪 <span>Sign Out</span>
-          </button>
-        </div>
       </div>
-    </nav>
 
-    <!-- Main Content Area (Full Width) -->
-    <div class="main-content-area" style="margin-left:0;">
-      <div class="container dashboard-container">
+      <!-- Vertical One-by-One Navigation Menu Options -->
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+          <span style="font-size:1.15rem;">🏠</span> <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+          <span style="font-size:1.15rem;">🚨</span> <span>Emergency Alerts</span>
+        </a>
+        <a class="nav-item" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
+          <span style="font-size:1.15rem;">📍</span> <span>Live GPS</span>
+        </a>
+        <a class="nav-item" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+          <span style="font-size:1.15rem;">👥</span> <span>Contacts</span>
+        </a>
+        <a class="nav-item" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+          <span style="font-size:1.15rem;">📊</span> <span>Reports & Logs</span>
+        </a>
+        <a class="nav-item" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
+          <span style="font-size:1.15rem;">👤</span> <span>Profile</span>
+        </a>
+        <a class="nav-item" data-tab="tab-settings" onclick="openEditProfileModal()">
+          <span style="font-size:1.15rem;">⚙️</span> <span>Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content-area">
+      <!-- Top Action Bar -->
+      <header class="app-top-header" style="background:var(--neo-bg); border-bottom:1px solid rgba(255,255,255,0.7); padding:0.85rem 1.5rem; display:flex; align-items:center; justify-content:flex-end; gap:0.75rem; box-shadow:4px 4px 10px var(--neo-shadow-dark);">
+        <!-- Light / Dark Mode Toggle Button -->
+        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
+        </button>
+
+        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+          👁️ Accessibility
+        </button>
+
+        <!-- Real-Time Notifications Button -->
+        <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
+          <span>🔔</span> <span data-i18n="notifications">Notifications</span>
+          <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
+        </button>
+
+        <div id="duty-status-container"></div>
+
+        <!-- Sign Out Button -->
+        <button onclick="logout()" class="btn btn-outline-danger btn-sm nav-signout-btn" data-i18n="sign_out" style="display:flex; align-items:center; gap:0.4rem; font-weight:700;">
+          🚪 <span>Sign Out</span>
+        </button>
+      </header>
+
+      <div class="container dashboard-container" style="padding-top:1.5rem;">
         
         <!-- Active Emergency Tracker Banner (For Senior/Child) -->
         <div id="active-sos-tracker" class="d-none"></div>
