@@ -790,6 +790,32 @@ const CareConnectI18n = {
   renderLanguageSelector: (containerId) => {
     const container = document.getElementById(containerId);
     if (container) container.innerHTML = '';
+  },
+
+  // Interactive Language Selection Tab Bar on Homepage & Landing Portals
+  renderLanguageTabs: (containerId) => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const currentLang = CareConnectI18n.getLanguage();
+
+    const tabsHTML = CareConnectI18n.supportedLanguages.map(l => {
+      const isActive = l.code === currentLang ? 'active-lang-tab' : '';
+      return `
+        <button type="button" class="lang-tab-btn ${isActive}" onclick="CareConnectI18n.setLanguage('${l.code}'); CareConnectI18n.renderLanguageTabs('${containerId}');" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.5rem 0.95rem; border-radius:9999px; font-weight:700; font-size:0.88rem; cursor:pointer; transition:all 0.2s ease;">
+          <span>${l.flag}</span> <span>${l.native}</span>
+        </button>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="homepage-language-bar" style="background:rgba(255,255,255,0.72); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.85); border-radius:20px; padding:0.85rem 1.25rem; box-shadow:0 10px 30px rgba(2,132,199,0.08); display:flex; align-items:center; justify-content:center; gap:0.55rem; flex-wrap:wrap; margin:1.25rem 0 2rem 0;">
+        <span style="font-weight:800; font-size:0.88rem; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; margin-right:0.4rem; display:flex; align-items:center; gap:0.35rem;">
+          🌐 <span data-i18n="select_language">Select Language</span>:
+        </span>
+        ${tabsHTML}
+      </div>
+    `;
   }
 };
 
@@ -803,6 +829,9 @@ document.addEventListener('click', (e) => {
 // Initialize i18n on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   CareConnectI18n.setLanguage(CareConnectI18n.getLanguage());
+  if (document.getElementById('homepage-language-selector')) {
+    CareConnectI18n.renderLanguageTabs('homepage-language-selector');
+  }
 });
 
 window.CareConnectI18n = CareConnectI18n;
