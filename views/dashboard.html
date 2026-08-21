@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v43_removed_voice_theme_accessibility_buttons">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v43_removed_voice_theme_accessibility_buttons">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v44_emergency_alerts_only_on_tab_click">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v44_emergency_alerts_only_on_tab_click">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   <style>
     .d-none { display: none !important; }
@@ -81,9 +81,6 @@
 
       <div class="container dashboard-container" style="padding-top:1.5rem;">
         
-        <!-- Active Emergency Tracker Banner (For Senior/Child) -->
-        <div id="active-sos-tracker" class="d-none"></div>
-
         <!-- Responder Account Link Requests Notification Banner -->
         <div id="responder-link-requests-container" class="d-none" style="margin-bottom:2rem;"></div>
 
@@ -131,6 +128,9 @@
 
         <!-- TAB PANEL 2: EMERGENCY ALERTS -->
         <div id="tab-alerts" class="dashboard-tab-panel">
+          <!-- Active Emergency Tracker Banner (For Senior/Child - Displays when Emergency Alerts tab is clicked) -->
+          <div id="active-sos-tracker" class="d-none" style="margin-bottom:1.75rem;"></div>
+
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
             <h3 style="font-size:1.4rem; color:#133E2B; font-weight:800;">🚨 Live Emergency Alert Dispatch Stream</h3>
             <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm">🔄 Refresh Feed</button>
