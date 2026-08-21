@@ -215,3 +215,48 @@ exports.markAsRead = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to mark as read' });
   }
 };
+
+// Clear Notification History
+exports.clearNotificationHistory = async (req, res) => {
+  try {
+    const user = req.user;
+    const isDbConnected = require('mongoose').connection.readyState === 1;
+
+    if (isDbConnected) {
+      let filter = {};
+      if (user.role !== 'admin') {
+        const orConditions = [
+          { recipientUserId: user._id }
+        ];
+        if (user.email) orConditions.push({ targetEmail: user.email.toLowerCase() });
+        if (user.phone) orConditions.push({ targetPhone: user.phone });
+        filter = { $or: orConditions };
+      }
+      await Notification.deleteMany(filter);
+    } else {
+      const memoryStore = require('../config/memoryStore');
+      const userIdStr = (user._id || user.id || '').toString();
+      const userEmail = (user.email || '').toLowerCase();
+      const userPhone = user.phone || '';
+
+      if (user.role === 'admin') {
+        memoryStore.notifications = [];
+      } else {
+        memoryStore.notifications = (memoryStore.notifications || []).filter(n =>
+          !( (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
+             (userEmail && n.targetEmail && n.targetEmail.toLowerCase() === userEmail) ||
+             (userPhone && n.targetPhone && n.targetPhone === userPhone) )
+        );
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Notification history cleared successfully.'
+    });
+  } catch (err) {
+    console.error('Clear Notifications Error:', err);
+    res.status(500).json({ success: false, message: 'Failed to clear notification history' });
+  }
+};
+

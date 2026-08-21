@@ -9,5 +9,7 @@ router.get('/', notificationController.getUserNotifications);
 router.put('/:notificationId/accept', notificationController.acceptNotification);
 router.put('/:notificationId/decline', notificationController.declineNotification);
 router.put('/:notificationId/read', notificationController.markAsRead);
+router.delete('/clear', notificationController.clearNotificationHistory);
+router.delete('/', notificationController.clearNotificationHistory);
 
 module.exports = router;

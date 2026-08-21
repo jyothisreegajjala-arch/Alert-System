@@ -1351,12 +1351,32 @@ function updateHelperAssignedCards(alertId, helperName, helperRole) {
   });
 }
 
-function logout() {
-  SafeReach.clearAuth();
-  window.location.href = '/login';
+async function clearNotificationHistoryAction() {
+  if (!confirm('Are you sure you want to clear all notification history?')) return;
+
+  try {
+    const data = await SafeReach.api('/api/notifications/clear', { method: 'DELETE' });
+    SafeReach.showToast(data.message || 'Notification history cleared', 'success');
+
+    currentNotifications = [];
+    const countPendingEl = document.getElementById('count-pending');
+    const countAcceptedEl = document.getElementById('count-accepted');
+    const countReadEl = document.getElementById('count-read');
+    const badgeEl = document.getElementById('nav-unread-badge');
+
+    if (countPendingEl) countPendingEl.textContent = '0';
+    if (countAcceptedEl) countAcceptedEl.textContent = '0';
+    if (countReadEl) countReadEl.textContent = '0';
+    if (badgeEl) badgeEl.classList.add('d-none');
+
+    renderNotificationList();
+  } catch (err) {
+    SafeReach.showToast(err.message || 'Failed to clear history', 'danger');
+  }
 }
 
 window.logout = logout;
+window.clearNotificationHistoryAction = clearNotificationHistoryAction;
 window.acceptEmergencyAlert = acceptEmergencyAlert;
 window.rejectEmergencyAlert = rejectEmergencyAlert;
 window.resolveEmergencyAlert = resolveEmergencyAlert;
