@@ -792,45 +792,75 @@ const CareConnectI18n = {
     if (container) container.innerHTML = '';
   },
 
-  // Interactive Language Selection Tab Bar on Homepage & Landing Portals
-  renderLanguageTabs: (containerId) => {
+  // Render Clean Header Language Dropdown Menu (With 12 Supported Languages)
+  renderHeaderLanguageDropdown: (containerId) => {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const currentLang = CareConnectI18n.getLanguage();
+    const activeLang = CareConnectI18n.supportedLanguages.find(l => l.code === currentLang) || CareConnectI18n.supportedLanguages[0];
 
-    const tabsHTML = CareConnectI18n.supportedLanguages.map(l => {
-      const isActive = l.code === currentLang ? 'active-lang-tab' : '';
+    const menuItemsHTML = CareConnectI18n.supportedLanguages.map(l => {
+      const isSelected = l.code === currentLang;
       return `
-        <button type="button" class="lang-tab-btn ${isActive}" onclick="CareConnectI18n.setLanguage('${l.code}'); CareConnectI18n.renderLanguageTabs('${containerId}');" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.5rem 0.95rem; border-radius:9999px; font-weight:700; font-size:0.88rem; cursor:pointer; transition:all 0.2s ease;">
-          <span>${l.flag}</span> <span>${l.native}</span>
+        <button type="button" class="lang-menu-item ${isSelected ? 'selected' : ''}" onclick="CareConnectI18n.selectHeaderLanguage('${l.code}', '${containerId}')" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.55rem 0.85rem; border:none; background:${isSelected ? 'rgba(2,132,199,0.1)' : 'transparent'}; border-radius:10px; cursor:pointer; font-weight:${isSelected ? '800' : '600'}; font-size:0.88rem; color:${isSelected ? '#0284c7' : '#0f172a'}; transition:all 0.15s ease;">
+          <div style="display:flex; align-items:center; gap:0.55rem;">
+            <span>${l.flag}</span> <span>${l.native}</span> <small style="color:#64748b; font-size:0.8em;">(${l.name})</small>
+          </div>
+          ${isSelected ? '<span style="color:#0284c7; font-weight:900;">✓</span>' : ''}
         </button>
       `;
     }).join('');
 
     container.innerHTML = `
-      <div class="homepage-language-bar" style="background:rgba(255,255,255,0.72); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.85); border-radius:20px; padding:0.85rem 1.25rem; box-shadow:0 10px 30px rgba(2,132,199,0.08); display:flex; align-items:center; justify-content:center; gap:0.55rem; flex-wrap:wrap; margin:1.25rem 0 2rem 0;">
-        <span style="font-weight:800; font-size:0.88rem; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px; margin-right:0.4rem; display:flex; align-items:center; gap:0.35rem;">
-          🌐 <span data-i18n="select_language">Select Language</span>:
-        </span>
-        ${tabsHTML}
+      <div class="language-dropdown-wrapper" style="position:relative; display:inline-block;">
+        <button type="button" class="btn btn-outline-secondary btn-sm lang-dropdown-btn" onclick="CareConnectI18n.toggleHeaderMenu(this)" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.85rem; border-radius:9999px; font-weight:700; font-size:0.85rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:1px solid rgba(2,132,199,0.25); color:#0f172a; cursor:pointer;">
+          <span class="lang-trigger-flag">${activeLang.flag}</span>
+          <span class="lang-trigger-label">${activeLang.native}</span>
+          <span style="font-size:0.75rem; color:#64748b;">▾</span>
+        </button>
+        
+        <div class="lang-header-menu d-none" style="position:absolute; right:0; top:calc(100% + 8px); width:230px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.95); border-radius:16px; padding:0.4rem; box-shadow:0 15px 35px rgba(2,132,199,0.15); z-index:2500; max-height:340px; overflow-y:auto;">
+          ${menuItemsHTML}
+        </div>
       </div>
     `;
+  },
+
+  toggleHeaderMenu: (btn) => {
+    const wrapper = btn.closest('.language-dropdown-wrapper');
+    if (!wrapper) return;
+    const menu = wrapper.querySelector('.lang-header-menu');
+    if (!menu) return;
+    
+    const isHidden = menu.classList.contains('d-none');
+    document.querySelectorAll('.lang-header-menu').forEach(m => m.classList.add('d-none'));
+    if (isHidden) {
+      menu.classList.remove('d-none');
+    }
+  },
+
+  selectHeaderLanguage: (langCode, containerId) => {
+    CareConnectI18n.setLanguage(langCode);
+    if (containerId) {
+      CareConnectI18n.renderHeaderLanguageDropdown(containerId);
+    }
+    document.querySelectorAll('.lang-header-menu').forEach(m => m.classList.add('d-none'));
   }
 };
 
 // Close popover when clicking outside
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.language-selector-wrapper')) {
-    document.querySelectorAll('.lang-popover-menu').forEach(menu => menu.classList.add('d-none'));
+  if (!e.target.closest('.language-dropdown-wrapper')) {
+    document.querySelectorAll('.lang-header-menu', '.lang-popover-menu').forEach(menu => menu.classList.add('d-none'));
   }
 });
 
 // Initialize i18n on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   CareConnectI18n.setLanguage(CareConnectI18n.getLanguage());
-  if (document.getElementById('homepage-language-selector')) {
-    CareConnectI18n.renderLanguageTabs('homepage-language-selector');
+  if (document.getElementById('header-language-selector')) {
+    CareConnectI18n.renderHeaderLanguageDropdown('header-language-selector');
   }
 });
 
