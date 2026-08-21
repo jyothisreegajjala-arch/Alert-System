@@ -229,8 +229,17 @@ exports.clearNotificationHistory = async (req, res) => {
           { recipientUserId: user._id },
           { senderUserId: user._id }
         ];
-        if (user.email) orConditions.push({ targetEmail: user.email.toLowerCase() });
-        if (user.phone) orConditions.push({ targetPhone: user.phone });
+        if (user._id) {
+          orConditions.push({ recipientUserId: user._id.toString() });
+          orConditions.push({ senderUserId: user._id.toString() });
+        }
+        if (user.email) {
+          orConditions.push({ targetEmail: user.email.toLowerCase() });
+          orConditions.push({ targetEmail: user.email });
+        }
+        if (user.phone) {
+          orConditions.push({ targetPhone: user.phone });
+        }
         filter = { $or: orConditions };
       }
       await Notification.deleteMany(filter);
@@ -243,12 +252,17 @@ exports.clearNotificationHistory = async (req, res) => {
       if (user.role === 'admin') {
         memoryStore.notifications = [];
       } else {
-        memoryStore.notifications = (memoryStore.notifications || []).filter(n =>
-          !( (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
-             (n.senderUserId && n.senderUserId.toString() === userIdStr) ||
-             (userEmail && n.targetEmail && n.targetEmail.toLowerCase() === userEmail) ||
-             (userPhone && n.targetPhone && n.targetPhone === userPhone) )
-        );
+        memoryStore.notifications = (memoryStore.notifications || []).filter(n => {
+          const recId = (n.recipientUserId || '').toString();
+          const sndId = (n.senderUserId || '').toString();
+          const tEmail = (n.targetEmail || '').toLowerCase();
+          const tPhone = n.targetPhone || '';
+
+          if (userIdStr && (recId === userIdStr || sndId === userIdStr)) return false;
+          if (userEmail && tEmail === userEmail) return false;
+          if (userPhone && tPhone === userPhone) return false;
+          return true;
+        });
       }
     }
 
