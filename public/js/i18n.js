@@ -817,9 +817,6 @@ const CareConnectI18n = {
         </button>
 
         <div class="lang-popover-menu d-none">
-          <div class="lang-popover-header" data-i18n="select_language">
-            🌐 Select Your Preferred Language
-          </div>
           <div class="lang-line-list">
             ${lineItemsHtml}
           </div>
