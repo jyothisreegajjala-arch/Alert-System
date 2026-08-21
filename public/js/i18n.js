@@ -787,42 +787,9 @@ const CareConnectI18n = {
     }
   },
 
-  // Render Custom Line-by-Line Language Selector Switcher Dropdown (Requirement 8)
   renderLanguageSelector: (containerId) => {
     const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const currentLang = CareConnectI18n.getLanguage();
-    const activeLangObj = CareConnectI18n.supportedLanguages.find(l => l.code === currentLang) || CareConnectI18n.supportedLanguages[0];
-
-    const lineItemsHtml = CareConnectI18n.supportedLanguages.map(l => `
-      <div class="lang-line-item ${l.code === currentLang ? 'selected' : ''}" onclick="CareConnectI18n.selectAndClose('${l.code}')">
-        <div class="lang-line-left">
-          <span class="lang-line-flag">${l.flag}</span>
-          <div class="lang-line-details">
-            <span class="lang-line-native">${l.native}</span>
-            <span class="lang-line-name">${l.name}</span>
-          </div>
-        </div>
-        ${l.code === currentLang ? '<span class="lang-line-check">✓</span>' : ''}
-      </div>
-    `).join('');
-
-    container.innerHTML = `
-      <div class="language-selector-wrapper">
-        <button type="button" class="lang-trigger-btn" onclick="CareConnectI18n.toggleDropdown(this)">
-          <span class="lang-trigger-flag">${activeLangObj.flag}</span>
-          <span class="lang-trigger-label">${activeLangObj.native}</span>
-          <span class="lang-trigger-arrow">▾</span>
-        </button>
-
-        <div class="lang-popover-menu d-none">
-          <div class="lang-line-list">
-            ${lineItemsHtml}
-          </div>
-        </div>
-      </div>
-    `;
+    if (container) container.innerHTML = '';
   }
 };
 
