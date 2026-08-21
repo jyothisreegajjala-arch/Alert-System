@@ -1356,20 +1356,30 @@ async function clearNotificationHistoryAction() {
 
   try {
     const data = await SafeReach.api('/api/notifications/clear', { method: 'DELETE' });
-    SafeReach.showToast(data.message || 'Notification history cleared', 'success');
+    SafeReach.showToast(data.message || 'Notification history cleared successfully', 'success');
 
     currentNotifications = [];
+
     const countPendingEl = document.getElementById('count-pending');
     const countAcceptedEl = document.getElementById('count-accepted');
     const countReadEl = document.getElementById('count-read');
     const badgeEl = document.getElementById('nav-unread-badge');
+    const container = document.getElementById('notifications-list-content');
 
     if (countPendingEl) countPendingEl.textContent = '0';
     if (countAcceptedEl) countAcceptedEl.textContent = '0';
     if (countReadEl) countReadEl.textContent = '0';
     if (badgeEl) badgeEl.classList.add('d-none');
 
-    renderNotificationList();
+    if (container) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:3rem 1.5rem; color:#475569;">
+          <div style="font-size:2.8rem; margin-bottom:0.6rem;">🔔</div>
+          <h4 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-bottom:0.25rem;">No Notifications Found</h4>
+          <p style="font-size:0.9rem; font-weight:500; color:#64748b;">Your notification history has been completely cleared.</p>
+        </div>
+      `;
+    }
   } catch (err) {
     SafeReach.showToast(err.message || 'Failed to clear history', 'danger');
   }
