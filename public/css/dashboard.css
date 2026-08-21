@@ -213,21 +213,24 @@
   gap: 0.5rem;
 }
 
-/* Active Alert Alert Banner */
+/* Neatly Styled Active Emergency Alert Glass Card */
 .active-sos-card {
   width: 100%;
-  background: linear-gradient(135deg, rgba(255, 59, 48, 0.2), rgba(15, 23, 42, 0.9));
-  border: 2px solid var(--primary);
-  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 2px solid rgba(239, 68, 68, 0.4) !important;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  margin-bottom: 2rem;
-  animation: pulse-border 2s infinite;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.15), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  animation: pulse-border 2.5s infinite ease-in-out;
 }
 
 @keyframes pulse-border {
-  0% { border-color: rgba(255, 59, 48, 0.4); }
-  50% { border-color: rgba(255, 59, 48, 1); }
-  100% { border-color: rgba(255, 59, 48, 0.4); }
+  0% { border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.12); }
+  50% { border-color: rgba(239, 68, 68, 0.85); box-shadow: 0 16px 45px rgba(239, 68, 68, 0.28); }
+  100% { border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.12); }
 }
 
 /* Interactive Map Section */

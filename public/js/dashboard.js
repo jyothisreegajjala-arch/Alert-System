@@ -254,19 +254,33 @@ function renderActiveSOSTracker(emergency) {
 
   trackerEl.classList.remove('d-none');
   
-  let statusBadge = `<span class="badge badge-pending">PENDING (NOTIFYING NEIGHBORS & SECURITY)</span>`;
+  let statusBadge = `<span class="badge badge-pending" style="background:#fee2e2; color:#dc2626; border:1px solid rgba(239,68,68,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">⏳ PENDING (NOTIFYING NEIGHBORS & SECURITY)</span>`;
   if (emergency.status === 'ACCEPTED') {
-    statusBadge = `<span class="badge badge-accepted">RESPONDER ACCEPTED</span>`;
+    statusBadge = `<span class="badge badge-accepted" style="background:#dcfce7; color:#15803d; border:1px solid rgba(34,197,94,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">✅ RESPONDER ACCEPTED</span>`;
   } else if (emergency.status === 'ESCALATED_VOLUNTEER') {
-    statusBadge = `<span class="badge badge-escalated">ESCALATED TO VOLUNTEERS & FAMILY</span>`;
+    statusBadge = `<span class="badge badge-escalated" style="background:#ffedd5; color:#c2410c; border:1px solid rgba(249,115,22,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">⚡ ESCALATED TO VOLUNTEERS & FAMILY</span>`;
   }
 
-  let responderInfo = 'Searching for nearby responders...';
+  let responderInfo = `
+    <div style="margin-top:0.85rem; padding:0.85rem 1rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border-radius:14px; border:1px solid rgba(2,132,199,0.25); color:#0f172a; font-size:0.9rem; display:flex; align-items:center; gap:0.75rem;">
+      <div style="font-size:1.5rem;">📡</div>
+      <div>
+        <div style="font-weight:700; color:#0369a1;">Searching for nearby responders...</div>
+        <div style="font-size:0.83rem; color:#64748b;">Community security guard & neighbor notifications active</div>
+      </div>
+    </div>
+  `;
+
   if (emergency.acceptedBy && emergency.acceptedBy.name) {
     responderInfo = `
-      <div style="margin-top:0.75rem; padding:0.75rem; background:rgba(0,122,255,0.15); border-radius:8px; border:1px solid #007aff;">
-        <strong>Assigned Responder:</strong> ${emergency.acceptedBy.name} (${SafeReach.formatRole(emergency.acceptedBy.role)})<br>
-        <strong>Phone:</strong> <a href="tel:${emergency.acceptedBy.phone}">${emergency.acceptedBy.phone}</a>
+      <div style="margin-top:0.85rem; padding:0.85rem 1rem; background:rgba(220,252,231,0.85); backdrop-filter:blur(8px); border-radius:14px; border:1px solid rgba(34,197,94,0.3); color:#14532d; font-size:0.9rem; display:flex; align-items:center; gap:0.85rem; box-shadow:0 4px 12px rgba(34,197,94,0.1);">
+        <div style="font-size:1.8rem;">👨‍⚕️</div>
+        <div>
+          <div style="font-weight:800; font-size:0.98rem; color:#15803d;">Assigned Responder: ${emergency.acceptedBy.name} (${SafeReach.formatRole(emergency.acceptedBy.role)})</div>
+          <div style="font-size:0.88rem; font-weight:600; margin-top:0.15rem;">
+            📞 Phone: <a href="tel:${emergency.acceptedBy.phone}" style="color:#0284c7; text-decoration:underline; font-weight:800;">${emergency.acceptedBy.phone}</a>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -275,18 +289,36 @@ function renderActiveSOSTracker(emergency) {
 
   trackerEl.innerHTML = `
     <div class="active-sos-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="color:#ffffff; font-size:1.3rem;">🚨 ACTIVE EMERGENCY ALERT: #${emergency.alertId}</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; border-bottom:1px solid rgba(239,68,68,0.2); padding-bottom:0.85rem; margin-bottom:0.85rem;">
+        <h3 style="color:#991b1b; font-size:1.25rem; font-weight:900; display:flex; align-items:center; gap:0.5rem; margin:0;">
+          <span>🚨</span> <span>ACTIVE EMERGENCY ALERT: #${emergency.alertId}</span>
+        </h3>
         ${statusBadge}
       </div>
-      <p style="margin-top:0.5rem; color:#cbd5e1;">Triggered at ${SafeReach.formatTime(emergency)} on ${SafeReach.formatDate(emergency)} (${emergency.address})</p>
-      <div style="margin-top:0.5rem; font-size:0.88rem; color:#38bdf8;">
-        📍 GPS Coords: <strong>${Number(emergency.latitude).toFixed(6)}, ${Number(emergency.longitude).toFixed(6)}</strong>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:0.85rem; margin-top:0.75rem;">
+        <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); border-radius:12px; padding:0.65rem 0.85rem; border:1px solid rgba(255,255,255,0.9);">
+          <div style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Triggered Time & Address</div>
+          <div style="font-size:0.92rem; font-weight:700; color:#0f172a; margin-top:0.15rem;">${SafeReach.formatTime(emergency)} on ${SafeReach.formatDate(emergency)}</div>
+          <div style="font-size:0.85rem; color:#334155; margin-top:0.15rem;">${emergency.address || 'Registered Address'}</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); border-radius:12px; padding:0.65rem 0.85rem; border:1px solid rgba(255,255,255,0.9);">
+          <div style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Live GPS Coordinates</div>
+          <div style="font-size:0.92rem; font-weight:800; color:#0284c7; margin-top:0.15rem;">📍 ${Number(emergency.latitude).toFixed(6)}, ${Number(emergency.longitude).toFixed(6)}</div>
+          <div style="font-size:0.82rem; color:#16a34a; font-weight:700; margin-top:0.15rem;">High Accuracy Satellite Tracking</div>
+        </div>
       </div>
+
       ${responderInfo}
-      <div style="margin-top:1.25rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
-        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">📍 View My Location on Google Maps</a>
-        <button onclick="cancelActiveEmergency('${emergency._id}')" class="btn btn-outline-danger btn-sm">Cancel Alert</button>
+
+      <div style="margin-top:1.15rem; display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:flex-end;">
+        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.65rem 1.25rem; font-weight:700; font-size:0.88rem;">
+          📍 View My Location on Google Maps
+        </a>
+        <button onclick="cancelActiveEmergency('${emergency._id}')" class="btn btn-outline-danger btn-sm" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.65rem 1.25rem; font-weight:700; font-size:0.88rem;">
+          ✖️ Cancel Alert
+        </button>
       </div>
     </div>
   `;
