@@ -226,7 +226,8 @@ exports.clearNotificationHistory = async (req, res) => {
       let filter = {};
       if (user.role !== 'admin') {
         const orConditions = [
-          { recipientUserId: user._id }
+          { recipientUserId: user._id },
+          { senderUserId: user._id }
         ];
         if (user.email) orConditions.push({ targetEmail: user.email.toLowerCase() });
         if (user.phone) orConditions.push({ targetPhone: user.phone });
@@ -244,6 +245,7 @@ exports.clearNotificationHistory = async (req, res) => {
       } else {
         memoryStore.notifications = (memoryStore.notifications || []).filter(n =>
           !( (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
+             (n.senderUserId && n.senderUserId.toString() === userIdStr) ||
              (userEmail && n.targetEmail && n.targetEmail.toLowerCase() === userEmail) ||
              (userPhone && n.targetPhone && n.targetPhone === userPhone) )
         );
