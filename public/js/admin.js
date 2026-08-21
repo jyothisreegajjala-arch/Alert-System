@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadUsersTable();
   initSearchAndFilter();
   initSystemStreamLog();
+  if (typeof loadUserNotifications === 'function') {
+    loadUserNotifications();
+  }
 });
 
 // Load KPI Metrics
