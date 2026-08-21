@@ -814,45 +814,61 @@ const CareConnectI18n = {
 
     container.innerHTML = `
       <div class="language-dropdown-wrapper" style="position:relative; display:inline-block;">
-        <button type="button" class="btn btn-outline-secondary btn-sm lang-dropdown-btn" onclick="CareConnectI18n.toggleHeaderMenu(this)" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.85rem; border-radius:9999px; font-weight:700; font-size:0.85rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:1px solid rgba(2,132,199,0.25); color:#0f172a; cursor:pointer;">
+        <button type="button" class="btn btn-outline-secondary btn-sm lang-dropdown-btn" onclick="CareConnectI18n.toggleHeaderMenu(this, event)" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.85rem; border-radius:9999px; font-weight:700; font-size:0.85rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:1px solid rgba(2,132,199,0.25); color:#0f172a; cursor:pointer;">
           <span class="lang-trigger-flag">${activeLang.flag}</span>
           <span class="lang-trigger-label">${activeLang.native}</span>
           <span style="font-size:0.75rem; color:#64748b;">▾</span>
         </button>
         
-        <div class="lang-header-menu d-none" style="position:absolute; right:0; top:calc(100% + 8px); width:230px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.95); border-radius:16px; padding:0.4rem; box-shadow:0 15px 35px rgba(2,132,199,0.15); z-index:2500; max-height:340px; overflow-y:auto;">
+        <div class="lang-header-menu" style="display:none; position:absolute; right:0; top:calc(100% + 8px); width:230px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.95); border-radius:16px; padding:0.4rem; box-shadow:0 15px 35px rgba(2,132,199,0.15); z-index:2500; max-height:340px; overflow-y:auto;">
           ${menuItemsHTML}
         </div>
       </div>
     `;
   },
 
-  toggleHeaderMenu: (btn) => {
+  toggleHeaderMenu: (btn, event) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     const wrapper = btn.closest('.language-dropdown-wrapper');
     if (!wrapper) return;
     const menu = wrapper.querySelector('.lang-header-menu');
     if (!menu) return;
     
-    const isHidden = menu.classList.contains('d-none');
-    document.querySelectorAll('.lang-header-menu').forEach(m => m.classList.add('d-none'));
-    if (isHidden) {
-      menu.classList.remove('d-none');
+    const isVisible = menu.classList.contains('show') || menu.style.display === 'block';
+    
+    document.querySelectorAll('.lang-header-menu').forEach(m => {
+      m.classList.remove('show');
+      m.style.display = 'none';
+    });
+
+    if (!isVisible) {
+      menu.classList.add('show');
+      menu.style.display = 'block';
     }
   },
 
   selectHeaderLanguage: (langCode, containerId) => {
     CareConnectI18n.setLanguage(langCode);
+    document.querySelectorAll('.lang-header-menu').forEach(m => {
+      m.classList.remove('show');
+      m.style.display = 'none';
+    });
     if (containerId) {
       CareConnectI18n.renderHeaderLanguageDropdown(containerId);
     }
-    document.querySelectorAll('.lang-header-menu').forEach(m => m.classList.add('d-none'));
   }
 };
 
-// Close popover when clicking outside
+// Close dropdown menu when clicking anywhere outside
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.language-dropdown-wrapper')) {
-    document.querySelectorAll('.lang-header-menu', '.lang-popover-menu').forEach(menu => menu.classList.add('d-none'));
+    document.querySelectorAll('.lang-header-menu').forEach(menu => {
+      menu.classList.remove('show');
+      menu.style.display = 'none';
+    });
   }
 });
 

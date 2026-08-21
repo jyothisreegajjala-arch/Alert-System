@@ -1137,6 +1137,201 @@ html, body {
 .lang-tab-btn:hover {
   background: rgba(255, 255, 255, 0.95) !important;
   color: #0284c7 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.horizontal-nav-list {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  gap: 0.5rem !important;
+  max-width: 100% !important;
+  scrollbar-width: none !important;
+  padding: 0.2rem 0 !important;
+}
+
+.horizontal-nav-list::-webkit-scrollbar {
+  display: none !important;
+}
+
+.horizontal-nav-list .nav-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  padding: 0.5rem 0.85rem !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--neo-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
+  font-size: 0.86rem !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-shadow: 3px 3px 8px var(--neo-shadow-dark), -3px -3px 8px var(--neo-shadow-light) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.header-actions-right, .nav-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.45rem !important;
+  margin-left: auto !important;
+  max-width: 100% !important;
+}
+
+.header-actions-right > *, .nav-actions > * {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+.header-actions-right button, .nav-actions button, .lang-trigger-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  padding: 0.45rem 0.75rem !important;
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+}
+
+/* Mobile Screen Specific Tweaks (Desktop Site ON/OFF on Phone) */
+@media (max-width: 768px) {
+  .app-header-nav {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  .header-nav-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+  }
+
+  .header-actions-right, .nav-actions {
+    width: 100% !important;
+    justify-content: space-between !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .horizontal-nav-list {
+    width: 100% !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
+    padding-top: 0.4rem !important;
+  }
+
+  .main-content-area {
+    padding: 0.75rem !important;
+  }
+
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+}
+
+/* Centered Voice Command & Voice Assistant Bar System */
+.floating-assist-bar {
+  position: fixed !important;
+  bottom: 1.25rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 2000 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.75rem !important;
+  padding: 0.55rem 1.1rem !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16) !important;
+}
+
+.floating-assist-bar button {
+  border-radius: 9999px !important;
+  padding: 0.5rem 1.1rem !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.floating-assist-bar #btn-voice-command {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+
+.floating-assist-bar #btn-voice-command:hover {
+  background: #0369a1 !important;
+  transform: scale(1.04) !important;
+}
+
+.floating-assist-bar #btn-voice-assistant {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.floating-assist-bar #btn-voice-assistant:hover {
+  background: #f1f5f9 !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+.header-voice-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  margin: 0 auto !important;
+}
+
+.header-voice-center button {
+  border-radius: 20px !important;
+  padding: 0.45rem 0.85rem !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+}
+
+/* Homepage & Landing Portals Language Tab Buttons */
+.lang-tab-btn {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(2, 132, 199, 0.2) !important;
+  color: #334155 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  white-space: nowrap !important;
+}
+
+.lang-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #0284c7 !important;
   border-color: rgba(2, 132, 199, 0.45) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12) !important;
@@ -1147,4 +1342,13 @@ html, body {
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
   box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+}
+
+/* Header Language Dropdown Menu - Explicitly Hidden Until Clicked */
+.lang-header-menu {
+  display: none !important;
+}
+
+.lang-header-menu.show {
+  display: block !important;
 }
