@@ -219,52 +219,16 @@ exports.markAsRead = async (req, res) => {
 // Clear Notification History
 exports.clearNotificationHistory = async (req, res) => {
   try {
-    const user = req.user;
     const isDbConnected = require('mongoose').connection.readyState === 1;
 
     if (isDbConnected) {
-      let filter = {};
-      if (user.role !== 'admin') {
-        const orConditions = [
-          { recipientUserId: user._id },
-          { senderUserId: user._id }
-        ];
-        if (user._id) {
-          orConditions.push({ recipientUserId: user._id.toString() });
-          orConditions.push({ senderUserId: user._id.toString() });
-        }
-        if (user.email) {
-          orConditions.push({ targetEmail: user.email.toLowerCase() });
-          orConditions.push({ targetEmail: user.email });
-        }
-        if (user.phone) {
-          orConditions.push({ targetPhone: user.phone });
-        }
-        filter = { $or: orConditions };
-      }
-      await Notification.deleteMany(filter);
-    } else {
-      const memoryStore = require('../config/memoryStore');
-      const userIdStr = (user._id || user.id || '').toString();
-      const userEmail = (user.email || '').toLowerCase();
-      const userPhone = user.phone || '';
-
-      if (user.role === 'admin') {
-        memoryStore.notifications = [];
-      } else {
-        memoryStore.notifications = (memoryStore.notifications || []).filter(n => {
-          const recId = (n.recipientUserId || '').toString();
-          const sndId = (n.senderUserId || '').toString();
-          const tEmail = (n.targetEmail || '').toLowerCase();
-          const tPhone = n.targetPhone || '';
-
-          if (userIdStr && (recId === userIdStr || sndId === userIdStr)) return false;
-          if (userEmail && tEmail === userEmail) return false;
-          if (userPhone && tPhone === userPhone) return false;
-          return true;
-        });
-      }
+      // Delete all notification documents from MongoDB (including broadcasted SOS alerts and link requests)
+      await Notification.deleteMany({});
     }
+    
+    // Clear in-memory notification store
+    const memoryStore = require('../config/memoryStore');
+    memoryStore.notifications = [];
 
     return res.status(200).json({
       success: true,
