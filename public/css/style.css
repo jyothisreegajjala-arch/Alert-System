@@ -222,8 +222,7 @@ a:hover {
   background: var(--neo-bg) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
   padding: 0.85rem 1.5rem;
-  position: sticky;
-  top: 0;
+  position: relative !important;
   z-index: 1000;
   box-shadow: 6px 6px 16px var(--neo-shadow-dark), -6px -6px 16px var(--neo-shadow-light) !important;
 }
@@ -687,8 +686,7 @@ a:hover {
 
 /* Top Horizontal Single-Row Navigation Header */
 .app-header-nav {
-  position: sticky;
-  top: 0;
+  position: relative !important;
   z-index: 1500;
   background: var(--neo-bg) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.7) !important;
@@ -795,8 +793,7 @@ html, body {
 }
 
 .app-header-nav {
-  position: sticky;
-  top: 0;
+  position: relative !important;
   z-index: 1500;
   background: var(--neo-bg) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.7) !important;
