@@ -7,9 +7,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v20_final_no_language_popover">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v20_final_no_language_popover">
-  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v20_final_no_language_popover">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v21_aligned_notifications">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v21_aligned_notifications">
+  <link rel="stylesheet" href="/public/css/admin.css?v=20260821_v21_aligned_notifications">
 </head>
 <body>
 
@@ -247,8 +247,71 @@
           </div>
         </div>
 
+  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL -->
+  <div id="notifications-modal" class="modal-backdrop d-none">
+    <div class="modal-content" style="max-width: 760px; width: 95vw;">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:0.5rem; margin:0;">
+          <span>🔔</span> <span data-i18n="notifications">Notifications & Connection Requests</span>
+        </h3>
+        <button onclick="closeNotificationsModal()" class="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Divided Count Summary Cards -->
+        <div class="notif-summary-banner">
+          <div class="notif-summary-card" onclick="filterNotifications('PENDING')">
+            <div class="notif-summary-icon">🔴</div>
+            <div class="notif-summary-info">
+              <span class="notif-summary-label">Pending Requests</span>
+              <span id="count-pending" class="notif-summary-count">0</span>
+            </div>
+          </div>
+
+          <div class="notif-summary-card" onclick="filterNotifications('ACCEPTED')">
+            <div class="notif-summary-icon">🟢</div>
+            <div class="notif-summary-info">
+              <span class="notif-summary-label">Accepted / Linked</span>
+              <span id="count-accepted" class="notif-summary-count">0</span>
+            </div>
+          </div>
+
+          <div class="notif-summary-card" onclick="filterNotifications('all')">
+            <div class="notif-summary-icon">📋</div>
+            <div class="notif-summary-info">
+              <span class="notif-summary-label">Total Logs</span>
+              <span id="count-read" class="notif-summary-count">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Tab Buttons -->
+        <div class="notif-filter-tabs">
+          <button type="button" id="tab-notif-all" class="btn notif-tab-btn active" onclick="filterNotifications('all')">
+            📋 All Notifications
+          </button>
+          <button type="button" id="tab-notif-pending" class="btn notif-tab-btn" onclick="filterNotifications('PENDING')">
+            🔴 Pending Requests
+          </button>
+          <button type="button" id="tab-notif-accepted" class="btn notif-tab-btn" onclick="filterNotifications('ACCEPTED')">
+            🟢 Accepted Requests
+          </button>
+          <button type="button" id="tab-notif-read" class="btn notif-tab-btn" onclick="filterNotifications('READ')">
+            ⚪ Read Logs
+          </button>
+        </div>
+
+        <div id="notifications-list-content">
+          <div style="text-align:center; padding:2.5rem; color:#475569;">Loading notifications...</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" onclick="closeNotificationsModal()" class="btn btn-secondary">Close</button>
       </div>
     </div>
+  </div>
+
   <!-- Floating Centered Voice Assistant & Speech-to-Text Bar -->
   <div class="floating-assist-bar">
     <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">

@@ -1258,29 +1258,40 @@ function renderNotificationList() {
       <div class="notif-card ${cardClass}">
         <div class="notif-header">
           <div class="notif-sender">
-            ${n.senderName} <small style="font-size:0.85rem; color:#94a3b8; font-weight:600;">(${n.senderRole || 'User'})</small>
+            <span>👤</span>
+            <span>${n.senderName}</span>
+            <small style="font-size:0.82rem; color:#64748b; font-weight:600;">(${n.senderRole || 'User'})</small>
           </div>
           <span class="badge ${n.status === 'PENDING' ? 'badge-pending' : n.status === 'ACCEPTED' ? 'badge-accepted' : 'badge-escalated'}">
-            ${n.status}
+            ${n.status === 'PENDING' ? '🔴 PENDING' : n.status === 'ACCEPTED' ? '🟢 ACCEPTED' : n.status}
           </span>
         </div>
 
-        <p style="color:#ffffff; font-size:0.95rem; font-weight:700; margin:0.4rem 0;">
+        <p style="color:#0f172a; font-size:0.95rem; font-weight:700; margin:0.4rem 0 0.75rem 0; line-height:1.5;">
           ${n.message}
         </p>
 
         <div class="notif-meta-grid">
-          <div><strong style="color:#94a3b8;">Request Type:</strong><br><span style="color:#fff; font-weight:700;">${n.emergencyType || 'Connection Request'}</span></div>
-          <div><strong style="color:#94a3b8;">Address / Apartment:</strong><br><span style="color:#fff; font-weight:700;">${n.address || 'Springboard Community'} ${n.apartment ? '(' + n.apartment + ')' : ''}</span></div>
-          <div><strong style="color:#94a3b8;">Date & Time:</strong><br><span style="color:#fff; font-weight:700;">${SafeReach.formatDate(n) || 'Recent'} ${SafeReach.formatTime(n) || ''}</span></div>
+          <div class="notif-meta-item">
+            <span class="notif-meta-label">Type</span>
+            <span class="notif-meta-val">${n.emergencyType || 'Connection Request'}</span>
+          </div>
+          <div class="notif-meta-item">
+            <span class="notif-meta-label">Location / Apt</span>
+            <span class="notif-meta-val">${n.address || 'Springboard Community'} ${n.apartment ? '(' + n.apartment + ')' : ''}</span>
+          </div>
+          <div class="notif-meta-item">
+            <span class="notif-meta-label">Date & Time</span>
+            <span class="notif-meta-val">${SafeReach.formatDate(n) || 'Recent'} ${SafeReach.formatTime(n) || ''}</span>
+          </div>
         </div>
 
         ${n.status === 'PENDING' ? `
           <div class="notif-actions">
-            <button onclick="acceptNotificationAction('${n._id}')" class="btn btn-success btn-sm" style="font-weight:800; padding:0.5rem 1.25rem;">
-              ✅ Accept
+            <button onclick="acceptNotificationAction('${n._id}')" class="btn btn-primary btn-sm" style="font-weight:800; padding:0.5rem 1.35rem;">
+              ✅ Accept Connection
             </button>
-            <button onclick="declineNotificationAction('${n._id}')" class="btn btn-outline-danger btn-sm" style="font-weight:700; padding:0.5rem 1.25rem;">
+            <button onclick="declineNotificationAction('${n._id}')" class="btn btn-outline-danger btn-sm" style="font-weight:700; padding:0.5rem 1.35rem;">
               ❌ Decline
             </button>
           </div>
