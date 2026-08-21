@@ -1352,3 +1352,8 @@ html, body {
 .lang-header-menu.show {
   display: block !important;
 }
+
+/* Voice Assistant, Voice Command, Dark Mode & Accessibility Bar Removal */
+.floating-assist-bar, #btn-voice-assistant, #btn-voice-command, #btn-theme-toggle, #btn-toggle-accessibility {
+  display: none !important;
+}

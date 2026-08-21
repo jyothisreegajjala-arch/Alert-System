@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v42_full_dashboard_language_translation">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v42_full_dashboard_language_translation">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260821_v43_removed_voice_theme_accessibility_buttons">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260821_v43_removed_voice_theme_accessibility_buttons">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   <style>
     .d-none { display: none !important; }
@@ -64,15 +64,6 @@
       <header class="app-top-header" style="background:var(--neo-bg); border-bottom:1px solid rgba(255,255,255,0.7); padding:0.85rem 1.5rem; display:flex; align-items:center; justify-content:flex-end; gap:0.75rem; box-shadow:4px 4px 10px var(--neo-shadow-dark);">
         <!-- Language Selection Dropdown Menu -->
         <div id="header-language-selector"></div>
-
-        <!-- Light / Dark Mode Toggle Button -->
-        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
-          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-        </button>
-
-        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
-          👁️ Accessibility
-        </button>
 
         <!-- Real-Time Notifications Button -->
         <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
@@ -390,16 +381,6 @@
         <button type="button" onclick="closeNotificationsModal()" class="btn btn-secondary btn-sm">Close</button>
       </div>
     </div>
-  </div>
-
-  <!-- Floating Voice Assistant & Speech-to-Text Bar -->
-  <div class="floating-assist-bar">
-    <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">
-      🔊 Voice Assistant
-    </button>
-    <button type="button" id="btn-voice-command" onclick="CareConnectVoiceCommands.toggleListening()" class="btn btn-primary btn-sm" data-i18n="voice_command_btn">
-      🎙️ Voice Command
-    </button>
   </div>
 
   <!-- Socket.IO, Leaflet JS, SidebarNav & CareConnect Scripts -->
