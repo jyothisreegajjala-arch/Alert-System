@@ -99,6 +99,28 @@
         </div>
       </header>
 
+      <!-- Mobile Quick Horizontal Tab Bar (Visible on mobile/tablet screens for 1-tap tab switching) -->
+      <div class="mobile-quick-nav-bar">
+        <button class="mobile-tab-btn active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+          <span>🏠</span> <span data-i18n="dashboard">Dashboard</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+          <span>🚨</span> <span data-i18n="active_emergency">Alerts</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-gps" onclick="CareConnectNav.switchTab('tab-gps')">
+          <span>📍</span> <span data-i18n="live_gps_title">Live GPS</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-contacts" onclick="CareConnectNav.switchTab('tab-contacts')">
+          <span>👥</span> <span data-i18n="emergency_contacts">Contacts</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+          <span>📊</span> <span data-i18n="reports">Reports</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-profile" onclick="CareConnectNav.switchTab('tab-profile')">
+          <span>👤</span> <span data-i18n="profile">Profile</span>
+        </button>
+      </div>
+
       <div class="container dashboard-container" style="padding-top:1.5rem;">
         
         <!-- Responder Account Link Requests Notification Banner -->

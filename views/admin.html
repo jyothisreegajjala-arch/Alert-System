@@ -95,6 +95,25 @@
         </div>
       </header>
 
+      <!-- Mobile Quick Horizontal Tab Bar (Visible on mobile/tablet screens for 1-tap tab switching) -->
+      <div class="mobile-quick-nav-bar">
+        <button class="mobile-tab-btn active" data-tab="tab-dashboard" onclick="CareConnectNav.switchTab('tab-dashboard')">
+          <span>🏠</span> <span>Dashboard</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-alerts" onclick="CareConnectNav.switchTab('tab-alerts')">
+          <span>🚨</span> <span>Alerts</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-gps" onclick="window.location.href='/dashboard#tab-gps'">
+          <span>📍</span> <span>Live GPS</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-reports" onclick="CareConnectNav.switchTab('tab-reports')">
+          <span>📊</span> <span>Reports</span>
+        </button>
+        <button class="mobile-tab-btn" data-tab="tab-profile" onclick="openEditProfileModal()">
+          <span>👤</span> <span>Profile</span>
+        </button>
+      </div>
+
       <div class="container dashboard-container">
         
         <div class="admin-header">
