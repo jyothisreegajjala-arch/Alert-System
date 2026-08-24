@@ -593,6 +593,31 @@
   margin-bottom: 0.75rem;
 }
 
+/* Universal Fluid Container & Grid Adaptability for Mobile Phones (Desktop Site ON/OFF) */
+.user-profile-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-grid, .location-grid, .alert-meta-grid, .contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sos-hub {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
 @media (max-width: 768px) {
   .user-profile-bar {
     flex-direction: column;

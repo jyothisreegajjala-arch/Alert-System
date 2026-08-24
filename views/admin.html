@@ -22,12 +22,13 @@
     <div id="sidebar-backdrop"></div>
 
     <!-- Vertical Left Sidebar Navigation -->
-    <aside class="app-sidebar">
-      <div class="sidebar-header">
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header" style="display:flex; align-items:center; justify-content:space-between;">
         <a href="/admin" class="brand-logo" style="display:flex; align-items:center; gap:0.55rem; text-decoration:none;">
           <div class="logo-icon" style="font-size:1.6rem;">👑</div>
           <span class="sidebar-brand-name" style="font-size:1.15rem; font-weight:800; color:#0f172a;">SafeReach Admin</span>
         </a>
+        <button class="mobile-sidebar-close-btn" onclick="CareConnectNav.closeMobileSidebar()" aria-label="Close sidebar" style="background:none; border:none; font-size:1.35rem; cursor:pointer; color:#64748b; padding:0.2rem 0.4rem; border-radius:4px; display:inline-flex; align-items:center; justify-content:center;">✕</button>
       </div>
 
       <!-- Vertical One-by-One Navigation Menu Options -->
@@ -59,10 +60,17 @@
     <!-- Main Content Area -->
     <div class="main-content-area">
       <!-- Top Action Bar -->
-      <header class="app-top-header" style="background:var(--neo-bg); border-bottom:1px solid rgba(255,255,255,0.7); padding:0.85rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem; box-shadow:4px 4px 10px var(--neo-shadow-dark);">
-        <!-- Top Welcome User Banner -->
-        <div id="top-welcome-user" style="font-size:1.15rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
-          <span data-i18n="welcome">Welcome</span>, <span id="top-user-name" style="color:#0284c7; font-weight:900;">System Admin</span> (<span id="top-user-role" style="color:#475569; font-weight:700;">System Admin</span>)
+      <header class="app-top-header" style="background:var(--neo-bg); border-bottom:1px solid rgba(255,255,255,0.7); padding:0.85rem 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem; box-shadow:4px 4px 10px var(--neo-shadow-dark); flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <!-- Mobile Sidebar Toggle Button -->
+          <button id="sidebar-toggle-btn" onclick="CareConnectNav.toggleMobileSidebar()" class="sidebar-toggle-btn btn btn-sm btn-outline-secondary" aria-label="Toggle Menu Sidebar" style="display:inline-flex; align-items:center; justify-content:center; padding:0.4rem 0.65rem; font-size:1.25rem; cursor:pointer; font-weight:800; border-radius:8px;">
+            ☰
+          </button>
+
+          <!-- Top Welcome User Banner -->
+          <div id="top-welcome-user" style="font-size:1.15rem; font-weight:800; color:#0f172a; display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+            <span data-i18n="welcome">Welcome</span>, <span id="top-user-name" style="color:#0284c7; font-weight:900;">System Admin</span> (<span id="top-user-role" style="color:#475569; font-weight:700;">System Admin</span>)
+          </div>
         </div>
 
         <div style="display:flex; align-items:center; gap:0.75rem;">
