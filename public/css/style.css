@@ -1539,18 +1539,25 @@ html, body {
   .top-header-actions > * {
     flex: 1 1 auto !important;
     min-width: 0 !important;
+    max-width: 100% !important;
     justify-content: center !important;
     text-align: center !important;
   }
 
-  .lang-trigger-btn, #btn-nav-notifications, .status-pill-btn, .nav-signout-btn {
+  .lang-trigger-btn, #btn-nav-notifications, .status-pill-btn, .nav-signout-btn, .mobile-tab-btn {
     padding: 0.32rem 0.55rem !important;
-    font-size: 0.78rem !important;
-    white-space: nowrap !important;
+    font-size: clamp(0.74rem, 2.4vw, 0.92rem) !important;
+    min-height: 2rem !important;
+    height: auto !important;
+    line-height: 1.25 !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
   }
 
   #top-welcome-user {
-    font-size: 0.95rem !important;
+    font-size: clamp(0.85rem, 2.8vw, 1.1rem) !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
   }
 
   /* 5. Dashboard Container & Grid Cards */
@@ -1559,6 +1566,7 @@ html, body {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 
   .user-profile-bar {
@@ -1579,7 +1587,8 @@ html, body {
   }
 
   .sos-title {
-    font-size: clamp(1.6rem, 5vw, 2.2rem) !important;
+    font-size: clamp(1.5rem, 5vw, 2.2rem) !important;
+    overflow-wrap: break-word !important;
   }
 
   .sos-button-wrapper {
@@ -1755,13 +1764,41 @@ html, body {
 
 .alert-actions-group > * {
   flex: 1 1 auto !important;
-  min-width: min(100%, 140px) !important;
+  min-width: min(100%, 130px) !important;
   justify-content: center !important;
   text-align: center !important;
   font-size: 0.82rem !important;
-  padding: 0.45rem 0.75rem !important;
-  white-space: nowrap !important;
+  padding: 0.45rem 0.65rem !important;
 }
+
+/* Universal System Font Scale & Mobile Display Setting Adaptability */
+* {
+  box-sizing: border-box !important;
+}
+
+body, html {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+.alert-user-name, .notif-sender, .sos-title, .brand-logo, h1, h2, h3, h4, h5, p, span, label {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+.btn, .status-pill-btn, .mobile-tab-btn, .nav-item, .lang-trigger-btn {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: auto !important;
+}
+
+/* Enable smooth scrolling tables on small screens with scaled fonts */
+.history-table-content, table {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
 
 
 
