@@ -1519,11 +1519,34 @@ html, body {
 
   /* 4. Top Action Header formatting */
   .app-top-header {
-    padding: 0.65rem 0.85rem !important;
-    flex-wrap: wrap !important;
-    gap: 0.5rem !important;
+    padding: 0.55rem 0.75rem !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.45rem !important;
     width: 100% !important;
     box-sizing: border-box !important;
+  }
+
+  .top-header-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.35rem !important;
+    width: 100% !important;
+    flex-wrap: wrap !important;
+  }
+
+  .top-header-actions > * {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .lang-trigger-btn, #btn-nav-notifications, .status-pill-btn, .nav-signout-btn {
+    padding: 0.32rem 0.55rem !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
   }
 
   #top-welcome-user {
