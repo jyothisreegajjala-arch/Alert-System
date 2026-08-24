@@ -104,18 +104,20 @@ function renderUserProfile() {
   if (dutyContainer) {
     if (currentUser.role === 'security_guard') {
       dutyContainer.innerHTML = `
-        <button id="btn-toggle-duty" class="btn btn-sm ${currentUser.dutyStatus === 'ON_DUTY' ? 'btn-success' : 'btn-secondary'}">
-          ${currentUser.dutyStatus === 'ON_DUTY' ? '🟢 ON DUTY' : '⚪ OFF DUTY'}
+        <button id="btn-toggle-duty" class="status-pill-btn ${currentUser.dutyStatus === 'ON_DUTY' ? 'status-online' : 'status-offline'}" title="Click to toggle duty status">
+          ${currentUser.dutyStatus === 'ON_DUTY' ? '🟢 On Duty' : '🔴 Off Duty'}
         </button>
       `;
       document.getElementById('btn-toggle-duty')?.addEventListener('click', toggleDutyStatus);
     } else if (currentUser.role === 'volunteer') {
       dutyContainer.innerHTML = `
-        <button id="btn-toggle-avail" class="btn btn-sm ${currentUser.availability === 'AVAILABLE' ? 'btn-success' : 'btn-secondary'}">
-          ${currentUser.availability === 'AVAILABLE' ? '⚡ AVAILABLE' : '🌙 UNAVAILABLE'}
+        <button id="btn-toggle-avail" class="status-pill-btn ${currentUser.availability === 'AVAILABLE' ? 'status-online' : 'status-offline'}" title="Click to toggle availability">
+          ${currentUser.availability === 'AVAILABLE' ? '🟢 Available' : '🔴 Busy'}
         </button>
       `;
       document.getElementById('btn-toggle-avail')?.addEventListener('click', toggleVolunteerAvailability);
+    } else {
+      dutyContainer.innerHTML = '';
     }
   }
 }
@@ -524,7 +526,7 @@ function createAlertCard(emergency) {
       </div>
     ` : ''}
 
-    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem;">
+    <div class="alert-actions-group">
       ${emergency.status !== 'ACCEPTED' && emergency.status !== 'RESOLVED' ? `
         <button onclick="acceptEmergencyAlert('${emergency._id}')" class="btn btn-success btn-sm">✅ ACCEPT EMERGENCY</button>
         <button onclick="rejectEmergencyAlert('${emergency._id}')" class="btn btn-secondary btn-sm">❌ Dismiss</button>
@@ -534,7 +536,7 @@ function createAlertCard(emergency) {
         <button onclick="resolveEmergencyAlert('${emergency._id}')" class="btn btn-success btn-sm">🏁 Mark as Resolved</button>
       ` : ''}
 
-      <a href="${mapUrl}" target="_blank" class="btn btn-primary btn-sm">🗺️ Open Google Maps Navigation</a>
+      <a href="${mapUrl}" target="_blank" class="btn btn-primary btn-sm">🗺️ Google Maps Navigation</a>
       <a href="tel:${emergency.userPhone}" class="btn btn-secondary btn-sm">📞 Call ${emergency.userName}</a>
     </div>
   `;
