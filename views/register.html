@@ -105,11 +105,14 @@
         </div>
 
         <div class="form-group">
-          <label for="reg-password">Password</label>
-          <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+          <label for="reg-password" data-i18n="password">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('reg-password', this)" aria-label="Toggle password visibility">👁️</button>
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.9rem; margin-top:0.5rem;">Create Account</button>
+        <button type="submit" class="btn btn-outline-secondary" style="width:100%; padding:0.85rem; margin-top:0.5rem; background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:800; font-size:1.05rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">Create Account</button>
       </form>
 
       <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color: #475569;">

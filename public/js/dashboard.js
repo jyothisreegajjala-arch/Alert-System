@@ -57,13 +57,39 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Render Header User Info
 function renderUserProfile() {
   const nameEl = document.getElementById('user-display-name');
+  const topNameEl = document.getElementById('top-user-name');
+  const topRoleEl = document.getElementById('top-user-role');
   const roleEl = document.getElementById('user-display-role');
   const avatarEl = document.getElementById('user-avatar');
   const editBtn = document.getElementById('btn-edit-profile');
 
-  if (nameEl) nameEl.textContent = currentUser.name;
-  if (roleEl) roleEl.textContent = `${SafeReach.formatRole(currentUser.role)} • ${currentUser.apartmentNumber || currentUser.address || ''}`;
-  if (avatarEl) avatarEl.textContent = currentUser.name.charAt(0).toUpperCase();
+  const formattedRole = SafeReach.formatRole(currentUser.role);
+  const cleanName = (currentUser.name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+  if (nameEl) nameEl.textContent = cleanName;
+  if (topNameEl) topNameEl.textContent = cleanName;
+  if (topRoleEl) topRoleEl.textContent = formattedRole;
+  if (roleEl) roleEl.textContent = `${formattedRole} • ${currentUser.apartmentNumber || currentUser.address || ''}`;
+  if (avatarEl) avatarEl.textContent = cleanName.charAt(0).toUpperCase();
+
+  const profileSignoutBtn = document.getElementById('btn-profile-signout');
+  if (profileSignoutBtn) {
+    if (currentUser.role === 'senior_citizen' || currentUser.role === 'child' || currentUser.role === 'family_member' || currentUser.role === 'admin' || currentUser.role === 'neighbor' || currentUser.role === 'security_guard' || currentUser.role === 'volunteer') {
+      profileSignoutBtn.style.display = 'none';
+    } else {
+      profileSignoutBtn.style.display = 'inline-flex';
+    }
+  }
+
+  const adminPanelBtn = document.getElementById('btn-admin-panel');
+  if (adminPanelBtn) {
+    if (currentUser.role === 'admin') {
+      adminPanelBtn.classList.remove('d-none');
+      adminPanelBtn.style.display = 'inline-flex';
+    } else {
+      adminPanelBtn.classList.add('d-none');
+      adminPanelBtn.style.display = 'none';
+    }
+  }
 
   if (editBtn) {
     if (currentUser.role === 'senior_citizen' || currentUser.role === 'child') {
@@ -131,6 +157,10 @@ function initSocketConnection() {
     SafeReach.showToast(data.message, 'success');
     loadActiveEmergencies();
     loadEmergencyHistory();
+    loadUserNotifications();
+    if (data.emergency) {
+      focusLiveGpsOnEmergency(data.emergency);
+    }
   });
 
   socket.on('EMERGENCY_RESOLVED', (data) => {
@@ -142,6 +172,7 @@ function initSocketConnection() {
   socket.on('SOS_STATUS_UPDATE', (data) => {
     SafeReach.showToast(data.message, data.status === 'ACCEPTED' ? 'success' : 'warning');
     renderActiveSOSTracker(data.emergency);
+    loadEmergencyHistory();
   });
 }
 
@@ -179,6 +210,25 @@ function renderRoleDashboard() {
   if (mapSection) mapSection.classList.remove('d-none');
   if (historySection) historySection.classList.remove('d-none');
   if (seniorLinkRequests) seniorLinkRequests.classList.remove('d-none');
+
+  const settingsNavItems = document.querySelectorAll('.nav-item[data-tab="tab-settings"]');
+  const contactsNavItems = document.querySelectorAll('.nav-item[data-tab="tab-contacts"]');
+
+  settingsNavItems.forEach(item => {
+    if (role === 'senior_citizen' || role === 'child' || role === 'family_member' || role === 'admin' || role === 'neighbor' || role === 'security_guard' || role === 'volunteer') {
+      item.style.display = 'none';
+    } else {
+      item.style.display = 'flex';
+    }
+  });
+
+  contactsNavItems.forEach(item => {
+    if (role === 'family_member' || role === 'admin' || role === 'neighbor' || role === 'security_guard' || role === 'volunteer') {
+      item.style.display = 'none';
+    } else {
+      item.style.display = 'flex';
+    }
+  });
 
   if (role === 'senior_citizen' || role === 'child') {
     if (seniorSosView) seniorSosView.classList.remove('d-none');
@@ -234,6 +284,7 @@ function initSOSButtonEngine() {
         SafeReach.showToast('🚨 EMERGENCY ALERT BROADCASTED WITH LOCATION!', 'danger');
         renderActiveSOSTracker(data.emergency);
         loadActiveEmergencies();
+        loadEmergencyHistory();
       } catch (err) {
         SafeReach.showToast(err.message, 'danger');
       }
@@ -354,6 +405,22 @@ async function cancelActiveEmergency(emergencyId) {
   }
 }
 
+// Client Dismissed Alerts Storage
+const getDismissedAlertIds = () => {
+  try {
+    return new Set(JSON.parse(sessionStorage.getItem('safereach_dismissed_alerts') || '[]'));
+  } catch (e) {
+    return new Set();
+  }
+};
+
+const markAlertAsDismissed = (emergencyId) => {
+  if (!emergencyId) return;
+  const set = getDismissedAlertIds();
+  set.add(String(emergencyId));
+  sessionStorage.setItem('safereach_dismissed_alerts', JSON.stringify(Array.from(set)));
+};
+
 // Fetch and render Active Emergencies Feed for Responders
 async function loadActiveEmergencies() {
   try {
@@ -375,7 +442,10 @@ async function loadActiveEmergencies() {
     const streamContainer = document.getElementById('active-alerts-feed-stream');
     if (!alertsContainer && !streamContainer) return;
 
-    if (!data.emergencies || data.emergencies.length === 0) {
+    const dismissedSet = getDismissedAlertIds();
+    const activeEmergencies = (data.emergencies || []).filter(e => !dismissedSet.has(String(e._id)) && !dismissedSet.has(String(e.id)));
+
+    if (activeEmergencies.length === 0) {
       const emptyHtml = `
         <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
           <span style="font-size:2rem;">🛡️</span>
@@ -389,7 +459,7 @@ async function loadActiveEmergencies() {
 
     if (alertsContainer) {
       alertsContainer.innerHTML = '';
-      data.emergencies.forEach(emergency => {
+      activeEmergencies.forEach(emergency => {
         const card = createAlertCard(emergency);
         alertsContainer.appendChild(card);
       });
@@ -397,7 +467,7 @@ async function loadActiveEmergencies() {
 
     if (streamContainer) {
       streamContainer.innerHTML = '';
-      data.emergencies.forEach(emergency => {
+      activeEmergencies.forEach(emergency => {
         const card = createAlertCard(emergency);
         streamContainer.appendChild(card);
       });
@@ -405,8 +475,8 @@ async function loadActiveEmergencies() {
 
     // If map section exists and is visible, center map on first active emergency
     const mapSection = document.getElementById('view-map-section');
-    if (data.emergencies.length > 0 && document.getElementById('map') && mapSection && !mapSection.classList.contains('d-none')) {
-      const first = data.emergencies[0];
+    if (activeEmergencies.length > 0 && document.getElementById('map') && mapSection && !mapSection.classList.contains('d-none')) {
+      const first = activeEmergencies[0];
       SafeReachMap.init('map', first.latitude, first.longitude, 15);
       SafeReachMap.addMarker(first.latitude, first.longitude, first.userName, `<b>${first.userName}</b><br>${first.address}`, 'red');
     }
@@ -504,24 +574,96 @@ function startClientCountdown(emergency) {
   activeCountdownIntervals.set(emergency._id, interval);
 }
 
+// Focus Live GPS Controls & Satellite Map on Senior Citizen Emergency
+function focusLiveGpsOnEmergency(emergency) {
+  if (!emergency) return;
+  const lat = Number(emergency.latitude) || 12.9716;
+  const lng = Number(emergency.longitude) || 77.5946;
+  const seniorName = emergency.userName || 'Senior Citizen';
+  const address = emergency.address || 'Emergency Location';
+  const phone = emergency.userPhone || '';
+  const alertId = emergency.alertId || '';
+
+  // 1. Switch active dashboard tab to Live GPS
+  if (window.CareConnectNav && window.CareConnectNav.switchTab) {
+    CareConnectNav.switchTab('tab-gps');
+  }
+
+  // 2. Update Location Controls & Status Panel
+  const statusEl = document.getElementById('location-status-text');
+  const infoEl = document.getElementById('location-info-display');
+
+  if (statusEl) {
+    statusEl.className = 'location-status status-active';
+    statusEl.innerHTML = `🚨 <strong>TRACKING LIVE SENIOR CITIZEN EMERGENCY:</strong> ${seniorName} • Alert #${alertId}`;
+  }
+
+  if (infoEl) {
+    infoEl.classList.remove('d-none');
+    const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+    infoEl.innerHTML = `
+      <div style="background: rgba(2, 132, 199, 0.08); border: 1px solid rgba(2, 132, 199, 0.25); padding: 1rem; border-radius: 12px; margin-top: 0.75rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+          <div>
+            <h5 style="color:#0f172a; font-weight:800; margin:0; font-size:1.05rem;">🆘 Senior Citizen: ${seniorName}</h5>
+            <p style="margin:0.25rem 0 0 0; font-size:0.9rem; color:#334155;">📍 <strong>Address:</strong> ${address}</p>
+            <p style="margin:0.2rem 0 0 0; font-size:0.85rem; color:#0284c7; font-weight:700;">🌐 GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            ${phone ? `<a href="tel:${phone}" class="btn btn-secondary btn-sm">📞 Call ${seniorName}</a>` : ''}
+            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">🗺️ Open Google Maps Navigation</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. Center Live Map on Senior Citizen Emergency Coordinates
+  const mapSection = document.getElementById('view-map-section');
+  if (mapSection) mapSection.classList.remove('d-none');
+
+  setTimeout(() => {
+    if (window.SafeReachMap) {
+      SafeReachMap.init('map', lat, lng, 16);
+      SafeReachMap.addMarker(
+        lat,
+        lng,
+        `Senior Citizen: ${seniorName}`,
+        `<b>🚨 Senior Citizen Emergency: ${seniorName}</b><br>Address: ${address}<br>Phone: ${phone}<br>GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`,
+        'red'
+      );
+      if (SafeReachMap.invalidateMapSize) {
+        SafeReachMap.invalidateMapSize();
+      }
+    }
+  }, 200);
+}
+
+window.focusLiveGpsOnEmergency = focusLiveGpsOnEmergency;
+
 // Responder Actions
 async function acceptEmergencyAlert(emergencyId) {
   try {
     const data = await SafeReach.api(`/api/emergency/accept/${emergencyId}`, { method: 'PUT' });
-    SafeReach.showToast(data.message, 'success');
+    SafeReach.showToast(data.message || 'Emergency accepted successfully!', 'success');
     loadActiveEmergencies();
+    if (data.emergency) {
+      focusLiveGpsOnEmergency(data.emergency);
+    }
   } catch (err) {
     SafeReach.showToast(err.message, 'danger');
   }
 }
 
 async function rejectEmergencyAlert(emergencyId) {
+  markAlertAsDismissed(emergencyId);
   try {
-    await SafeReach.api(`/api/emergency/reject/${emergencyId}`, { method: 'POST' });
-    SafeReach.showToast('Alert dismissed for view', 'info');
+    await SafeReach.api(`/api/emergency/reject/${emergencyId}`, { method: 'POST' }).catch(() => {});
+    SafeReach.showToast('Alert dismissed and removed from dashboard', 'info');
     loadActiveEmergencies();
   } catch (err) {
-    SafeReach.showToast(err.message, 'danger');
+    loadActiveEmergencies();
+    SafeReach.showToast('Alert dismissed from dashboard', 'info');
   }
 }
 
@@ -542,39 +684,67 @@ async function resolveEmergencyAlert(emergencyId) {
 
 // Emergency History Loader
 async function loadEmergencyHistory() {
-  if (currentUser.role === 'senior_citizen' || currentUser.role === 'child') {
-    return; // Bypass history table loading for Senior Citizens to keep view clutter-free
-  }
-
   try {
     const data = await SafeReach.api('/api/emergency/history');
-    const tbody = document.getElementById('history-table-body');
-    if (!tbody) return;
+    const tbodyHistory = document.getElementById('history-table-body');
+    const tbodyReports = document.getElementById('reports-history-table-body');
 
     if (!data.emergencies || data.emergencies.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
+      if (tbodyHistory) tbodyHistory.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
+      if (tbodyReports) tbodyReports.innerHTML = `<tr><td colspan="10" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
       return;
     }
 
-    tbody.innerHTML = '';
-    data.emergencies.forEach(item => {
-      let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
-      if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
-      if (item.status === 'PENDING_LOCAL') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
-      if (item.status === 'ESCALATED_VOLUNTEER') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
+    if (tbodyHistory) {
+      tbodyHistory.innerHTML = '';
+      data.emergencies.forEach(item => {
+        let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
+        if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
+        if (item.status === 'PENDING_LOCAL') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
+        if (item.status === 'ESCALATED_VOLUNTEER') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><strong>#${item.alertId}</strong></td>
-        <td>${item.userName}</td>
-        <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
-        <td>${item.address}</td>
-        <td>${statusBadge}</td>
-        <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${item.acceptedBy.role})` : 'Unassigned'}</td>
-        <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : 'N/A'}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${item.alertId}</strong></td>
+          <td>${item.userName}</td>
+          <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
+          <td>${item.address}</td>
+          <td>${statusBadge}</td>
+          <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${item.acceptedBy.role})` : 'Unassigned'}</td>
+          <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : 'N/A'}</td>
+        `;
+        tbodyHistory.appendChild(tr);
+      });
+    }
+
+    if (tbodyReports) {
+      tbodyReports.innerHTML = '';
+      data.emergencies.forEach(item => {
+        let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
+        if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
+        if (item.status === 'PENDING_LOCAL' || item.status === 'PENDING_FAMILY') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
+        if (item.status === 'ESCALATED_VOLUNTEER' || item.status === 'ESCALATED_NEIGHBOR_GUARD') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
+        if (item.status === 'CANCELLED') statusBadge = `<span class="badge" style="background:#64748b; color:#ffffff;">CANCELLED</span>`;
+
+        const lat = item.location?.coordinates?.[1] || item.latitude || 12.9716;
+        const lng = item.location?.coordinates?.[0] || item.longitude || 77.5946;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${item.alertId}</strong></td>
+          <td><strong>${item.userName}</strong></td>
+          <td>${item.userPhone || '—'}</td>
+          <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
+          <td>${item.address}</td>
+          <td>📍 ${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}</td>
+          <td>${item.medicalInfo || item.emergencyType || 'SOS Emergency Triggered'}</td>
+          <td>${statusBadge}</td>
+          <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${SafeReach.formatRole(item.acceptedBy.role)})` : (item.status === 'CANCELLED' ? 'Cancelled by User' : 'Unassigned')}</td>
+          <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : (item.status === 'CANCELLED' ? 'N/A' : 'Pending')}</td>
+        `;
+        tbodyReports.appendChild(tr);
+      });
+    }
   } catch (err) {
     console.error('History load error:', err);
   }
@@ -770,7 +940,7 @@ function openEditProfileModal() {
   }
   // 6. Senior Citizen / Dependent (Complete Safety Network Profile in 2-Column Grid)
   else {
-    modalTitle.innerHTML = `👵 <span data-i18n="profile">Senior Citizen Profile & Safety Network</span>`;
+    modalTitle.innerHTML = (role === 'child') ? `👶 <span data-i18n="profile">Child / Dependent Profile & Safety Network</span>` : `👵 <span data-i18n="profile">Senior Citizen Profile & Safety Network</span>`;
     modalBody.innerHTML = `
       <div class="edit-section-card">
         <div class="edit-section-title">👤 1. Personal & Health Information</div>
@@ -949,6 +1119,7 @@ async function handleSaveProfile(e) {
     }
 
     SafeReach.showToast('✅ Profile updated successfully!', 'success');
+    alert('Profile updated successfully!');
   } catch (err) {
     SafeReach.showToast(err.message || 'Failed to update profile details', 'danger');
   }

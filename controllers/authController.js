@@ -171,6 +171,40 @@ exports.register = async (req, res) => {
   }
 };
 
+const demoAccountsList = [
+  { name: 'System Admin', email: 'admin@safereach.com', phone: '9800000000', password: 'password123', role: 'admin', address: 'Admin Command HQ', apartmentNumber: 'HQ-1', latitude: 12.9716, longitude: 77.5946, medicalInfo: 'System Operator & Command Monitor' }
+];
+
+async function seedDemoAccountsIfMissing() {
+  const isDbConnected = require('mongoose').connection.readyState === 1;
+  const memoryStore = require('../config/memoryStore');
+
+  for (const acc of demoAccountsList) {
+    if (isDbConnected) {
+      try {
+        let existing = await User.findOne({ email: acc.email });
+        if (!existing) {
+          await User.create(acc);
+          console.log(`[Auto-Seed Admin Account] Created '${acc.email}' (${acc.role}) in MongoDB Atlas.`);
+        }
+      } catch (e) {
+        console.warn(`[Auto-Seed DB Error for ${acc.email}]:`, e.message);
+      }
+    }
+
+    if (!memoryStore.users) memoryStore.users = [];
+    let existingMem = memoryStore.users.find(u => u.email === acc.email);
+    if (!existingMem) {
+      memoryStore.users.push({
+        _id: 'mem_demo_' + acc.role + '_' + Date.now(),
+        ...acc,
+        rawPassword: acc.password,
+        active: true
+      });
+    }
+  }
+}
+
 // Login user
 exports.login = async (req, res) => {
   try {
@@ -189,6 +223,9 @@ exports.login = async (req, res) => {
     const memoryStore = require('../config/memoryStore');
     let isDbConnected = require('mongoose').connection.readyState === 1;
     let user = null;
+
+    // Ensure system demo accounts (including System Admin) exist
+    await seedDemoAccountsIfMissing();
 
     // 1. Check MongoDB Atlas for matching User account
     if (isDbConnected) {

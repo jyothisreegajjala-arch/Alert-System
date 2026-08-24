@@ -241,9 +241,37 @@ const CareConnectTheme = {
   }
 };
 
+window.togglePasswordVisibility = function(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerHTML = '🙈';
+    btn.setAttribute('aria-label', 'Hide password');
+  } else {
+    input.type = 'password';
+    btn.innerHTML = '👁️';
+    btn.setAttribute('aria-label', 'Show password');
+  }
+};
+
 window.CareConnectTheme = CareConnectTheme;
 window.logout = function() {
   SafeReach.logout();
+};
+
+window.toggleReportsSection = function(contentId, arrowId) {
+  const contentEl = document.getElementById(contentId);
+  const arrowEl = document.getElementById(arrowId);
+  if (!contentEl) return;
+
+  if (contentEl.style.display === 'none') {
+    contentEl.style.display = 'block';
+    if (arrowEl) arrowEl.textContent = '▼';
+  } else {
+    contentEl.style.display = 'none';
+    if (arrowEl) arrowEl.textContent = '▶';
+  }
 };
 
 // Apply theme preference immediately

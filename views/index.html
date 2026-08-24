@@ -15,15 +15,15 @@
     <div class="nav-content">
       <a href="/" class="brand-logo">
         <div class="logo-icon">🛡️</div>
-        <span>SafeReach</span>
+        <span data-i18n="brand">SafeReach</span>
       </a>
       <div class="nav-links">
-        <a href="#how-it-works">How It Works</a>
-        <a href="#features">Features</a>
+        <a href="#how-it-works" data-i18n="how_it_works">How It Works</a>
+        <a href="#features" data-i18n="features">Features</a>
         <!-- Header Language Selection Dropdown Menu -->
         <div id="header-language-selector"></div>
-        <a href="/login" class="btn btn-outline-primary btn-sm">Role Login</a>
-        <a href="/register" class="btn btn-primary btn-sm">Register Account</a>
+        <a href="/login" class="btn btn-outline-secondary btn-sm" style="background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:700; padding:0.45rem 0.9rem;" data-i18n="login">Role Login</a>
+        <a href="/register" class="btn btn-outline-secondary btn-sm" style="background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:700; padding:0.45rem 0.9rem;" data-i18n="register">Register Account</a>
       </div>
     </div>
   </nav>
@@ -31,34 +31,34 @@
   <!-- Hero Section -->
   <section style="padding: 4rem 0 3.5rem 0; border-bottom: 1px solid rgba(184, 196, 214, 0.4);">
     <div class="container" style="max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; text-align: center;">
-      <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(2, 132, 199, 0.08); color: #0284c7; padding: 0.5rem 1.25rem; border-radius: 9999px; font-weight: 700; font-size: 0.88rem; margin-bottom: 1.25rem; border: 1px solid rgba(2, 132, 199, 0.2);">
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(2, 132, 199, 0.08); color: #0284c7; padding: 0.5rem 1.25rem; border-radius: 9999px; font-weight: 700; font-size: 0.88rem; margin-bottom: 1.25rem; border: 1px solid rgba(2, 132, 199, 0.2);" data-i18n="instant_escalation_badge">
         ⚡ Instant 60-Second Community Escalation
       </div>
       
-      <h1 style="font-size: clamp(2.2rem, 5vw, 3.4rem); color: #0f172a; font-weight: 900; line-height: 1.2; margin-bottom: 1rem;">
+      <h1 style="font-size: clamp(2.2rem, 5vw, 3.4rem); color: #0f172a; font-weight: 900; line-height: 1.2; margin-bottom: 1rem;" data-i18n="hero_title">
         Smart Community Emergency Alert System
       </h1>
       
-      <p style="font-size: clamp(1.05rem, 2.5vw, 1.2rem); color: #334155; max-width: 750px; margin: 0 auto 2rem auto; font-weight: 500;">
+      <p style="font-size: clamp(1.05rem, 2.5vw, 1.2rem); color: #334155; max-width: 750px; margin: 0 auto 2rem auto; font-weight: 500;" data-i18n="hero_subtitle">
         Connect Senior Citizens directly with linked Family Members, Neighbors, Security Guards, and Volunteers for instant response and GPS tracking.
       </p>
 
       <!-- Main Focus SOS Focus Circle Button -->
       <div class="main-sos-focus-wrapper">
         <a href="/login" class="main-sos-circle-btn">
-          <div class="sos-btn-text">🆘 SOS</div>
+          <div class="sos-btn-text">🆘 <span data-i18n="sos_button">SOS</span></div>
         </a>
         <div style="margin-top: 1.25rem;">
-          <div class="main-sos-line1">Press & Hold 3 Seconds to Trigger SOS</div>
-          <div class="main-sos-line2">Immediate Socket Broadcast to Linked Responders</div>
+          <div class="main-sos-line1" data-i18n="press_hold_sos">Press & Hold 3 Seconds to Trigger SOS</div>
+          <div class="main-sos-line2" data-i18n="socket_broadcast">Immediate Socket Broadcast to Linked Responders</div>
         </div>
       </div>
 
       <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
-        <a href="/register" class="btn btn-primary" style="padding: 0.85rem 1.8rem; font-size: 1.05rem;">
+        <a href="/register" class="btn btn-outline-secondary" style="padding: 0.85rem 1.8rem; font-size: 1.05rem; background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:700; box-shadow:0 2px 8px rgba(0,0,0,0.06);" data-i18n="register_now">
           🚀 Register Account Now
         </a>
-        <a href="/login" class="btn btn-outline-primary" style="padding: 0.85rem 1.8rem; font-size: 1.05rem;">
+        <a href="/login" class="btn btn-outline-secondary" style="padding: 0.85rem 1.8rem; font-size: 1.05rem; background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:700; box-shadow:0 2px 8px rgba(0,0,0,0.06);" data-i18n="access_role_portals">
           🔑 Access Role Portals
         </a>
       </div>
@@ -69,33 +69,33 @@
   <section id="how-it-works" style="padding: 4.5rem 0;">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
       <div style="text-align: center; margin-bottom: 3.5rem;">
-        <h2 style="font-size: 2.3rem; color: #0f172a; font-weight: 800;">Automated 60-Second Emergency Workflow</h2>
-        <p style="color: #475569; margin-top: 0.5rem; font-size: 1.05rem;">No emergency request goes unanswered with two-tier community escalation.</p>
+        <h2 style="font-size: 2.3rem; color: #0f172a; font-weight: 800;" data-i18n="workflow_title">Automated 60-Second Emergency Workflow</h2>
+        <p style="color: #475569; margin-top: 0.5rem; font-size: 1.05rem;" data-i18n="workflow_sub">No emergency request goes unanswered with two-tier community escalation.</p>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
         <div class="workflow-step-card">
           <div style="width: 44px; height: 44px; background: linear-gradient(145deg, #0284c7, #0369a1); color: #ffffff; font-weight: 900; font-size: 1.25rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.15);">1</div>
-          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;">Press & Hold SOS</h3>
-          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;">User holds the SOS button for 3 seconds. Live GPS location, date, time, and emergency ID are captured instantly.</p>
+          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="step1_title">Press & Hold SOS</h3>
+          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;" data-i18n="step1_desc">User holds the SOS button for 3 seconds. Live GPS location, date, time, and emergency ID are captured instantly.</p>
         </div>
 
         <div class="workflow-step-card">
           <div style="width: 44px; height: 44px; background: linear-gradient(145deg, #0ea5e9, #0284c7); color: #ffffff; font-weight: 900; font-size: 1.25rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.15);">2</div>
-          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;">Tier 1: Neighbors & Guards</h3>
-          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;">Immediate socket broadcast to registered nearby neighbors and building security guards with live countdown timer.</p>
+          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="step2_title">Tier 1: Neighbors & Guards</h3>
+          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;" data-i18n="step2_desc">Immediate socket broadcast to registered nearby neighbors and building security guards with live countdown timer.</p>
         </div>
 
         <div class="workflow-step-card">
           <div style="width: 44px; height: 44px; background: linear-gradient(145deg, #ea580c, #c2410c); color: #ffffff; font-weight: 900; font-size: 1.25rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.15);">3</div>
-          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;">60-Sec Escalation</h3>
-          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;">If no neighbor or security accepts within 60 seconds, the server automatically escalates the alert to family & volunteers.</p>
+          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="step3_title">60-Sec Escalation</h3>
+          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;" data-i18n="step3_desc">If no neighbor or security accepts within 60 seconds, the server automatically escalates the alert to family & volunteers.</p>
         </div>
 
         <div class="workflow-step-card">
           <div style="width: 44px; height: 44px; background: linear-gradient(145deg, #16a34a, #15803d); color: #ffffff; font-weight: 900; font-size: 1.25rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; box-shadow: 3px 3px 8px rgba(0,0,0,0.15);">4</div>
-          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;">Resolution & Tracking</h3>
-          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;">Responders navigate via Google Maps, assist the victim, and mark the emergency as resolved in MongoDB database.</p>
+          <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="step4_title">Resolution & Tracking</h3>
+          <p style="font-size: 0.92rem; color: #334155; line-height: 1.6;" data-i18n="step4_desc">Responders navigate via Google Maps, assist the victim, and mark the emergency as resolved in MongoDB database.</p>
         </div>
       </div>
     </div>
@@ -105,44 +105,44 @@
   <section id="features" style="padding: 4.5rem 0; border-top: 1px solid rgba(184, 196, 214, 0.4); border-bottom: 1px solid rgba(184, 196, 214, 0.4);">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
       <div style="text-align: center; margin-bottom: 3.5rem;">
-        <h2 style="font-size: 2.3rem; color: #0f172a; font-weight: 800;">Built for Speed, Reliability, and Community Safety</h2>
+        <h2 style="font-size: 2.3rem; color: #0f172a; font-weight: 800;" data-i18n="features_title">Built for Speed, Reliability, and Community Safety</h2>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">🔴</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">3-Second Hold SOS</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Prevents accidental triggers with radial visual progress, vibration, and synthesized alarm audio.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat1_title">3-Second Hold SOS</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat1_desc">Prevents accidental triggers with radial visual progress, vibration, and synthesized alarm audio.</p>
         </div>
 
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">⚡</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">Socket.IO Real-Time Engine</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Instantaneous websockets push live emergency popups to nearby responders without page refresh.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat2_title">Socket.IO Real-Time Engine</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat2_desc">Instantaneous websockets push live emergency popups to nearby responders without page refresh.</p>
         </div>
 
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">🗺️</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">Google Maps Navigation</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Interactive Leaflet tracking plus one-click Google Maps turn-by-turn navigation link generation.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat3_title">Google Maps Navigation</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat3_desc">Interactive Leaflet tracking plus one-click Google Maps turn-by-turn navigation link generation.</p>
         </div>
 
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">🔐</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">JWT Authentication</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Secure password hashing and token-based role permission middleware across all API routes.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat4_title">JWT Authentication</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat4_desc">Secure password hashing and token-based role permission middleware across all API routes.</p>
         </div>
 
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">👥</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">7 Specialized Roles</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Dedicated user interfaces for Seniors, Children, Families, Neighbors, Security Guards, Volunteers, and Admins.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat5_title">7 Specialized Roles</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat5_desc">Dedicated user interfaces for Seniors, Children, Families, Neighbors, Security Guards, Volunteers, and Admins.</p>
         </div>
 
         <div class="glass-card">
           <div style="font-size: 2.2rem; margin-bottom: 1rem; background: var(--neo-bg); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light); border: 1px solid rgba(255, 255, 255, 0.6);">📊</div>
-          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;">Admin Operational Analytics</h3>
-          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;">Comprehensive user management, response time telemetry, and emergency audit logs in MongoDB Atlas.</p>
+          <h3 style="color: #0f172a; font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 800;" data-i18n="feat6_title">Admin Operational Analytics</h3>
+          <p style="color: #334155; font-size: 0.95rem; line-height: 1.6;" data-i18n="feat6_desc">Comprehensive user management, response time telemetry, and emergency audit logs in MongoDB Atlas.</p>
         </div>
       </div>
     </div>
@@ -151,7 +151,7 @@
   <!-- Footer -->
   <footer style="padding: 2.5rem 0; text-align: center; color: #475569; font-size: 0.95rem; font-weight: 600;">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
-      <p>© 2026 SafeReach / CareConnect Emergency Network • Smart Community Emergency Alert System</p>
+      <p data-i18n="footer_copyright">© 2026 SafeReach / CareConnect Emergency Network • Smart Community Emergency Alert System</p>
     </div>
   </footer>
 

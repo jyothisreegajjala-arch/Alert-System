@@ -67,7 +67,7 @@ app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__
 app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get(['/login', '/login.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
 app.get(['/login/senior', '/login/senior.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'senior.html')));
-app.get(['/login/child', '/login/child.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'senior.html')));
+app.get(['/login/child', '/login/child.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'child.html')));
 app.get(['/login/family', '/login/family.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'family.html')));
 app.get(['/login/neighbor', '/login/neighbor.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'neighbor.html')));
 app.get(['/login/security', '/login/security.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'security.html')));
@@ -236,7 +236,7 @@ const handleSOSTrigger = async (emergency) => {
               type: 'EMERGENCY_ALERT',
               title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
               message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-              status: 'UNREAD',
+              status: 'PENDING',
               createdAt: now,
               date: dateStr,
               time: timeStr
@@ -258,7 +258,7 @@ const handleSOSTrigger = async (emergency) => {
               type: 'EMERGENCY_ALERT',
               title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
               message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-              status: 'UNREAD',
+              status: 'PENDING',
               createdAt: now,
               date: dateStr,
               time: timeStr
@@ -339,6 +339,25 @@ const handleSOSAccept = async (emergency) => {
   };
 
   const allLinkedResponderIds = await getLinkedResponderUserIds(emergency.userId, null);
+
+  // Update stored notification status from PENDING to ACCEPTED
+  try {
+    if (isDb) {
+      await Notification.updateMany(
+        { senderUserId: emergency.userId, type: 'EMERGENCY_ALERT' },
+        { status: 'ACCEPTED', title: `✅ EMERGENCY ACCEPTED: ${emergency.userName}` }
+      );
+    } else {
+      (memoryStore.notifications || []).forEach(n => {
+        if (String(n.senderUserId) === String(emergency.userId) && n.type === 'EMERGENCY_ALERT') {
+          n.status = 'ACCEPTED';
+          n.title = `✅ EMERGENCY ACCEPTED: ${emergency.userName}`;
+        }
+      });
+    }
+  } catch (err) {
+    console.error('Error updating notification status on accept:', err);
+  }
 
   // Notify Senior Citizen & Linked Responders
   io.to(`room:user:${emergency.userId}`).emit('SOS_ACCEPTED_BY_HELPER', updatePayload);
