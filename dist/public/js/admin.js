@@ -1,10 +1,11 @@
 /* SafeReach - Admin Management Console Controller */
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await SafeReach.syncNativeStorage();
   const user = SafeReach.getUser();
   if (!user || user.role !== 'admin') {
     SafeReach.showToast('Access denied: Admin authorization required.', 'danger');
-    window.location.href = '/dashboard';
+    SafeReach.navigate('/dashboard');
     return;
   }
 

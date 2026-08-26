@@ -273,6 +273,19 @@ const handleSOSTrigger = async (emergency) => {
 
     for (const rId of recipientList) {
       if (String(rId) !== String(emergency.userId)) {
+        const notifObj = {
+          recipientUserId: rId,
+          senderUserId: emergency.userId,
+          senderName: emergency.userName,
+          type: 'EMERGENCY_ALERT',
+          title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
+          message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
+          status: 'PENDING',
+          createdAt: now,
+          date: dateStr,
+          time: timeStr
+        };
+
         if (isDb) {
           const tenSecAgo = new Date(now.getTime() - 10000);
           const existingNotif = await Notification.findOne({
@@ -283,18 +296,8 @@ const handleSOSTrigger = async (emergency) => {
           });
 
           if (!existingNotif) {
-            await Notification.create({
-              recipientUserId: rId,
-              senderUserId: emergency.userId,
-              senderName: emergency.userName,
-              type: 'EMERGENCY_ALERT',
-              title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
-              message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-              status: 'PENDING',
-              createdAt: now,
-              date: dateStr,
-              time: timeStr
-            });
+            const created = await Notification.create(notifObj);
+            io.to(`room:user:${rId}`).emit('NEW_NOTIFICATION', created);
           }
         } else {
           const recentNotif = (memoryStore.notifications || []).find(n =>
@@ -304,23 +307,37 @@ const handleSOSTrigger = async (emergency) => {
             n.time === timeStr
           );
           if (!recentNotif) {
-            memoryStore.notifications.push({
-              _id: 'notif_sos_' + Date.now() + '_' + Math.floor(Math.random() * 10000),
-              recipientUserId: rId,
-              senderUserId: emergency.userId,
-              senderName: emergency.userName,
-              type: 'EMERGENCY_ALERT',
-              title: `🚨 EMERGENCY ALERT: ${emergency.userName}`,
-              message: `URGENT! ${emergency.userName} triggered an SOS emergency alert at ${emergency.address}. Location: ${googleMapsUrl}`,
-              status: 'PENDING',
-              createdAt: now,
-              date: dateStr,
-              time: timeStr
-            });
+            notifObj._id = 'notif_sos_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+            memoryStore.notifications.push(notifObj);
+            io.to(`room:user:${rId}`).emit('NEW_NOTIFICATION', notifObj);
           }
         }
       }
     }
+
+    // Also record an in-app message notification for the SOS trigger user
+    try {
+      const selfNotif = {
+        recipientUserId: emergency.userId,
+        senderUserId: emergency.userId,
+        senderName: emergency.userName,
+        type: 'EMERGENCY_ALERT',
+        title: `🚨 SOS Alert Broadcasted`,
+        message: `Your SOS Emergency Alert (${emergency.alertId}) was successfully sent to your connected responders and active community network.`,
+        status: 'UNREAD',
+        createdAt: now,
+        date: dateStr,
+        time: timeStr
+      };
+      if (isDb) {
+        const createdSelf = await Notification.create(selfNotif);
+        io.to(`room:user:${emergency.userId}`).emit('NEW_NOTIFICATION', createdSelf);
+      } else {
+        selfNotif._id = 'notif_sos_self_' + Date.now();
+        memoryStore.notifications.push(selfNotif);
+        io.to(`room:user:${emergency.userId}`).emit('NEW_NOTIFICATION', selfNotif);
+      }
+    } catch (e) {}
 
     // 3. Requirement 3 & 17 & 18: Dispatch FCM Push Notifications to Volunteers, NGOs, Admins & Linked Responders
     const { sendFCMPushNotification } = require('./config/firebase');

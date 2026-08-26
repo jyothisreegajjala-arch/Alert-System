@@ -5,9 +5,10 @@ let socket = null;
 let activeCountdownIntervals = new Map();
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await SafeReach.syncNativeStorage();
   currentUser = SafeReach.getUser();
   if (!currentUser || !SafeReach.getToken()) {
-    window.location.href = '/login';
+    SafeReach.navigate('/login');
     return;
   }
 
@@ -177,6 +178,14 @@ function initSocketConnection() {
     SafeReach.showToast(data.message, data.status === 'ACCEPTED' ? 'success' : 'warning');
     renderActiveSOSTracker(data.emergency);
     loadEmergencyHistory();
+    loadUserNotifications();
+  });
+
+  socket.on('NEW_NOTIFICATION', (data) => {
+    if (data && (data.message || data.title)) {
+      SafeReach.showToast(data.message || data.title, 'info');
+    }
+    loadUserNotifications();
   });
 }
 
