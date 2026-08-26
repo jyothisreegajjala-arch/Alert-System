@@ -108,6 +108,31 @@ const SafeReach = {
     return null;
   },
 
+  // Mobile & Webview Safe Route Navigation Engine
+  navigate: (targetRoute) => {
+    const isCapacitorNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+    const isLocalHost = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    if (isCapacitorNative || isLocalHost) {
+      if (targetRoute.startsWith('/login/')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const pageMap = {
+        '/': 'index.html',
+        '/login': 'login.html',
+        '/register': 'register.html',
+        '/dashboard': 'dashboard.html',
+        '/admin': 'admin.html',
+        '/language': 'language.html'
+      };
+      const dest = pageMap[targetRoute] || (targetRoute.endsWith('.html') ? targetRoute.replace(/^\//, '') : `${targetRoute.replace(/^\//, '')}.html`);
+      window.location.href = dest || 'index.html';
+    } else {
+      window.location.href = targetRoute;
+    }
+  },
+
   autoRedirectIfLoggedIn: async () => {
     const path = window.location.pathname;
     const isLoginPage = path === '/login' || path.endsWith('/login.html') || path === '/' || path.endsWith('/index.html');
@@ -123,10 +148,8 @@ const SafeReach = {
 
     const user = await SafeReach.checkPersistentSession();
     if (user) {
-      const target = user.role === 'admin'
-        ? (path.includes('.html') ? 'admin.html' : '/admin')
-        : (path.includes('.html') ? 'dashboard.html' : '/dashboard');
-      window.location.href = target;
+      const target = user.role === 'admin' ? '/admin' : '/dashboard';
+      SafeReach.navigate(target);
     } else if (splashEl) {
       splashEl.style.display = 'none';
     }
@@ -358,4 +381,20 @@ if (document.body) {
 document.addEventListener('DOMContentLoaded', async () => {
   CareConnectTheme.init();
   await SafeReach.autoRedirectIfLoggedIn();
+});
+
+// Global Link Navigation Interceptor for Native App & Local File Protocols
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a');
+  if (!a) return;
+  const href = a.getAttribute('href');
+  if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
+
+  const isCapacitorNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  const isLocalHost = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+  if (isCapacitorNative || isLocalHost) {
+    e.preventDefault();
+    SafeReach.navigate(href);
+  }
 });
