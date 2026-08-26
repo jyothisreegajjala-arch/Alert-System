@@ -15,22 +15,6 @@
       }
     },
     {
-      "src": "/app-release.apk",
-      "dest": "/api/index.js",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "content-type": "application/vnd.android.package-archive"
-      }
-    },
-    {
-      "src": "/app-debug.apk",
-      "dest": "/api/index.js",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate",
-        "content-type": "application/vnd.android.package-archive"
-      }
-    },
-    {
       "src": "/public/(.*)",
       "headers": {
         "cache-control": "no-cache, no-store, must-revalidate"
