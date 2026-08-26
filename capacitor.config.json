@@ -1,0 +1,14 @@
+{
+  "appId": "com.safereach.alert",
+  "appName": "SafeReach",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}

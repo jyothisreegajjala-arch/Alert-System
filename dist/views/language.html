@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Language - CareConnect</title>
+  
+  <!-- Unicode Regional Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_lightblue_v1">
+  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_lightblue_v1">
+  <link rel="stylesheet" href="/public/css/accessibility.css">
+  
+  <style>
+    .lang-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+    }
+    .lang-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 480px) {
+      .lang-container { margin: 1rem auto; padding: 0.75rem; }
+      .lang-card { padding: 1rem; }
+    }
+    .lang-card {
+      background: var(--neo-bg);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 18px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light);
+    }
+    .lang-card:hover, .lang-card.selected {
+      border-color: rgba(2, 132, 199, 0.5);
+      background: var(--neo-bg);
+      transform: translateY(-3px);
+      box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light);
+    }
+    .lang-flag {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .lang-native {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+    }
+    .lang-english {
+      font-size: 0.95rem;
+      color: #64748b;
+    }
+    .lang-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="/" class="brand-logo">
+        <div class="logo-icon">🆘</div>
+        <span data-i18n="brand">CareConnect</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm">
+          👁️ Accessibility
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container lang-container">
+    <div class="lang-header">
+      <h1 style="font-size:2.4rem; font-weight:900; color:#0f172a;">Language Settings</h1>
+      <p style="color:#475569; font-size:1.1rem; margin-top:0.5rem;" data-i18n="language_subtitle">Choose your language to customize your emergency care experience</p>
+    </div>
+
+    <!-- 12 Languages Grid -->
+    <div id="language-grid" class="lang-card-grid"></div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <button type="button" onclick="confirmLanguageSelection()" class="btn btn-primary btn-lg" style="padding:1rem 3rem; font-size:1.25rem;">
+        <span data-i18n="continue_to_app">Continue to Application</span> ➔
+      </button>
+    </div>
+  </div>
+
+  <script src="/public/js/i18n.js"></script>
+  <script src="/public/js/voiceAssistant.js"></script>
+  <script src="/public/js/accessibility.js"></script>
+  <script>
+    let selectedLang = CareConnectI18n.getLanguage();
+
+    function renderGrid() {
+      const grid = document.getElementById('language-grid');
+      grid.innerHTML = CareConnectI18n.supportedLanguages.map(l => `
+        <div class="lang-card ${l.code === selectedLang ? 'selected' : ''}" onclick="selectLanguage('${l.code}')">
+          <div class="lang-flag">${l.flag}</div>
+          <div class="lang-native">${l.native}</div>
+          <div class="lang-english">${l.name}</div>
+        </div>
+      `).join('');
+    }
+
+    function selectLanguage(code) {
+      selectedLang = code;
+      CareConnectI18n.setLanguage(code);
+      renderGrid();
+
+      if (window.CareConnectVoice) {
+        CareConnectVoice.speak('welcome_voice');
+      }
+    }
+
+    function confirmLanguageSelection() {
+      CareConnectI18n.setLanguage(selectedLang);
+      window.location.href = '/';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGrid();
+    });
+  </script>
+</body>
+</html>

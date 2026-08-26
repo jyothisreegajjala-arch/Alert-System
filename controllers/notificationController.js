@@ -240,3 +240,75 @@ exports.clearNotificationHistory = async (req, res) => {
   }
 };
 
+// Register / Update FCM Device Token
+exports.registerFCMToken = async (req, res) => {
+  try {
+    const { token, platform = 'android' } = req.body;
+    const user = req.user;
+    if (!token) return res.status(400).json({ success: false, message: 'FCM Token is required' });
+
+    const isDbConnected = require('mongoose').connection.readyState === 1;
+
+    if (isDbConnected) {
+      const dbUser = await User.findById(user._id);
+      if (dbUser) {
+        if (!dbUser.fcmTokens) dbUser.fcmTokens = [];
+        const existingIdx = dbUser.fcmTokens.findIndex(t => t.token === token);
+        if (existingIdx !== -1) {
+          dbUser.fcmTokens[existingIdx].updatedAt = new Date();
+          dbUser.fcmTokens[existingIdx].platform = platform;
+        } else {
+          dbUser.fcmTokens.push({ token, platform, updatedAt: new Date() });
+        }
+        await dbUser.save();
+      }
+    } else {
+      const memoryStore = require('../config/memoryStore');
+      const memUser = (memoryStore.users || []).find(u => String(u._id) === String(user._id || user.id));
+      if (memUser) {
+        if (!memUser.fcmTokens) memUser.fcmTokens = [];
+        const existingIdx = memUser.fcmTokens.findIndex(t => t.token === token);
+        if (existingIdx !== -1) {
+          memUser.fcmTokens[existingIdx].updatedAt = new Date();
+        } else {
+          memUser.fcmTokens.push({ token, platform, updatedAt: new Date() });
+        }
+      }
+    }
+
+    return res.status(200).json({ success: true, message: 'FCM device token registered successfully.' });
+  } catch (err) {
+    console.error('Register FCM Token Error:', err);
+    res.status(500).json({ success: false, message: 'Failed to register FCM device token' });
+  }
+};
+
+// Remove FCM Device Token (on Logout)
+exports.removeFCMToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = req.user;
+    const isDbConnected = require('mongoose').connection.readyState === 1;
+
+    if (token) {
+      if (isDbConnected) {
+        await User.findByIdAndUpdate(user._id, {
+          $pull: { fcmTokens: { token } }
+        });
+      } else {
+        const memoryStore = require('../config/memoryStore');
+        const memUser = (memoryStore.users || []).find(u => String(u._id) === String(user._id || user.id));
+        if (memUser && memUser.fcmTokens) {
+          memUser.fcmTokens = memUser.fcmTokens.filter(t => t.token !== token);
+        }
+      }
+    }
+
+    return res.status(200).json({ success: true, message: 'FCM device token removed successfully.' });
+  } catch (err) {
+    console.error('Remove FCM Token Error:', err);
+    res.status(500).json({ success: false, message: 'Failed to remove FCM device token' });
+  }
+};
+
+

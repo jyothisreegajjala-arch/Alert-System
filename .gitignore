@@ -17,3 +17,18 @@ logs/
 Thumbs.db
 
 .vercel
+
+# Android Keystore & Release Signing Secrets
+*.jks
+*.keystore
+key.properties
+
+# Firebase & Cloud Credentials
+google-services.json
+firebase-key.json
+firebase-*.json
+
+# Android Build Outputs
+*.apk
+*.aab
+

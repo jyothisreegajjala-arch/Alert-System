@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SafeReach</string>
+    <string name="title_activity_main">SafeReach</string>
+    <string name="package_name">com.safereach.alert</string>
+    <string name="custom_url_scheme">com.safereach.alert</string>
+</resources>

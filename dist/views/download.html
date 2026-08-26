@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download SafeReach - Emergency Alert System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1.25rem;
+      max-width: 480px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    .badge-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border-radius: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem auto;
+      box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.4);
+    }
+    .badge-icon i {
+      font-size: 2.25rem;
+      color: #ffffff;
+    }
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    .info-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 0.4rem 0.85rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 1.5rem;
+    }
+    .info-pill span {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: 0.85rem;
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s ease;
+      margin-bottom: 1.75rem;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 20px -3px rgba(37, 99, 235, 0.5);
+    }
+    .btn-download i {
+      font-size: 1.3rem;
+    }
+    .steps {
+      text-align: left;
+      background: #0f172a;
+      border-radius: 0.85rem;
+      padding: 1.25rem;
+      border: 1px solid #334155;
+    }
+    .steps h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .steps h3 i {
+      color: #38bdf8;
+    }
+    .steps ol {
+      padding-left: 1.2rem;
+      color: #94a3b8;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .steps li {
+      margin-bottom: 0.5rem;
+    }
+    .steps li:last-child {
+      margin-bottom: 0;
+    }
+    .footer-note {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge-icon">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+    <h1>SAFE REACH</h1>
+    <p class="subtitle">Smart Community Emergency Alert System</p>
+
+    <div class="info-pill">
+      <span>Version 1.0.0</span> &bull; Android 7.0+
+    </div>
+
+    <a href="https://github.com/jyothisreegajjala-arch/Alert-System/releases/download/v1.0.0/app-release.apk" class="btn-download" id="apkDownloadLink">
+      <i class="fa-brands fa-android"></i>
+      Download SafeReach for Android
+    </a>
+
+    <div class="steps">
+      <h3><i class="fa-solid fa-circle-info"></i> Installation Steps</h3>
+      <ol>
+        <li>Tap <strong>Download SafeReach for Android</strong> above.</li>
+        <li>If Android prompts a security warning, tap <strong>Settings</strong> and enable <em>"Allow from this source"</em>.</li>
+        <li>Open the downloaded <code>app-release.apk</code> and tap <strong>Install</strong>.</li>
+        <li>Open <strong>SafeReach</strong> and login or create your account.</li>
+      </ol>
+    </div>
+
+    <p class="footer-note">&copy; 2026 SafeReach Emergency Network. Package: com.safereach.alert</p>
+  </div>
+
+</body>
+</html>

@@ -63,6 +63,7 @@ app.use('/views', express.static(path.join(__dirname, 'views'), {
 }));
 
 // Serve view HTML files directly with array route aliases
+app.get(['/download', '/download.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'download.html')));
 app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
 app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get(['/login', '/login.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
@@ -266,6 +267,37 @@ const handleSOSTrigger = async (emergency) => {
           }
         }
       }
+    }
+
+    // 3. Requirement 3 & 17 & 18: Dispatch FCM Push Notifications to Volunteers, NGOs, Admins & Linked Responders
+    const { sendFCMPushNotification } = require('./config/firebase');
+    const fcmRecipients = recipientList.filter(id => String(id) !== String(emergency.userId));
+    
+    // Also include active Volunteers and Admins if available
+    try {
+      if (isDb) {
+        const volunteers = await User.find({ role: { $in: ['volunteer', 'admin'] }, active: true }).select('_id');
+        volunteers.forEach(v => fcmRecipients.push(v._id.toString()));
+      }
+    } catch (e) {}
+
+    const uniqueFcmRecipients = Array.from(new Set(fcmRecipients));
+    if (uniqueFcmRecipients.length > 0) {
+      await sendFCMPushNotification(
+        uniqueFcmRecipients,
+        {
+          title: `🚨 SafeReach Emergency Alert`,
+          body: `Senior citizen ${emergency.userName} triggered an SOS! Emergency ID: ${emergency.alertId}`
+        },
+        {
+          emergencyId: (emergency._id || '').toString(),
+          alertId: emergency.alertId || '',
+          type: 'EMERGENCY_ALERT',
+          seniorCitizenId: (emergency.userId || '').toString(),
+          latitude: String(emergency.latitude || 12.9716),
+          longitude: String(emergency.longitude || 77.5946)
+        }
+      );
     }
   } catch (notifErr) {
     console.error('[SOS Notification Error]:', notifErr);

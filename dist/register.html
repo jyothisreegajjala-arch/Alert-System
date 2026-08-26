@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Account - SafeReach Emergency System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_lightblue_v1">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+      background: var(--neo-bg);
+      color: #0f172a;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 560px;
+    }
+    @media (max-width: 480px) {
+      .auth-card { padding: 1.25rem; }
+      .auth-wrapper { padding: 1.5rem 0.75rem; }
+    }
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 0.4rem;
+    }
+    .role-specific-field {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="glass-card auth-card">
+      <div style="text-align:center; margin-bottom: 2rem;">
+        <a href="/" class="brand-logo" style="justify-content:center; margin-bottom:0.75rem;">
+          <div class="logo-icon">🆘</div>
+          <span>SafeReach</span>
+        </a>
+        <h2 style="font-size:1.5rem; color: #0f172a; font-weight:700;">Create Account</h2>
+        <p style="font-size:0.88rem; color: #475569;">Register your community role to participate in the safety network</p>
+      </div>
+
+      <form id="register-form">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone Number</label>
+            <input type="tel" id="reg-phone" class="form-control" placeholder="+1 (555) 000-0000" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="jane@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-role">User Role</label>
+          <select id="reg-role" class="form-control" style="background:#1e293b; color: #0f172a;" required>
+            <option value="senior_citizen">👵 Senior Citizen (SOS User)</option>
+            <option value="child">👶 Child / Dependent (SOS User)</option>
+            <option value="family_member">👨‍👩‍👧 Family Member</option>
+            <option value="neighbor">🏡 Nearby Neighbor (Tier 1 Responder)</option>
+            <option value="security_guard">👮 Security Guard (Tier 1 Responder)</option>
+            <option value="volunteer">🤝 Registered Volunteer (Tier 2 Escalation)</option>
+            <option value="admin">👑 System Administrator (Full System Control)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-address">Street / Building Address</label>
+          <input type="text" id="reg-address" class="form-control" placeholder="Sunrise Heights Block A" required>
+        </div>
+
+        <!-- Role Specific Input Fields -->
+        <div id="field-apartment" class="form-group role-specific-field">
+          <label for="reg-apartment">Apartment / Unit Number</label>
+          <input type="text" id="reg-apartment" class="form-control" placeholder="A-402">
+        </div>
+
+        <div id="field-medical" class="form-group role-specific-field" style="display:block;">
+          <label for="reg-medical">Medical Notes & Pre-existing Conditions (Optional)</label>
+          <input type="text" id="reg-medical" class="form-control" placeholder="e.g. Asthma, Pacemaker, Mobility limitation">
+        </div>
+
+        <div id="field-admin" class="form-group role-specific-field" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); padding: 1rem; border-radius: var(--radius-md); color: #fca5a5; font-size: 0.88rem;">
+          🛡️ <strong>System Administrator Privileges:</strong> Registering as System Administrator grants complete authority over the entire system, including user accounts, active emergency monitoring, system reset, and operational metrics.
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password" data-i18n="password">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('reg-password', this)" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-outline-secondary" style="width:100%; padding:0.85rem; margin-top:0.5rem; background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; font-weight:800; font-size:1.05rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">Create Account</button>
+      </form>
+
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color: #475569;">
+        Already have an account? <a href="/login" style="font-weight:600;">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/public/js/app.js?v=1.0.2"></script>
+  <script src="/public/js/auth.js?v=1.0.2"></script>
+</body>
+</html>

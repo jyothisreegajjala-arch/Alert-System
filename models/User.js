@@ -32,7 +32,14 @@ const userSchema = new mongoose.Schema(
     volunteerPhone: { type: String, default: '' },
     emergencyContactName: { type: String, default: '' },
     emergencyContactPhone: { type: String, default: '' },
-    emergencyContactRelationship: { type: String, default: '' }
+    emergencyContactRelationship: { type: String, default: '' },
+    fcmTokens: [
+      {
+        token: { type: String, required: true },
+        platform: { type: String, default: 'android' },
+        updatedAt: { type: Date, default: Date.now }
+      }
+    ]
   },
   { timestamps: true }
 );
