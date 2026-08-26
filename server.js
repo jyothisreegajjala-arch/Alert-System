@@ -64,7 +64,11 @@ app.use('/views', express.static(path.join(__dirname, 'views'), {
 
 // Serve view HTML files directly with array route aliases
 app.get(['/download', '/download.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'download.html')));
-app.get(['/app-release.apk', '/public/app-release.apk'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'app-release.apk')));
+app.get(['/app-release.apk', '/public/app-release.apk'], (req, res) => {
+  res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+  res.setHeader('Content-Disposition', 'attachment; filename="app-release.apk"');
+  res.sendFile(path.join(__dirname, 'public', 'app-release.apk'));
+});
 app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
 app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get(['/login', '/login.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
