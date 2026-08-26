@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
+const fs = require('fs');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const config = require('./config/config');
@@ -62,9 +63,15 @@ app.use('/views', express.static(path.join(__dirname, 'views'), {
   }
 }));
 
+const downloadHtmlPath = path.join(__dirname, 'views', 'download.html');
+const downloadHtmlContent = fs.existsSync(downloadHtmlPath) ? fs.readFileSync(downloadHtmlPath, 'utf8') : null;
+
 // Serve view HTML files directly with array route aliases
 app.get(['/download', '/download.html'], (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+  if (downloadHtmlContent) {
+    return res.status(200).type('html').send(downloadHtmlContent);
+  }
   res.sendFile(path.join(__dirname, 'views', 'download.html'));
 });
 app.get(['/app-release.apk', '/public/app-release.apk'], (req, res) => {
