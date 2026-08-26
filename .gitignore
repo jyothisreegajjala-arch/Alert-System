@@ -31,4 +31,7 @@ firebase-*.json
 # Android Build Outputs
 *.apk
 *.aab
+!public/*.apk
+!dist/public/*.apk
+!dist/*.apk
 
