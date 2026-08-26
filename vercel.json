@@ -15,6 +15,20 @@
       }
     },
     {
+      "src": "/app-release.apk",
+      "dest": "/api/index.js",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "src": "/app-debug.apk",
+      "dest": "/api/index.js",
+      "headers": {
+        "cache-control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
       "src": "/public/(.*)",
       "headers": {
         "cache-control": "no-cache, no-store, must-revalidate"
