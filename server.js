@@ -80,6 +80,12 @@ app.get(['/app-release.apk', '/public/app-release.apk'], (req, res) => {
   res.setHeader('Content-Disposition', 'attachment; filename="app-release.apk"');
   res.sendFile(path.join(__dirname, 'public', 'app-release.apk'));
 });
+app.get(['/app-debug.apk', '/public/app-debug.apk'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+  res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+  res.setHeader('Content-Disposition', 'attachment; filename="app-debug.apk"');
+  res.sendFile(path.join(__dirname, 'public', 'app-debug.apk'));
+});
 app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
 app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
 app.get(['/login', '/login.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
