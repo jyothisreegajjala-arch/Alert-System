@@ -174,13 +174,13 @@ body.dark-theme .admin-top-header {
   align-items: center;
   gap: 0.55rem;
   flex-wrap: wrap;
-  width: 100%;
+  width: auto;
 }
 
 .lang-selector-box {
   position: relative;
-  flex: 1;
-  min-width: 110px;
+  flex: 0 0 auto;
+  width: auto;
 }
 
 .header-control-pill {
@@ -199,6 +199,8 @@ body.dark-theme .admin-top-header {
   cursor: pointer;
   transition: var(--admin-transition);
   white-space: nowrap;
+  flex: 0 0 auto;
+  width: auto;
 }
 
 .header-control-pill:hover {
@@ -217,14 +219,15 @@ body.dark-theme .admin-top-header {
 /* Language Trigger Pill inside Header */
 .language-selector-wrapper {
   position: relative;
-  width: 100%;
+  width: auto;
+  display: inline-block;
 }
 
 .lang-trigger-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 0.45rem;
   padding: 0.45rem 0.85rem;
   background: var(--admin-card-bg);
   border: 1px solid rgba(180, 205, 230, 0.4);
@@ -234,7 +237,14 @@ body.dark-theme .admin-top-header {
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  width: 100%;
+  width: auto;
+  white-space: nowrap;
+  transition: var(--admin-transition);
+}
+
+.lang-trigger-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--admin-card-shadow-sm);
 }
 
 .lang-popover-menu {
