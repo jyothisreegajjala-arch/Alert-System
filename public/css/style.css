@@ -1,39 +1,37 @@
 /* ==========================================================================
    SafeReach - Smart Community Emergency Alert System
-   Unified Neomorphic Design System & Global Responsive Stylesheet
-   Single Codebase for Mobile (320px+), Tablet (768px-1023px), Desktop (1024px+)
+   Definitive Neomorphic Design System & Global Responsive Stylesheet
+   Single Responsive Codebase (320px to 1920px)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
 
 :root {
   /* ------------------------------------------------------------------------
-     1. DARK NEOMORPHIC THEME (Default)
+     1. DARK NEOMORPHISM (Default Theme)
      ------------------------------------------------------------------------ */
-  --bg-primary: #0b1120;
-  --bg-secondary: #111a2e;
-  --bg-tertiary: #18233d;
+  --bg-canvas: #151a24;
+  --surface: #151a24;
+  --surface-soft: #181e2b;
+  --surface-hover: #1b2230;
+  --surface-inset: #11151e;
   
-  --surface: #141f36;
-  --surface-soft: #1a2744;
-  --surface-hover: #1e2e4f;
-  --surface-inset: #090e1b;
-  
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-hover: rgba(255, 255, 255, 0.2);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-color-hover: rgba(255, 255, 255, 0.18);
   --border-accent: rgba(14, 165, 233, 0.4);
 
-  --text-primary: #f8fafc;
+  --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
-  /* Neomorphic Dual Shadows - Dark Mode */
-  --neo-shadow-flat: 6px 6px 14px #070b15, -6px -6px 14px #1b2947;
-  --neo-shadow-raised: 10px 10px 24px #060912, -10px -10px 24px #1c2b4a;
-  --neo-shadow-inset: inset 4px 4px 8px #070b15, inset -4px -4px 8px #1b2947;
-  --neo-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-  
+  /* Classic Dark Neomorphic Dual Shadows (Light source top-left, shadow bottom-right) */
+  --neo-flat: 8px 8px 18px #0d1017, -8px -8px 18px #1d2431;
+  --neo-raised: 12px 12px 26px #0b0e14, -12px -12px 26px #1f2634;
+  --neo-inset: inset 5px 5px 10px #0c0f16, inset -5px -5px 10px #1e2532;
+  --neo-btn: 6px 6px 14px #0d1017, -6px -6px 14px #1d2431;
+  --neo-btn-active: inset 4px 4px 8px #0b0e14, inset -4px -4px 8px #1f2634;
+
   /* Brand Emergency Accents */
   --primary: #ef4444;
   --primary-hover: #dc2626;
@@ -52,33 +50,29 @@
   --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Radius System */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
 
-  /* Standard Transitions */
+  /* Transitions */
   --transition-fast: all 0.15s ease;
   --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.35s ease;
 }
 
 /* --------------------------------------------------------------------------
-   2. LIGHT NEOMORPHIC THEME
+   2. LIGHT NEOMORPHISM (Iconic Soft Off-White / Slate Gray)
    -------------------------------------------------------------------------- */
 body.light-theme {
-  --bg-primary: #eef2f6;
-  --bg-secondary: #f6f8fb;
-  --bg-tertiary: #e2e8f0;
-  
-  --surface: #f1f4f9;
-  --surface-soft: #e5ebf3;
-  --surface-hover: #ffffff;
-  --surface-inset: #e2e7ef;
+  --bg-canvas: #e0e5ec;
+  --surface: #e0e5ec;
+  --surface-soft: #d8e0eb;
+  --surface-hover: #e6ebf2;
+  --surface-inset: #d3dbe6;
 
-  --border-color: rgba(15, 23, 42, 0.08);
-  --border-color-hover: rgba(15, 23, 42, 0.18);
+  --border-color: rgba(0, 0, 0, 0.04);
+  --border-color-hover: rgba(0, 0, 0, 0.12);
   --border-accent: rgba(14, 165, 233, 0.5);
 
   --text-primary: #0f172a;
@@ -86,18 +80,19 @@ body.light-theme {
   --text-muted: #64748b;
   --text-dim: #94a3b8;
 
-  /* Neomorphic Dual Shadows - Light Mode */
-  --neo-shadow-flat: 6px 6px 14px #d1d9e6, -6px -6px 14px #ffffff;
-  --neo-shadow-raised: 10px 10px 24px #c6d0df, -10px -10px 24px #ffffff;
-  --neo-shadow-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
-  --neo-shadow-card: 8px 8px 20px #d4dce8, -8px -8px 20px #ffffff;
+  /* Classic Light Neomorphic Dual Shadows */
+  --neo-flat: 9px 9px 18px #bcc5d3, -9px -9px 18px #ffffff;
+  --neo-raised: 13px 13px 28px #b4becd, -13px -13px 28px #ffffff;
+  --neo-inset: inset 6px 6px 12px #bcc5d3, inset -6px -6px 12px #ffffff;
+  --neo-btn: 7px 7px 15px #bcc5d3, -7px -7px 15px #ffffff;
+  --neo-btn-active: inset 5px 5px 10px #bcc5d3, inset -5px -5px 10px #ffffff;
 
   --primary-glow: rgba(239, 68, 68, 0.25);
   --accent-cyan-glow: rgba(14, 165, 233, 0.25);
 }
 
 /* ==========================================================================
-   GLOBAL RESET & LAYOUT CONTROLS (NO HORIZONTAL OVERFLOW)
+   GLOBAL RESET & LAYOUT CONTROLS
    ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -120,24 +115,13 @@ body {
   max-width: 100%;
   overflow-x: hidden;
   font-family: var(--font-main);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-canvas);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 55%),
-    radial-gradient(circle at 10% 35%, rgba(239, 68, 68, 0.05) 0%, transparent 45%),
-    radial-gradient(circle at 90% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 45%);
-  background-attachment: fixed;
   transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-body.light-theme {
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06) 0%, transparent 60%),
-    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -183,46 +167,41 @@ body.light-theme a:hover {
 }
 
 /* ==========================================================================
-   NEOMORPHIC CARD SYSTEM
+   NEOMORPHIC CARD SYSTEM (TACTILE 3D DEPTH)
    ========================================================================== */
-.neo-card, .glass-card {
+.neo-card, .glass-card, .step-card, .feature-card, .role-card {
   background: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
-  padding: clamp(1.25rem, 3vw, 1.85rem);
-  box-shadow: var(--neo-shadow-flat);
+  padding: clamp(1.4rem, 3vw, 2rem);
+  box-shadow: var(--neo-flat);
   transition: var(--transition);
   position: relative;
-  overflow: hidden;
 }
 
 .neo-card-inset {
-  background: var(--surface-inset);
+  background: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-inset);
   padding: 1.25rem;
 }
 
-.neo-card-interactive {
-  cursor: pointer;
-}
-
-.neo-card-interactive:hover, .neo-card:hover, .glass-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--neo-shadow-raised);
+.neo-card:hover, .glass-card:hover, .step-card:hover, .feature-card:hover, .role-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--neo-raised);
   border-color: var(--border-color-hover);
 }
 
 /* ==========================================================================
-   NAVIGATION BAR (RESPONSIVE DESKTOP & MOBILE)
+   NAVIGATION BAR (NEOMORPHIC FLOATING PILL)
    ========================================================================== */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--bg-primary);
-  box-shadow: var(--neo-shadow-flat);
+  background: var(--bg-canvas);
+  box-shadow: var(--neo-flat);
   border-bottom: 1px solid var(--border-color);
   padding: 0.85rem 0;
   transition: background-color 0.25s ease;
@@ -250,15 +229,15 @@ body.light-theme a:hover {
 }
 
 .logo-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+  font-size: 1.25rem;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
 }
 
 /* Center Desktop Links */
@@ -275,22 +254,21 @@ body.light-theme a:hover {
   color: var(--text-secondary);
   font-size: 0.92rem;
   font-weight: 600;
-  padding: 0.45rem 0.75rem;
+  padding: 0.5rem 0.9rem;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
 }
 
 .nav-links li a:hover {
   color: var(--text-primary);
-  background: var(--surface-hover);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-inset);
 }
 
 /* Desktop Actions Group */
 .nav-actions-desktop {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
   flex-shrink: 0;
 }
 
@@ -303,7 +281,7 @@ body.light-theme a:hover {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-btn);
   font-size: 1.35rem;
   cursor: pointer;
   align-items: center;
@@ -312,11 +290,11 @@ body.light-theme a:hover {
 }
 
 .mobile-menu-btn:hover {
-  box-shadow: var(--neo-shadow-raised);
+  box-shadow: var(--neo-raised);
 }
 
 .mobile-menu-btn:active {
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-btn-active);
 }
 
 /* Mobile Slide-Down Drawer */
@@ -326,19 +304,15 @@ body.light-theme a:hover {
   top: 100%;
   left: 0;
   width: 100%;
-  background: var(--bg-secondary);
+  background: var(--bg-canvas);
   border-bottom: 1px solid var(--border-color);
   padding: 1.25rem 1rem 1.75rem;
   flex-direction: column;
-  gap: 0.65rem;
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.6);
+  gap: 0.75rem;
+  box-shadow: var(--neo-raised);
   z-index: 1000;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
-}
-
-body.light-theme .mobile-nav-drawer {
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
 }
 
 .mobile-nav-drawer.open {
@@ -353,7 +327,7 @@ body.light-theme .mobile-nav-drawer {
 
 .mobile-nav-drawer a, .mobile-nav-drawer button {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1rem;
   border-radius: var(--radius-md);
   font-size: 0.95rem;
   font-weight: 600;
@@ -366,21 +340,21 @@ body.light-theme .mobile-nav-drawer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-flat);
   border: 1px solid var(--border-color);
 }
 
 .mobile-nav-drawer a:hover {
-  background: var(--surface-hover);
+  box-shadow: var(--neo-raised);
 }
 
 .mobile-nav-drawer a:active {
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-inset);
 }
 
 .mobile-controls-row {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.65rem;
   margin-top: 0.25rem;
 }
 
@@ -408,7 +382,7 @@ body.light-theme .mobile-nav-drawer {
 }
 
 /* ==========================================================================
-   LANGUAGE SELECTOR DROPDOWN (RELATIVE & FLOATING)
+   LANGUAGE SELECTOR DROPDOWN (RELATIVE & NEOMORPHIC FLOATING)
    ========================================================================== */
 .language-selector-wrapper {
   position: relative;
@@ -422,29 +396,28 @@ body.light-theme .mobile-nav-drawer {
   background: var(--surface);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 0.45rem 0.85rem;
+  padding: 0.5rem 0.95rem;
   border-radius: var(--radius-md);
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-btn);
   transition: var(--transition);
   white-space: nowrap;
 }
 
 .lang-trigger-btn:hover {
-  box-shadow: var(--neo-shadow-raised);
-  border-color: var(--border-color-hover);
+  box-shadow: var(--neo-raised);
 }
 
 .lang-trigger-btn:active {
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-btn-active);
 }
 
 /* Popover Floating Menu */
 .lang-popover-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
   width: 260px;
   max-height: 320px;
@@ -452,10 +425,8 @@ body.light-theme .mobile-nav-drawer {
   background: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  box-shadow: var(--neo-shadow-raised);
+  box-shadow: var(--neo-raised);
   z-index: 2000;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
 .lang-popover-header {
@@ -492,11 +463,11 @@ body.light-theme .mobile-nav-drawer {
 }
 
 .lang-line-item:hover {
-  background: var(--surface-hover);
+  box-shadow: var(--neo-inset);
 }
 
 .lang-line-item.selected {
-  background: rgba(14, 165, 233, 0.18);
+  background: rgba(14, 165, 233, 0.15);
   font-weight: 700;
 }
 
@@ -547,11 +518,11 @@ body.light-theme .mobile-nav-drawer {
   width: 100%;
   max-height: 240px;
   margin-top: 0.5rem;
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-inset);
 }
 
 /* ==========================================================================
-   BUTTONS SYSTEM
+   BUTTONS SYSTEM (TACTILE NEOMORPHIC)
    ========================================================================== */
 .btn {
   display: inline-flex;
@@ -583,72 +554,70 @@ body.light-theme .mobile-nav-drawer {
 .btn-primary {
   background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: #ffffff !important;
-  box-shadow: 0 4px 14px var(--accent-cyan-glow);
+  box-shadow: 0 6px 18px var(--accent-cyan-glow), var(--neo-btn);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px var(--accent-cyan-glow);
+  box-shadow: 0 10px 24px var(--accent-cyan-glow), var(--neo-raised);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--neo-btn-active);
 }
 
 .btn-secondary {
   background: var(--surface);
   color: var(--text-primary) !important;
   border: 1px solid var(--border-color);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-btn);
 }
 
 .btn-secondary:hover {
-  background: var(--surface-hover);
   transform: translateY(-2px);
-  box-shadow: var(--neo-shadow-raised);
+  box-shadow: var(--neo-raised);
 }
 
 .btn-secondary:active {
   transform: translateY(0);
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-btn-active);
 }
 
 .btn-outline-secondary {
-  background: transparent;
+  background: var(--surface);
   color: var(--text-secondary) !important;
   border: 1px solid var(--border-color);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-btn);
 }
 
 .btn-outline-secondary:hover {
-  background: var(--surface-hover);
   color: var(--text-primary) !important;
-  border-color: var(--border-color-hover);
+  box-shadow: var(--neo-raised);
 }
 
 .btn-outline-secondary:active {
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-btn-active);
 }
 
 .btn-danger {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: #ffffff !important;
-  box-shadow: 0 4px 14px var(--primary-glow);
+  box-shadow: 0 6px 18px var(--primary-glow), var(--neo-btn);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .btn-danger:hover {
   background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px var(--primary-glow);
+  box-shadow: 0 10px 24px var(--primary-glow), var(--neo-raised);
 }
 
 .btn-danger:active {
   transform: translateY(0);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--neo-btn-active);
 }
 
 .btn-hero-primary {
@@ -658,22 +627,23 @@ body.light-theme .mobile-nav-drawer {
   font-size: 1.05rem;
   font-weight: 700;
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px var(--accent-cyan-glow);
+  box-shadow: 0 8px 24px var(--accent-cyan-glow), var(--neo-raised);
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 52px;
+  min-height: 54px;
 }
 
 .btn-hero-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(14, 165, 233, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px var(--accent-cyan-glow), var(--neo-raised);
 }
 
 .btn-hero-primary:active {
   transform: translateY(0);
+  box-shadow: var(--neo-btn-active);
 }
 
 .btn-hero-secondary {
@@ -684,23 +654,22 @@ body.light-theme .mobile-nav-drawer {
   font-weight: 700;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-flat);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 52px;
+  min-height: 54px;
 }
 
 .btn-hero-secondary:hover {
-  background: var(--surface-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--neo-shadow-raised);
+  transform: translateY(-3px);
+  box-shadow: var(--neo-raised);
 }
 
 .btn-hero-secondary:active {
   transform: translateY(0);
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-btn-active);
 }
 
 /* ==========================================================================
@@ -719,27 +688,27 @@ body.light-theme .mobile-nav-drawer {
   max-width: 860px;
 }
 
-/* ⚡ Badge */
+/* ⚡ Inset Badge */
 .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.4rem 1.1rem;
+  padding: 0.45rem 1.25rem;
   background: var(--surface);
-  border: 1px solid var(--border-accent);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-inset);
   color: var(--accent-cyan);
   font-size: clamp(0.82rem, 2.5vw, 0.92rem);
-  font-weight: 600;
-  margin-bottom: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
   text-align: center;
   max-width: 100%;
 }
 
-/* Main Heading (Fluid responsive typography) */
+/* Main Heading */
 .hero-title {
-  font-size: clamp(1.85rem, 5.5vw, 3.3rem);
+  font-size: clamp(1.85rem, 5.5vw, 3.4rem);
   font-weight: 900;
   line-height: 1.18;
   letter-spacing: -0.02em;
@@ -758,7 +727,7 @@ body.light-theme .mobile-nav-drawer {
 }
 
 /* ==========================================================================
-   SOS BUTTON AREA (RESPONSIVE NEOMORPHIC)
+   SOS BUTTON AREA (TACTILE NEOMORPHIC DOME)
    ========================================================================== */
 .sos-section {
   display: flex;
@@ -770,12 +739,12 @@ body.light-theme .mobile-nav-drawer {
 
 .sos-button-wrapper {
   position: relative;
-  width: clamp(150px, 40vw, 210px);
-  height: clamp(150px, 40vw, 210px);
+  width: clamp(160px, 42vw, 220px);
+  height: clamp(160px, 42vw, 220px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.35rem;
 }
 
 .sos-svg-ring {
@@ -804,16 +773,16 @@ body.light-theme .mobile-nav-drawer {
   transition: stroke-dashoffset 0.1s linear;
 }
 
-/* Large Circular Red Neomorphic SOS Button */
+/* Large Circular Red Neomorphic SOS Dome */
 .main-sos-circle-btn {
-  width: clamp(130px, 34vw, 180px);
-  height: clamp(130px, 34vw, 180px);
+  width: clamp(135px, 35vw, 185px);
+  height: clamp(135px, 35vw, 185px);
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #f87171 0%, #ef4444 45%, #b91c1c 100%);
   border: 4px solid rgba(255, 255, 255, 0.35);
   box-shadow: 
     0 0 35px rgba(239, 68, 68, 0.6),
-    var(--neo-shadow-raised),
+    var(--neo-raised),
     inset 0 4px 8px rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
@@ -830,14 +799,14 @@ body.light-theme .mobile-nav-drawer {
   transform: scale(1.05);
   box-shadow: 
     0 0 50px rgba(239, 68, 68, 0.85),
-    var(--neo-shadow-raised);
+    var(--neo-raised);
 }
 
 .main-sos-circle-btn:active {
   transform: scale(0.95);
   box-shadow: 
     0 0 25px rgba(239, 68, 68, 0.9),
-    var(--neo-shadow-inset);
+    var(--neo-inset);
 }
 
 .sos-btn-text {
@@ -858,9 +827,9 @@ body.light-theme .mobile-nav-drawer {
 }
 
 @keyframes sosPulse {
-  0% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), 0 10px 25px rgba(0,0,0,0.5); }
-  50% { box-shadow: 0 0 45px rgba(239, 68, 68, 0.75), 0 14px 30px rgba(0,0,0,0.6); }
-  100% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), 0 10px 25px rgba(0,0,0,0.5); }
+  0% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), var(--neo-flat); }
+  50% { box-shadow: 0 0 45px rgba(239, 68, 68, 0.75), var(--neo-raised); }
+  100% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), var(--neo-flat); }
 }
 
 .sos-subtext-group {
@@ -900,7 +869,7 @@ body.light-theme .sos-line-1 {
 
 .hero-action-buttons .btn {
   flex: 1;
-  min-height: 52px;
+  min-height: 54px;
 }
 
 @media (max-width: 640px) {
@@ -919,7 +888,7 @@ body.light-theme .sos-line-1 {
    COMMON SECTION STYLES
    ========================================================================== */
 .section-container {
-  padding: clamp(3rem, 6vw, 5rem) 0;
+  padding: clamp(3.5rem, 7vw, 5.5rem) 0;
   position: relative;
 }
 
@@ -938,11 +907,10 @@ body.light-theme .sos-line-1 {
   letter-spacing: 0.08em;
   color: var(--accent-cyan);
   background: var(--surface);
-  border: 1px solid var(--border-accent);
-  box-shadow: var(--neo-shadow-flat);
-  padding: 0.35rem 0.9rem;
+  box-shadow: var(--neo-inset);
+  padding: 0.4rem 1.1rem;
   border-radius: var(--radius-full);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
 .section-title {
@@ -986,20 +954,8 @@ body.light-theme .sos-line-1 {
 }
 
 .step-card {
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--neo-shadow-flat);
-  padding: clamp(1.4rem, 3vw, 2rem) clamp(1.15rem, 2.5vw, 1.5rem);
   display: flex;
   flex-direction: column;
-  transition: var(--transition);
-}
-
-.step-card:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-3px);
-  box-shadow: var(--neo-shadow-raised);
 }
 
 .step-top {
@@ -1014,19 +970,18 @@ body.light-theme .sos-line-1 {
   font-size: 1.15rem;
   font-weight: 900;
   color: var(--accent-cyan);
-  background: var(--surface-inset);
-  box-shadow: var(--neo-shadow-inset);
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--neo-inset);
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border-color);
 }
 
 .step-icon {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
 }
 
 .step-title {
@@ -1066,35 +1021,22 @@ body.light-theme .sos-line-1 {
 }
 
 .feature-card {
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--neo-shadow-flat);
-  padding: clamp(1.5rem, 3vw, 2.2rem) clamp(1.25rem, 2.5vw, 1.75rem);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: var(--transition);
-}
-
-.feature-card:hover {
-  border-color: var(--border-color-hover);
-  transform: translateY(-3px);
-  box-shadow: var(--neo-shadow-raised);
 }
 
 .feature-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: var(--surface-inset);
-  box-shadow: var(--neo-shadow-inset);
-  border: 1px solid var(--border-color);
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--neo-inset);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.65rem;
-  margin-bottom: 1.15rem;
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .feature-title {
@@ -1127,36 +1069,23 @@ body.light-theme .sos-line-1 {
 }
 
 .role-card {
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--neo-shadow-flat);
-  padding: clamp(1.4rem, 3vw, 1.85rem) clamp(1.15rem, 2.5vw, 1.5rem);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  transition: var(--transition);
-}
-
-.role-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--neo-shadow-raised);
-  border-color: var(--border-color-hover);
 }
 
 .role-icon-box {
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
-  margin: 0 auto 1rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  margin: 0 auto 1.15rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.85rem;
-  background: var(--surface-inset);
-  box-shadow: var(--neo-shadow-inset);
-  border: 1px solid var(--border-color);
+  font-size: 2rem;
+  background: var(--surface);
+  box-shadow: var(--neo-inset);
 }
 
 .role-name {
@@ -1172,11 +1101,11 @@ body.light-theme .sos-line-1 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.2rem 0.6rem;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
-  margin-bottom: 0.75rem;
-  background: var(--surface-inset);
-  box-shadow: var(--neo-shadow-inset);
+  margin-bottom: 0.85rem;
+  background: var(--surface);
+  box-shadow: var(--neo-inset);
 }
 
 .role-desc {
@@ -1208,11 +1137,11 @@ body.light-theme .sos-line-1 {
 
 .form-control, .neo-input {
   width: 100%;
-  padding: 0.85rem 1rem;
-  background: var(--surface-inset);
+  padding: 0.9rem 1.1rem;
+  background: var(--surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  box-shadow: var(--neo-shadow-inset);
+  box-shadow: var(--neo-inset);
   color: var(--text-primary);
   font-family: var(--font-main);
   font-size: 0.95rem;
@@ -1222,16 +1151,16 @@ body.light-theme .sos-line-1 {
 
 .form-control:focus, .neo-input:focus {
   border-color: var(--accent-cyan);
-  box-shadow: var(--neo-shadow-inset), 0 0 0 3px rgba(14, 165, 233, 0.2);
+  box-shadow: var(--neo-inset), 0 0 0 3px rgba(14, 165, 233, 0.25);
 }
 
 /* ==========================================================================
    FOOTER (RESPONSIVE NEOMORPHIC)
    ========================================================================== */
 .main-footer {
-  background: var(--bg-primary);
+  background: var(--bg-canvas);
   border-top: 1px solid var(--border-color);
-  box-shadow: var(--neo-shadow-flat);
+  box-shadow: var(--neo-flat);
   padding: clamp(2.5rem, 5vw, 4rem) 0 2.5rem;
   color: var(--text-muted);
   margin-top: auto;
@@ -1292,11 +1221,11 @@ body.light-theme .sos-line-1 {
 }
 
 .safety-notice-box {
-  background: var(--surface-inset);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  box-shadow: var(--neo-shadow-inset);
+  background: var(--surface);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: var(--neo-inset);
   border-radius: var(--radius-md);
-  padding: 0.85rem;
+  padding: 0.95rem;
   font-size: 0.84rem;
   line-height: 1.5;
   color: #ff8b8b;
@@ -1334,9 +1263,7 @@ body.light-theme .safety-notice-box {
   padding: 0.45rem 0.85rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
-  box-shadow: var(--neo-shadow-raised);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--neo-raised);
   max-width: calc(100vw - 2rem);
 }
 
