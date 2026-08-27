@@ -70,31 +70,33 @@
   <header class="admin-top-header">
     <div class="admin-header-container">
       
-      <!-- Top Row: Hamburger + Welcome message -->
-      <div class="header-top-row">
-        <button class="header-menu-btn" onclick="openAdminDrawer()" aria-label="Toggle Navigation Menu">
-          <span id="menu-icon-symbol">☰</span>
-        </button>
+      <!-- Top Row: Single Line with Welcome on Left and Controls on Right -->
+      <div class="header-main-bar">
+        <div class="header-left-group">
+          <button class="header-menu-btn" onclick="openAdminDrawer()" aria-label="Toggle Navigation Menu">
+            <span id="menu-icon-symbol">☰</span>
+          </button>
 
-        <div class="header-welcome-block">
-          <span>Welcome to CareConnect , <strong id="admin-welcome-name" class="admin-name-highlight">tarun tej</strong> (</span>
-          <span class="admin-role-text">System Admin )</span>
+          <div class="header-welcome-block">
+            <span>Welcome to CareConnect , <strong id="admin-welcome-name" class="admin-name-highlight">tarun tej</strong> (</span>
+            <span class="admin-role-text">System Admin )</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Controls Row: Language | Notifications | Sign Out -->
-      <div class="header-controls-row">
-        <div id="admin-language-selector-container" class="lang-selector-box"></div>
+        <!-- Controls Row: Language | Notifications | Sign Out on Right Side -->
+        <div class="header-controls-row">
+          <div id="admin-language-selector-container" class="lang-selector-box"></div>
 
-        <button onclick="openAdminNotificationsModal()" class="header-control-pill notif-pill" title="View Notifications">
-          <span>🔔</span>
-          <span>Notifications <span id="header-notif-count">2</span></span>
-        </button>
+          <button onclick="openAdminNotificationsModal()" class="header-control-pill notif-pill" title="View Notifications">
+            <span>🔔</span>
+            <span>Notifications <span id="header-notif-count">2</span></span>
+          </button>
 
-        <button onclick="logout()" class="header-control-pill signout-pill" title="Sign Out">
-          <span>🚪</span>
-          <span>Sign Out</span>
-        </button>
+          <button onclick="logout()" class="header-control-pill signout-pill" title="Sign Out">
+            <span>🚪</span>
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
 
       <!-- Quick Navigation Tabs (Matching Screenshot 1 & 2) -->
