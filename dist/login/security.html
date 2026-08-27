@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👮 Security Guard Login - SafeReach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/style.css?v=20260820_lightblue_v1">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background: var(--neo-bg); color: #0f172a;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 0.4rem;
+    }
+    .form-control:focus {
+      border-color: #ff9500;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="glass-card auth-card">
+      <div style="text-align:center; margin-bottom: 2rem;">
+        <a href="/" class="brand-logo" style="justify-content:center; margin-bottom:0.75rem;">
+          <div class="logo-icon" style="background:#ff9500;">👮</div>
+          <span>SafeReach</span>
+        </a>
+        <h2 style="font-size:1.5rem; color: #0f172a; font-weight:800;">Security Guard Gatehouse Console</h2>
+        <p style="font-size:0.88rem; color: #475569;">On-duty emergency response and gatehouse tracking</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-control" value="" placeholder="guard@safereach.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password" data-i18n="password">Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="login-password" class="form-control" value="" placeholder="••••••••" required>
+            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('login-password', this)" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-secondary" style="width:100%; padding:0.9rem; margin-top:0.5rem; background:#ff9500; border:none; font-weight:700; color:#000;">
+          👮 Sign In to Gatehouse Console
+        </button>
+      </form>
+
+      <div style="margin-top:1.5rem; text-align:center;">
+        <button type="button" onclick="quickDemoLogin('guard@safereach.com')" class="btn btn-secondary btn-sm" style="width:100%;">
+          ⚡ 1-Click Auto Fill Demo Credentials
+        </button>
+      </div>
+
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color: #475569; display:flex; justify-content:space-between;">
+        <a href="/login" style="color: #475569;">← All Role Logins</a>
+        <a href="/register" style="font-weight:600;">Register New Account</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/public/js/app.js"></script>
+  <script src="/public/js/auth.js"></script>
+</body>
+</html>

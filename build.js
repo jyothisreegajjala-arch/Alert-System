@@ -46,10 +46,28 @@ if (fs.existsSync(path.join(rootDir, 'views'))) {
     }
   });
 
+  // Also copy role login views to dist/login/
+  if (fs.existsSync(path.join(rootDir, 'views', 'login'))) {
+    copyRecursiveSync(path.join(rootDir, 'views', 'login'), path.join(distDir, 'login'));
+  }
+
   // Ensure root index.html exists in dist
   if (fs.existsSync(path.join(rootDir, 'views', 'index.html'))) {
     fs.copyFileSync(path.join(rootDir, 'views', 'index.html'), path.join(distDir, 'index.html'));
   }
 }
+
+// 3. Ensure APK binaries are copied to dist root and dist/public
+const apkFiles = ['app-release.apk', 'app-debug.apk'];
+apkFiles.forEach(apk => {
+  const publicApk = path.join(rootDir, 'public', apk);
+  if (fs.existsSync(publicApk)) {
+    fs.copyFileSync(publicApk, path.join(distDir, apk));
+    if (!fs.existsSync(path.join(distDir, 'public'))) {
+      fs.mkdirSync(path.join(distDir, 'public'), { recursive: true });
+    }
+    fs.copyFileSync(publicApk, path.join(distDir, 'public', apk));
+  }
+});
 
 console.log('[Build Success] Web assets packaged into dist/ successfully.');
