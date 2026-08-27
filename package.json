@@ -1,6 +1,6 @@
 {
   "name": "safereach",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SafeReach - Smart Community Emergency Alert System",
   "main": "server.js",
   "scripts": {
