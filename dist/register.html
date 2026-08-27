@@ -13,43 +13,36 @@
     .auth-wrapper {
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2.5rem 1rem;
       background: var(--bg-primary);
+      transition: background-color 0.25s ease;
     }
     .auth-card {
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
     }
-    @media (max-width: 480px) {
+    .top-lang-bar {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 580px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 540px) {
       .auth-card { padding: 1.25rem; }
       .auth-wrapper { padding: 1.5rem 0.75rem; }
-    }
-    .form-group {
-      margin-bottom: 1.15rem;
-    }
-    .form-group label {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-    }
-    .form-control {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      color: #ffffff;
-      font-size: 0.95rem;
-      outline: none;
-      transition: var(--transition);
-    }
-    .form-control:focus {
-      border-color: var(--accent-cyan);
-      background: rgba(255, 255, 255, 0.08);
+      .grid-2 { grid-template-columns: 1fr; gap: 0; }
     }
     .role-specific-field {
       display: none;
@@ -59,14 +52,25 @@
 <body>
 
   <div class="auth-wrapper">
-    <div class="glass-card auth-card">
-      <div style="text-align:center; margin-bottom: 2rem;">
+    <div class="top-lang-bar">
+      <a href="/" class="btn btn-secondary btn-sm">🏠 <span>Home</span></a>
+      <div id="register-language-selector-container"></div>
+      <button type="button" onclick="toggleThemeMode()" class="btn btn-secondary btn-sm" aria-label="Toggle Theme">
+        <span id="theme-toggle-icon">🌙</span>
+      </button>
+      <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-secondary btn-sm" data-i18n="accessibility_mode">
+        👁️ Accessibility
+      </button>
+    </div>
+
+    <div class="neo-card auth-card">
+      <div style="text-align:center; margin-bottom: 1.75rem;">
         <a href="/" class="brand-logo" style="justify-content:center; margin-bottom:0.75rem;">
           <div class="logo-icon">🆘</div>
           <span>SafeReach</span>
         </a>
-        <h2 style="font-size:1.5rem; color:#fff; font-weight:700;">Create Account</h2>
-        <p style="font-size:0.88rem; color:var(--dark-muted);">Register your community role to participate in the safety network</p>
+        <h2 style="font-size:1.6rem; color:var(--text-primary); font-weight:800;">Create Account</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Register your community role to participate in the safety network</p>
       </div>
 
       <form id="register-form">
@@ -88,7 +92,7 @@
 
         <div class="form-group">
           <label for="reg-role">User Role</label>
-          <select id="reg-role" class="form-control" style="background:#1e293b; color:#fff;" required>
+          <select id="reg-role" class="form-control" style="background:var(--surface-inset); color:var(--text-primary);" required>
             <option value="senior_citizen">👵 Senior Citizen (SOS User)</option>
             <option value="child">👶 Child / Dependent (SOS User)</option>
             <option value="family_member">👨‍👩‍👧 Family Member</option>
@@ -115,7 +119,7 @@
           <input type="text" id="reg-medical" class="form-control" placeholder="e.g. Asthma, Pacemaker, Mobility limitation">
         </div>
 
-        <div id="field-admin" class="form-group role-specific-field" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); padding: 1rem; border-radius: var(--radius-md); color: #fca5a5; font-size: 0.88rem;">
+        <div id="field-admin" class="form-group role-specific-field" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); padding: 1rem; border-radius: var(--radius-md); color: #fca5a5; font-size: 0.88rem;">
           🛡️ <strong>System Administrator Privileges:</strong> Registering as System Administrator grants complete authority over the entire system, including user accounts, active emergency monitoring, system reset, and operational metrics.
         </div>
 
@@ -124,16 +128,41 @@
           <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.9rem; margin-top:0.5rem;">Create Account</button>
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">Create Account</button>
       </form>
 
-      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--dark-muted);">
-        Already have an account? <a href="/login" style="font-weight:600;">Sign In</a>
+      <div style="text-align:center; margin-top:1.5rem; font-size:0.9rem; color:var(--text-muted);">
+        Already have an account? <a href="/login" style="font-weight:700;">Sign In</a>
       </div>
     </div>
   </div>
 
+  <script src="/public/js/i18n.js"></script>
   <script src="/public/js/app.js?v=1.0.2"></script>
   <script src="/public/js/auth.js?v=1.0.2"></script>
+  <script>
+    function toggleThemeMode() {
+      const isLight = document.body.classList.toggle('light-theme');
+      const icon = document.getElementById('theme-toggle-icon');
+      if (icon) icon.textContent = isLight ? '☀️' : '🌙';
+      try {
+        localStorage.setItem('careconnect_theme', isLight ? 'light' : 'dark');
+      } catch (e) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (localStorage.getItem('careconnect_theme') === 'light') {
+          document.body.classList.add('light-theme');
+          const icon = document.getElementById('theme-toggle-icon');
+          if (icon) icon.textContent = '☀️';
+        }
+      } catch (e) {}
+
+      if (window.CareConnectI18n) {
+        CareConnectI18n.renderLanguageSelector('register-language-selector-container');
+      }
+    });
+  </script>
 </body>
 </html>

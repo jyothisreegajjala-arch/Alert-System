@@ -299,10 +299,11 @@ const SafeReach = {
 
 /* CareConnect Theme Controller */
 const CareConnectTheme = {
-  getTheme: () => localStorage.getItem('safereach_theme') || 'dark',
+  getTheme: () => localStorage.getItem('safereach_theme') || localStorage.getItem('careconnect_theme') || 'dark',
   
   setTheme: (theme) => {
     localStorage.setItem('safereach_theme', theme);
+    localStorage.setItem('careconnect_theme', theme);
     CareConnectTheme.applyTheme(theme);
   },
 
@@ -325,8 +326,8 @@ const CareConnectTheme = {
       }
     }
 
-    const iconEls = document.querySelectorAll('.theme-toggle-icon');
-    const textEls = document.querySelectorAll('.theme-toggle-text');
+    const iconEls = document.querySelectorAll('.theme-toggle-icon, #theme-toggle-icon, #theme-toggle-icon-mobile');
+    const textEls = document.querySelectorAll('.theme-toggle-text, #theme-toggle-text-mobile');
 
     iconEls.forEach(el => { el.textContent = isLight ? '☀️' : '🌙'; });
     textEls.forEach(el => { el.textContent = isLight ? 'Light' : 'Dark'; });
