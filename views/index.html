@@ -129,8 +129,6 @@
     .role-tier-badge { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); margin-bottom: 0.85rem; background: var(--surface); box-shadow: var(--neo-inset); }
     .role-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem; }
     .role-card .btn { width: 100%; }
-    .main-footer { background: var(--bg-canvas); border-top: 1px solid var(--border-color); box-shadow: var(--neo-flat); padding: 1.5rem 0 5rem 0; color: var(--text-muted); margin-top: auto; }
-    .floating-assist-bar { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; align-items: center; justify-content: center; gap: 0.65rem; background: var(--surface); padding: 0.45rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color); box-shadow: var(--neo-raised); max-width: calc(100vw - 2rem); }
   </style>
 </head>
 <body>
@@ -475,34 +473,7 @@
   </section>
 
   <!-- ========================================================================
-       6. FLOATING VOICE ASSISTANT BAR (CENTERED AT BOTTOM)
-       ======================================================================== -->
-  <div class="floating-assist-bar">
-    <button id="btn-voice-sos" onclick="toggleVoiceSOS()" class="btn btn-danger btn-sm" aria-label="Activate Voice Command SOS">
-      <span id="voice-sos-icon">🎤</span>
-      <span id="voice-sos-text">Voice SOS</span>
-    </button>
-    <button id="btn-voice-assistant" onclick="openVoiceAssistantModal()" class="btn btn-secondary btn-sm" aria-label="Open Voice Assistant Help">
-      <span>🤖</span>
-      <span>Voice Assistant</span>
-    </button>
-  </div>
-
-  <!-- ========================================================================
-       7. CLEAN MINIMAL FOOTER
-       ======================================================================== -->
-  <footer class="main-footer">
-    <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.88rem;">
-      <div>&copy; 2026 SafeReach Emergency Network. All rights reserved.</div>
-      <div style="display:flex; align-items:center; gap:1.25rem;">
-        <a href="/download" style="color:var(--accent-cyan); font-weight:600;">📲 Mobile App</a>
-        <a href="#main-nav" style="color:var(--text-secondary); font-weight:600;">↑ Back to Top</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ========================================================================
-       8. JAVASCRIPT LOGIC & HANDLERS
+       6. JAVASCRIPT LOGIC & HANDLERS
        ======================================================================== -->
   <script src="/public/js/i18n.js"></script>
   <script src="/public/js/voiceAssistant.js"></script>

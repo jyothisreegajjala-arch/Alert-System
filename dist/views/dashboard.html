@@ -16,7 +16,6 @@
     .d-none { display: none !important; }
     .language-selector-wrapper { display: flex; align-items: center; gap: 0.4rem; }
     .language-select-input { background: var(--surface); color: var(--text-primary); border: 1px solid var(--border-color); box-shadow: var(--neo-btn); border-radius: 6px; padding: 0.35rem 0.5rem; font-size: 0.88rem; cursor: pointer; }
-    .floating-assist-bar { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; align-items: center; justify-content: center; gap: 0.65rem; background: var(--surface); padding: 0.4rem 0.85rem; border-radius: 9999px; border: 1px solid var(--border-color); box-shadow: var(--neo-raised); max-width: calc(100vw - 2rem); }
   </style>
 </head>
 <body>
@@ -297,16 +296,6 @@
         <button type="button" onclick="closeNotificationsModal()" class="btn btn-secondary">Close</button>
       </div>
     </div>
-  </div>
-
-  <!-- Floating Voice Assistant & Speech-to-Text Bar (Requirements 5, 6, 7) -->
-  <div class="floating-assist-bar">
-    <button type="button" id="btn-voice-assistant" onclick="CareConnectVoice.readScreenAloud()" class="btn btn-secondary btn-sm" data-i18n="voice_assistant">
-      🔊 Voice Assistant
-    </button>
-    <button type="button" id="btn-voice-command" onclick="CareConnectVoiceCommands.toggleListening()" class="btn btn-primary btn-sm" data-i18n="voice_command_btn">
-      🎙️ Voice Command
-    </button>
   </div>
 
   <!-- Socket.IO, Leaflet JS & CareConnect Multilingual Scripts -->
