@@ -66,6 +66,31 @@ staticLocations.forEach(sp => {
   }
 });
 
+// Explicit static route handler fallback for serverless environments
+app.get('/public/*', (req, res, next) => {
+  const reqPath = req.params[0];
+  const candidates = [
+    path.join(__dirname, 'public', reqPath),
+    path.join(process.cwd(), 'public', reqPath),
+    path.join(__dirname, '..', 'public', reqPath),
+    path.join(process.cwd(), 'dist', 'public', reqPath)
+  ];
+  const found = candidates.find(c => fs.existsSync(c));
+  if (found) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+    if (reqPath.endsWith('.css')) res.type('text/css');
+    else if (reqPath.endsWith('.js')) res.type('application/javascript');
+    else if (reqPath.endsWith('.png')) res.type('image/png');
+    else if (reqPath.endsWith('.svg')) res.type('image/svg+xml');
+    else if (reqPath.endsWith('.apk')) {
+      res.type('application/vnd.android.package-archive');
+      res.setHeader('Content-Disposition', `attachment; filename="${path.basename(found)}"`);
+    }
+    return res.sendFile(found);
+  }
+  next();
+});
+
 const serveView = (relPath) => (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
   const candidates = [

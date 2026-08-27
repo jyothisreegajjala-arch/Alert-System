@@ -2,213 +2,457 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="brand">CareConnect – Smart Community Emergency System</title>
-  <!-- Google Fonts Unicode Regional Support -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>SafeReach – Smart Community Emergency Alert System</title>
+  <meta name="description" content="SafeReach connects senior citizens and vulnerable individuals directly with linked family members, neighbors, security guards, and volunteers for instant response and live GPS tracking.">
+  <meta name="theme-color" content="#0b0f19">
+
+  <!-- Google Fonts Unicode & Multilingual Support -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Primary Stylesheets -->
   <link rel="stylesheet" href="/public/css/style.css">
   <link rel="stylesheet" href="/public/css/accessibility.css">
+
+  <!-- Critical Inline Styles to guarantee immediate rendering -->
   <style>
-    .hero { padding: 5rem 0 4rem; text-align: center; position: relative; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; background: rgba(255, 59, 48, 0.15); border: 1px solid rgba(255, 59, 48, 0.3); border-radius: var(--radius-full); color: #ff4d4d; font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; }
-    .hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; }
-    .hero-title span { background: linear-gradient(135deg, #ff3b30, #ff9500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-desc { font-size: 1.2rem; color: var(--dark-muted); max-width: 760px; margin: 0 auto 2rem; }
-    .workflow-step-card { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: var(--radius-md); padding: 1.75rem; position: relative; }
-    .step-number { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; margin-bottom: 1rem; }
-    .floating-assist-bar { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    /* Critical Reset & Foundation */
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.75);
+      --text-primary: #ffffff;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --primary: #ef4444;
+      --accent-cyan: #0ea5e9;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .d-none { display: none !important; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
+  <!-- ========================================================================
+       1. NAVIGATION HEADER
+       ======================================================================== -->
+  <nav class="navbar" id="main-nav">
     <div class="container nav-content">
-      <a href="/" class="brand-logo">
+      <!-- Left: Logo + Name -->
+      <a href="/" class="brand-logo" aria-label="SafeReach Home">
         <div class="logo-icon">🆘</div>
-        <span data-i18n="brand">CareConnect</span>
+        <span>SafeReach</span>
       </a>
+
+      <!-- Center: Desktop Navigation Links -->
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#workflow">60s Escalation</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#features">Features</a></li>
-        <li><a href="#demo-access">Quick Demo</a></li>
+        <li><a href="#role-portals">Role Login</a></li>
+        <li><a href="/download">Download APK</a></li>
       </ul>
+
+      <!-- Right: Action Buttons & Controls -->
       <div class="nav-actions">
-        <!-- Language Selector Dropdown on Home Page (Requirement 8) -->
+        <!-- Language Selector -->
         <div id="home-language-selector-container"></div>
-        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" style="display:flex; align-items:center; gap:0.4rem;" aria-label="Toggle Theme Mode">
+
+        <!-- Light/Dark Mode Toggle -->
+        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Dark or Light Mode">
           <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
         </button>
-        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
+
+        <!-- Accessibility Mode Toggle -->
+        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Accessibility High Contrast">
           👁️ Accessibility
         </button>
-        <a href="/login" class="btn btn-secondary btn-sm" data-i18n="login">Sign In</a>
-        <a href="/register" class="btn btn-primary btn-sm" data-i18n="register">Register Free</a>
+
+        <!-- Role Login -->
+        <a href="#role-portals" class="btn btn-secondary btn-sm" style="display:none;" id="desktop-role-login">Role Login</a>
+
+        <!-- Register Account Button -->
+        <a href="/register" class="btn btn-primary btn-sm">Register Account</a>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open Navigation Menu">
+          <span>☰</span>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer">
+      <a href="#how-it-works" onclick="closeMobileMenu()">📋 How It Works</a>
+      <a href="#features" onclick="closeMobileMenu()">✨ Features</a>
+      <a href="#role-portals" onclick="closeMobileMenu()">🔑 Access Role Portals</a>
+      <a href="/login" onclick="closeMobileMenu()">🚪 Sign In</a>
+      <a href="/register" onclick="closeMobileMenu()" class="btn-primary" style="text-align:center;">🚀 Register Account</a>
+      <a href="/download" onclick="closeMobileMenu()" style="text-align:center; color: #38bdf8;">📲 Download Android APK</a>
     </div>
   </nav>
 
-  <!-- Hero Section - SOS Main Focus -->
-  <header class="hero" style="padding: 4rem 1rem 3rem;">
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+  <!-- ========================================================================
+       2. HERO SECTION
+       ======================================================================== -->
+  <header class="hero-section">
+    <div class="container hero-container">
       
-      <div class="hero-badge" style="margin-bottom: 1.25rem;">
-        <span>⚡ Real-Time Community Response Network</span>
+      <!-- Small Badge -->
+      <div class="hero-badge">
+        <span>⚡ Instant 60-Second Community Escalation</span>
       </div>
 
-      <h1 class="hero-title" style="margin-bottom: 0.75rem;" data-i18n="welcome">Immediate Help for Loved Ones in Seconds</h1>
-      <p class="hero-desc" style="max-width: 680px; margin-bottom: 2rem;" data-i18n="app_tagline">
-        CareConnect empowers senior citizens, children, and dependent individuals to send instant SOS alerts with live location tracking, voice assistance, and automatic responder escalation.
+      <!-- Main Heading -->
+      <h1 class="hero-title">
+        Smart Community Emergency Alert System
+      </h1>
+
+      <!-- Supporting Text -->
+      <p class="hero-subtitle">
+        Connect Senior Citizens directly with linked Family Members, Neighbors, Security Guards, and Volunteers for instant response and GPS tracking.
       </p>
 
-      <!-- Main Focal Point: Large Centered Red Circular SOS Button -->
-      <div class="main-sos-focus-wrapper">
-        <a href="/login/senior" class="main-sos-circle-btn" aria-label="🚨 SOS Emergency Assistance">
-          <span class="sos-btn-text">
-            <span>🚨</span><span>SOS</span>
-          </span>
-        </a>
+      <!-- Prominent Circular Red SOS Button Area -->
+      <div class="sos-section">
+        <div class="sos-button-wrapper">
+          <svg class="sos-svg-ring" viewBox="0 0 280 280">
+            <circle class="sos-ring-bg" cx="140" cy="140" r="126"></circle>
+            <circle id="sos-ring-progress" class="sos-ring-progress" cx="140" cy="140" r="126"></circle>
+          </svg>
+          <a href="/login/senior" id="hero-sos-btn" class="main-sos-circle-btn" aria-label="Press and hold SOS to trigger emergency broadcast">
+            <span class="sos-btn-text">
+              <span>🚨</span>
+              <span>SOS</span>
+            </span>
+          </a>
+        </div>
 
-        <!-- Subtext specified by user -->
-        <div class="main-sos-subtext-group">
-          <span class="main-sos-line1">Press and Hold for 3 Seconds</span>
-          <span class="main-sos-line2">For Emergency Assistance</span>
+        <div class="sos-subtext-group">
+          <span class="sos-line-1">Press & Hold 3 Seconds to Trigger SOS</span>
+          <span class="sos-line-2">Immediate Socket Broadcast to Linked Responders</span>
         </div>
       </div>
 
-      <div style="display:flex; justify-content:center; gap:1.25rem; flex-wrap:wrap; margin-top: 1rem;">
-        <a href="/login" class="btn btn-secondary btn-lg">🔑 <span data-i18n="login">Sign In to Dashboard</span></a>
-        <a href="/language" class="btn btn-outline-secondary btn-lg">🌐 <span data-i18n="select_language">Change Language</span></a>
+      <!-- Primary Action Buttons (Equal Width, Responsive) -->
+      <div class="hero-action-buttons">
+        <a href="/register" class="btn btn-hero-primary">
+          <span>🚀</span>
+          <span>Register Account</span>
+        </a>
+        <a href="#role-portals" class="btn btn-hero-secondary">
+          <span>🔑</span>
+          <span>Access Role Portals</span>
+        </a>
       </div>
+
     </div>
   </header>
 
-  <!-- Quick Demo One-Click Access Section -->
-  <section id="demo-access" style="padding: 3rem 0; background: rgba(255,255,255,0.02);">
+  <!-- ========================================================================
+       3. HOW IT WORKS SECTION (4 Steps)
+       ======================================================================== -->
+  <section id="how-it-works" class="section-container" style="background: rgba(15, 23, 42, 0.4);">
     <div class="container">
-      <div class="glass-card" style="border-color: rgba(0,122,255,0.3);">
-        <h2 style="font-size:1.75rem; margin-bottom:0.5rem; text-align:center; color:#ffffff;">🧪 Instant Demo Accounts (1-Click Login)</h2>
-        <p style="text-align:center; color:var(--dark-muted); margin-bottom:2rem;">
-          Select any role below to test the complete emergency alert lifecycle in real-time across multiple browser windows:
+      <div class="section-header">
+        <div class="section-badge">📋 Simple 4-Step Process</div>
+        <h2 class="section-title">How SafeReach Works</h2>
+        <p class="section-subtitle">
+          Automated multi-tier community escalation ensures emergency alerts are received and acted upon within seconds.
         </p>
-        <div class="grid-3">
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>👵 Senior Citizen</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">Press & Hold 3s SOS trigger, medical profile, emergency contacts.</p>
-            <a href="/login/senior" class="btn btn-primary btn-sm" style="width:100%;">Login as Senior</a>
+      </div>
+
+      <div class="workflow-grid">
+        <!-- Step 01 -->
+        <div class="step-card">
+          <div class="step-top">
+            <div class="step-num">01</div>
+            <div class="step-icon">🔴</div>
           </div>
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>👮 Security Guard</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">On-Duty gatehouse alerts, Accept/Reject, Google Maps direction.</p>
-            <a href="/login/security" class="btn btn-secondary btn-sm" style="width:100%;">Login as Security</a>
+          <h3 class="step-title">Senior Citizen presses SOS</h3>
+          <p class="step-desc">
+            User holds the emergency SOS button for 3 seconds, activating loud synthesized alarm audio and initiating immediate response telemetry.
+          </p>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="step-card">
+          <div class="step-top">
+            <div class="step-num">02</div>
+            <div class="step-icon">📍</div>
           </div>
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>🏡 Neighbor</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">Nearby community alerts feed, 60s live timer bar, victim phone.</p>
-            <a href="/login/neighbor" class="btn btn-secondary btn-sm" style="width:100%;">Login as Neighbor</a>
+          <h3 class="step-title">GPS location is captured</h3>
+          <p class="step-desc">
+            High-precision GPS coordinates, apartment unit address, and pre-existing medical conditions are automatically compiled.
+          </p>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="step-card">
+          <div class="step-top">
+            <div class="step-num" style="color:var(--accent-amber); background:rgba(245,158,11,0.15); border-color:rgba(245,158,11,0.3);">03</div>
+            <div class="step-icon">🛡️</div>
           </div>
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>🤝 Volunteer</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">Active escalated emergency response, resolve emergency with notes.</p>
-            <a href="/login/volunteer" class="btn btn-secondary btn-sm" style="width:100%;">Login as Volunteer</a>
+          <h3 class="step-title">Linked responders receive alert</h3>
+          <p class="step-desc">
+            Tier 1 nearby neighbors and on-duty security guards receive real-time push alerts and Socket.IO broadcasts with live 60s countdown timer.
+          </p>
+        </div>
+
+        <!-- Step 04 -->
+        <div class="step-card">
+          <div class="step-top">
+            <div class="step-num" style="color:var(--accent-emerald); background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3);">04</div>
+            <div class="step-icon">⏱️</div>
           </div>
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>👨‍👩‍👧 Family Member</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">Live tracking, status updates, direct phone call & responder details.</p>
-            <a href="/login/family" class="btn btn-secondary btn-sm" style="width:100%;">Login as Family</a>
-          </div>
-          <div class="glass-card" style="padding:1.25rem; text-align:center;">
-            <h3>👑 System Admin</h3>
-            <p style="font-size:0.85rem; color:var(--dark-muted); margin:0.5rem 0 1rem;">Analytics KPI cards, real-time socket stream log, user management.</p>
-            <a href="/login/admin" class="btn btn-primary btn-sm" style="width:100%;">Login as Admin</a>
-          </div>
+          <h3 class="step-title">Emergency is escalated if required</h3>
+          <p class="step-desc">
+            If not accepted within 60 seconds, the server automatically escalates the alert to family members and registered community volunteers.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 60-Second Escalation Workflow -->
-  <section id="workflow" style="padding: 5rem 0;">
+  <!-- ========================================================================
+       4. FEATURES SECTION (6 Cards)
+       ======================================================================== -->
+  <section id="features" class="section-container">
     <div class="container">
-      <div style="text-align:center; margin-bottom:3.5rem;">
-        <h2 style="font-size:2.25rem; color:#fff; font-weight:800;">Automated 60-Second Emergency Workflow</h2>
-        <p style="color:var(--dark-muted); margin-top:0.5rem;">No emergency request goes unanswered with two-tier community escalation.</p>
+      <div class="section-header">
+        <div class="section-badge">✨ Core Capabilities</div>
+        <h2 class="section-title">Built for Speed, Reliability & Safety</h2>
+        <p class="section-subtitle">
+          Comprehensive real-time emergency infrastructure tailored for residential societies, senior care, and families.
+        </p>
       </div>
 
-      <div class="grid-4">
-        <div class="workflow-step-card">
-          <div class="step-number">1</div>
-          <h3 style="color:#fff; font-size:1.1rem; margin-bottom:0.5rem;">Press & Hold SOS</h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted);">User holds the SOS button for 3 seconds. Live GPS location, date, time, and emergency ID are captured instantly.</p>
+      <div class="features-grid">
+        <!-- Feature 1: Instant SOS -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">🚨</div>
+          <h3 class="feature-title">Instant SOS</h3>
+          <p class="feature-desc">
+            Immediate emergency alert broadcasting with 3-second hold to prevent accidental triggers and emit high-priority sirens.
+          </p>
         </div>
-        <div class="workflow-step-card">
-          <div class="step-number">2</div>
-          <h3 style="color:#fff; font-size:1.1rem; margin-bottom:0.5rem;">Tier 1: Neighbors & Security</h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted);">Immediate socket broadcast to registered nearby neighbors and building security guards with live countdown timer.</p>
+
+        <!-- Feature 2: GPS Tracking -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #0ea5e9; background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3);">📍</div>
+          <h3 class="feature-title">GPS Tracking</h3>
+          <p class="feature-desc">
+            Share the senior citizen's live GPS coordinates with authorized responders alongside 1-click Google Maps navigation routing.
+          </p>
         </div>
-        <div class="workflow-step-card">
-          <div class="step-number" style="background:var(--warning);">3</div>
-          <h3 style="color:#fff; font-size:1.1rem; margin-bottom:0.5rem;">60-Sec Escalation</h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted);">If no neighbor or security accepts within 60 seconds, the server automatically escalates the alert to family & volunteers.</p>
+
+        <!-- Feature 3: Family Connection -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3);">👨‍👩‍👧</div>
+          <h3 class="feature-title">Family Connection</h3>
+          <p class="feature-desc">
+            Connect trusted family members and guardians for instant emergency push notifications, live status feeds, and direct telephone calls.
+          </p>
         </div>
-        <div class="workflow-step-card">
-          <div class="step-number" style="background:var(--success);">4</div>
-          <h3 style="color:#fff; font-size:1.1rem; margin-bottom:0.5rem;">Resolution & History</h3>
-          <p style="font-size:0.85rem; color:var(--dark-muted);">Responders navigate via Google Maps, assist the victim, and mark the emergency as resolved in MongoDB database.</p>
+
+        <!-- Feature 4: Community Responders -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">🛡️</div>
+          <h3 class="feature-title">Community Responders</h3>
+          <p class="feature-desc">
+            Notify linked nearby neighbors, registered volunteers, and gatehouse security personnel for immediate on-site support.
+          </p>
+        </div>
+
+        <!-- Feature 5: Real-Time Notifications -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">🔔</div>
+          <h3 class="feature-title">Real-Time Notifications</h3>
+          <p class="feature-desc">
+            Receive instant alerts through Socket.IO websockets and Firebase Cloud Messaging (FCM) push notifications with audio alerts.
+          </p>
+        </div>
+
+        <!-- Feature 6: 60-Second Escalation -->
+        <div class="feature-card">
+          <div class="feature-icon-box" style="color: #ec4899; background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3);">⏱️</div>
+          <h3 class="feature-title">60-Second Escalation</h3>
+          <p class="feature-desc">
+            Automated server-side escalation automatically cascades alerts to secondary tier responders when primary contacts are busy.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Grid -->
-  <section id="features" style="padding: 4rem 0; background: rgba(15, 23, 42, 0.6);">
+  <!-- ========================================================================
+       5. ROLE PORTALS SECTION (7 Dedicated Roles)
+       ======================================================================== -->
+  <section id="role-portals" class="section-container" style="background: rgba(15, 23, 42, 0.5);">
     <div class="container">
-      <div style="text-align:center; margin-bottom:3rem;">
-        <h2 style="font-size:2.25rem; color:#fff; font-weight:800;">Built for Speed, Reliability, and Community Safety</h2>
+      <div class="section-header">
+        <div class="section-badge">🔑 Specialized Portals</div>
+        <h2 class="section-title">Access Dedicated Role Portals</h2>
+        <p class="section-subtitle">
+          Select your registered community role below to sign in directly to your specialized emergency response dashboard.
+        </p>
       </div>
 
-      <div class="grid-3">
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">🔴</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">3-Second Press & Hold SOS</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Prevents accidental triggers with radial visual progress, vibration, and synthesized alarm audio.</p>
+      <div class="roles-grid">
+        <!-- 1. Senior Citizen -->
+        <div class="role-card">
+          <div class="role-icon-box">👵</div>
+          <h3 class="role-name">Senior Citizen</h3>
+          <span class="role-tier-badge" style="color:#f87171; background:rgba(239,68,68,0.15);">SOS Trigger Hub</span>
+          <p class="role-desc">1-Click SOS trigger, medical details, and linked private family emergency contacts.</p>
+          <a href="/login/senior" class="btn btn-danger btn-sm">Login as Senior</a>
         </div>
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">⚡</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">Socket.IO Real-Time Engine</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Instantaneous websockets push live emergency popups to nearby responders without page refresh.</p>
+
+        <!-- 2. Child / Dependent -->
+        <div class="role-card">
+          <div class="role-icon-box">👶</div>
+          <h3 class="role-name">Child / Dependent</h3>
+          <span class="role-tier-badge" style="color:#38bdf8; background:rgba(14,165,233,0.15);">SOS Trigger Hub</span>
+          <p class="role-desc">Simplified emergency SOS interface with automated parent and guardian notifications.</p>
+          <a href="/login/child" class="btn btn-primary btn-sm">Login as Child</a>
         </div>
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">🗺️</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">Google Maps Navigation</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Interactive Leaflet tracking plus one-click Google Maps turn-by-turn navigation link generation.</p>
+
+        <!-- 3. Family Member -->
+        <div class="role-card">
+          <div class="role-icon-box">👨‍👩‍👧</div>
+          <h3 class="role-name">Family Member</h3>
+          <span class="role-tier-badge" style="color:#a78bfa; background:rgba(139,92,246,0.15);">Guardian Tier</span>
+          <p class="role-desc">Live victim tracking, emergency status updates, direct phone call, and responder coordination.</p>
+          <a href="/login/family" class="btn btn-secondary btn-sm">Login as Family</a>
         </div>
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">🔐</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">JWT & Bcrypt Authentication</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Secure password hashing and token-based role permission middleware across all API routes.</p>
+
+        <!-- 4. Nearby Neighbor -->
+        <div class="role-card">
+          <div class="role-icon-box">🏡</div>
+          <h3 class="role-name">Nearby Neighbor</h3>
+          <span class="role-tier-badge" style="color:#34d399; background:rgba(16,185,129,0.15);">Tier 1 Responder</span>
+          <p class="role-desc">Nearby community alerts feed, 60-second live timer bar, and instant neighbor response.</p>
+          <a href="/login/neighbor" class="btn btn-secondary btn-sm">Login as Neighbor</a>
         </div>
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">👥</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">7 Specialized User Roles</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Dedicated user interfaces for Seniors, Children, Families, Neighbors, Security Guards, Volunteers, and Admins.</p>
+
+        <!-- 5. Security Guard -->
+        <div class="role-card">
+          <div class="role-icon-box">👮</div>
+          <h3 class="role-name">Security Guard</h3>
+          <span class="role-tier-badge" style="color:#60a5fa; background:rgba(59,130,246,0.15);">Tier 1 Responder</span>
+          <p class="role-desc">Gatehouse on-duty emergency console, Google Maps directions, and incident acceptance.</p>
+          <a href="/login/security" class="btn btn-secondary btn-sm">Login as Security</a>
         </div>
-        <div class="glass-card">
-          <div style="font-size:2.5rem; margin-bottom:1rem;">📊</div>
-          <h3 style="color:#fff; margin-bottom:0.5rem;">Admin Operational Analytics</h3>
-          <p style="color:var(--dark-muted); font-size:0.9rem;">Comprehensive user management, response time telemetry, and emergency audit logs in MongoDB Atlas.</p>
+
+        <!-- 6. Community Volunteer -->
+        <div class="role-card">
+          <div class="role-icon-box">🤝</div>
+          <h3 class="role-name">Community Volunteer</h3>
+          <span class="role-tier-badge" style="color:#fbbf24; background:rgba(245,158,11,0.15);">Tier 2 Escalation</span>
+          <p class="role-desc">Active escalated emergency response, victim assistance, and incident resolution notes.</p>
+          <a href="/login/volunteer" class="btn btn-secondary btn-sm">Login as Volunteer</a>
+        </div>
+
+        <!-- 7. System Admin -->
+        <div class="role-card">
+          <div class="role-icon-box">👑</div>
+          <h3 class="role-name">System Admin</h3>
+          <span class="role-tier-badge" style="color:#f472b6; background:rgba(244,114,182,0.15);">Full System Control</span>
+          <p class="role-desc">Operational KPI analytics, real-time socket stream, user directory, and Excel CSV export.</p>
+          <a href="/login/admin" class="btn btn-outline-secondary btn-sm">Login as Admin</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer style="padding: 2.5rem 0; border-top: 1px solid var(--dark-border); text-align: center; color: var(--dark-muted); font-size: 0.9rem;">
+  <!-- ========================================================================
+       6. PROFESSIONAL FOOTER
+       ======================================================================== -->
+  <footer class="main-footer">
     <div class="container">
-      <p>© 2026 SafeReach Emergency Network • Smart Community Emergency Alert System</p>
+      <div class="footer-grid">
+        <!-- Brand Info -->
+        <div class="footer-brand">
+          <a href="/" class="brand-logo" style="margin-bottom:0.75rem;">
+            <div class="logo-icon">🆘</div>
+            <span>SafeReach</span>
+          </a>
+          <p>
+            Smart Community Emergency Alert System connecting families, neighbors, security guards, and volunteers in real-time.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="footer-heading">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#role-portals">Role Login</a></li>
+            <li><a href="/register">Register Account</a></li>
+            <li><a href="/login">Sign In</a></li>
+          </ul>
+        </div>
+
+        <!-- Role Portals -->
+        <div>
+          <h4 class="footer-heading">Portals</h4>
+          <ul class="footer-links">
+            <li><a href="/login/senior">Senior Citizen</a></li>
+            <li><a href="/login/child">Child / Dependent</a></li>
+            <li><a href="/login/family">Family Member</a></li>
+            <li><a href="/login/neighbor">Nearby Neighbor</a></li>
+            <li><a href="/login/security">Security Guard</a></li>
+            <li><a href="/login/volunteer">Community Volunteer</a></li>
+            <li><a href="/login/admin">System Admin</a></li>
+          </ul>
+        </div>
+
+        <!-- Safety Notice & APK -->
+        <div>
+          <h4 class="footer-heading">Emergency Notice</h4>
+          <div class="safety-notice-box">
+            🛡️ <strong>Safety Advisory:</strong> SafeReach coordinates community response. In critical life-threatening situations, also notify local public emergency services (112 / 911).
+          </div>
+          <div style="margin-top:1rem;">
+            <a href="/download" class="btn btn-secondary btn-sm" style="width:100%; text-align:center;">
+              📲 Download Android APK
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div>
+          © 2026 SafeReach Emergency Network. All rights reserved.
+        </div>
+        <div style="display:flex; gap:1.25rem;">
+          <a href="/language" style="color:var(--text-muted);">🌐 Languages</a>
+          <a href="/download" style="color:var(--text-muted);">📱 Mobile App</a>
+          <a href="#main-nav" style="color:var(--text-muted);">↑ Back to Top</a>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -222,16 +466,74 @@
     </button>
   </div>
 
+  <!-- Scripts -->
   <script src="/public/js/i18n.js"></script>
   <script src="/public/js/voiceAssistant.js"></script>
   <script src="/public/js/voiceCommands.js"></script>
   <script src="/public/js/accessibility.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/fcm.js"></script>
+
   <script>
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) {
+        drawer.classList.toggle('open');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-nav-drawer');
+      if (drawer) {
+        drawer.classList.remove('open');
+      }
+    }
+
+    // Interactive 3-Second Press & Hold SOS on Hero
     document.addEventListener('DOMContentLoaded', () => {
       if (window.CareConnectI18n) {
         CareConnectI18n.renderLanguageSelector('home-language-selector-container');
+      }
+
+      const sosBtn = document.getElementById('hero-sos-btn');
+      const ringProgress = document.getElementById('sos-ring-progress');
+      let holdTimer = null;
+      let holdStartTime = 0;
+      const HOLD_DURATION = 3000;
+
+      if (sosBtn && ringProgress) {
+        const startHold = (e) => {
+          e.preventDefault();
+          holdStartTime = Date.now();
+          ringProgress.style.strokeDashoffset = '0';
+          ringProgress.style.transition = `stroke-dashoffset ${HOLD_DURATION}ms linear`;
+
+          holdTimer = setTimeout(() => {
+            // Check if user is logged in
+            const user = window.SafeReach ? window.SafeReach.getUser() : null;
+            if (user && (user.role === 'senior_citizen' || user.role === 'child')) {
+              window.location.href = '/dashboard';
+            } else {
+              window.location.href = '/login/senior';
+            }
+          }, HOLD_DURATION);
+        };
+
+        const cancelHold = () => {
+          if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+          }
+          ringProgress.style.transition = 'stroke-dashoffset 0.2s ease-out';
+          ringProgress.style.strokeDashoffset = '660';
+        };
+
+        sosBtn.addEventListener('mousedown', startHold);
+        sosBtn.addEventListener('touchstart', startHold, { passive: false });
+        sosBtn.addEventListener('mouseup', cancelHold);
+        sosBtn.addEventListener('mouseleave', cancelHold);
+        sosBtn.addEventListener('touchend', cancelHold);
+        sosBtn.addEventListener('touchcancel', cancelHold);
       }
     });
   </script>
