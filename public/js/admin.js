@@ -114,7 +114,8 @@ function toggleSectionExpand(contentId, arrowId) {
 // 5. Theme Controller
 // --------------------------------------------------------------------------
 function getAdminTheme() {
-  return localStorage.getItem('safereach_admin_theme') || localStorage.getItem('safereach_theme') || 'light';
+  const saved = localStorage.getItem('safereach_admin_theme');
+  return (saved === 'dark') ? 'dark' : 'light';
 }
 
 function applyAdminTheme(theme) {
@@ -137,12 +138,13 @@ function toggleAdminTheme() {
   const current = getAdminTheme();
   const next = current === 'dark' ? 'light' : 'dark';
   localStorage.setItem('safereach_admin_theme', next);
-  localStorage.setItem('safereach_theme', next);
   applyAdminTheme(next);
 }
 
 function initAdminTheme() {
-  applyAdminTheme(getAdminTheme());
+  // Ensure bright light theme is the primary active experience
+  const current = getAdminTheme();
+  applyAdminTheme(current);
 }
 
 // --------------------------------------------------------------------------
