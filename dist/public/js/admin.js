@@ -84,6 +84,14 @@ function switchAdminTab(tabId) {
       view.scrollTop = 0;
     }
     loadEmergencyReports();
+  } else if (tabId === 'tab-gps') {
+    document.getElementById('drawer-nav-gps')?.classList.add('active');
+    const view = document.getElementById('section-view-gps');
+    if (view) {
+      view.classList.remove('d-none');
+      view.scrollTop = 0;
+    }
+    initAdminLiveMap();
   } else if (tabId === 'tab-reports') {
     document.getElementById('drawer-nav-reports')?.classList.add('active');
     const view = document.getElementById('section-view-reports');
@@ -378,129 +386,134 @@ function handleSaveProfile(event) {
 }
 
 // --------------------------------------------------------------------------
-// 11. GPS & Notifications Modals (Real-Time Admin GPS Telemetry)
+// 11. Live GPS Radar & Interactive Map (Matching Reference Screenshot)
 // --------------------------------------------------------------------------
-let adminGpsWatchId = null;
+let adminMapInstance = null;
+let adminMapMarker = null;
 
-async function openGpsModal() {
-  const modal = document.getElementById('admin-gps-modal');
-  const list = document.getElementById('admin-gps-locations-list');
-  if (modal) modal.classList.remove('d-none');
+function initAdminLiveMap() {
+  const container = document.getElementById('admin-live-leaflet-map');
+  if (!container || typeof L === 'undefined') return;
 
-  if (!list) return;
+  const defaultLat = 13.0827;
+  const defaultLng = 80.2707;
 
+  if (!adminMapInstance) {
+    adminMapInstance = L.map('admin-live-leaflet-map').setView([defaultLat, defaultLng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; SafeReach Emergency Network',
+      maxZoom: 19
+    }).addTo(adminMapInstance);
+
+    const customPin = L.divIcon({
+      className: 'admin-live-map-pin',
+      html: `<div style="background:#0284c7; width:26px; height:26px; border-radius:50%; border:3px solid white; box-shadow:0 0 16px #0284c7; display:flex; align-items:center; justify-content:center; font-size:13px; color:white;">📍</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
+    });
+
+    adminMapMarker = L.marker([defaultLat, defaultLng], { icon: customPin }).addTo(adminMapInstance);
+    adminMapMarker.bindPopup('<strong>👑 System Admin Command Center</strong><br>Active Live Telemetry Base').openPopup();
+  }
+
+  setTimeout(() => {
+    if (adminMapInstance) adminMapInstance.invalidateSize();
+  }, 250);
+
+  // Fetch and update coordinates
+  fetchAndDisplayAdminGps();
+}
+
+function fetchAndDisplayAdminGps() {
+  const statusBox = document.getElementById('admin-gps-status-box');
+  const btn = document.getElementById('btn-get-admin-location');
   const adminName = localStorage.getItem('safereach_admin_name') || (adminUser && adminUser.name) || 'tarun tej';
   const officeLoc = localStorage.getItem('safereach_admin_location') || (adminUser && adminUser.location) || 'tamilnadu';
 
-  list.innerHTML = `
-    <div style="text-align:center; padding:1rem; color:var(--admin-text-sub);">
-      <div style="font-size:1.5rem; margin-bottom:0.5rem;">🛰️</div>
-      <div style="font-weight:700; font-size:0.92rem; color:var(--admin-text-main);">Acquiring Live GPS Satellite Lock...</div>
-      <div style="font-size:0.8rem; color:var(--admin-text-muted); margin-top:0.25rem;">Detecting real-time coordinates for System Admin <strong>${adminName}</strong></div>
-    </div>
-  `;
+  if (btn) {
+    btn.innerHTML = '<span>⏳</span> <span>Acquiring High-Accuracy GPS Lock...</span>';
+  }
 
-  // Function to render acquired GPS coordinates
-  const renderGpsUI = async (position, isFallback = false) => {
-    const lat = position ? position.coords.latitude : 13.0827;
-    const lng = position ? position.coords.longitude : 80.2707;
-    const accuracy = position && position.coords.accuracy ? Math.round(position.coords.accuracy) : 10;
-    const timestamp = new Date().toLocaleTimeString();
+  const handlePosition = (pos, isFallback = false) => {
+    const lat = pos ? pos.coords.latitude : 13.0827;
+    const lng = pos ? pos.coords.longitude : 80.2707;
+    const accuracy = pos && pos.coords.accuracy ? Math.round(pos.coords.accuracy) : 10;
+    const time = new Date().toLocaleTimeString();
 
-    let emergenciesHtml = '';
-    try {
-      const data = await SafeReach.api('/api/admin/reports');
-      const emergencies = (data?.emergencies || []).filter(e => e.location && e.location.latitude);
+    if (btn) {
+      btn.innerHTML = '<span>📍</span> <span>Get Current Location</span>';
+    }
 
-      if (emergencies.length > 0) {
-        emergenciesHtml = `
-          <div style="margin-top:1rem; border-top:1px solid rgba(180, 205, 230, 0.4); padding-top:0.75rem;">
-            <div style="font-weight:800; font-size:0.88rem; color:#ef4444; margin-bottom:0.5rem;">🚨 Active Community SOS Telemetry:</div>
-            ${emergencies.map(e => `
-              <div style="background:rgba(239, 68, 68, 0.08); padding:0.65rem 0.85rem; border-radius:10px; border:1px solid rgba(239, 68, 68, 0.2); margin-bottom:0.45rem;">
-                <div style="font-weight:700; font-size:0.85rem; color:var(--admin-text-main);">🚨 ${e.seniorName || 'Senior Citizen'}</div>
-                <div style="font-size:0.78rem; color:var(--admin-text-muted);">GPS: ${e.location.latitude.toFixed(5)}, ${e.location.longitude.toFixed(5)}</div>
-                <a href="https://www.google.com/maps?q=${e.location.latitude},${e.location.longitude}" target="_blank" style="color:#0284c7; font-size:0.78rem; font-weight:700; display:inline-block; margin-top:0.2rem;">View SOS Location on Google Maps →</a>
-              </div>
-            `).join('')}
+    if (statusBox) {
+      statusBox.style.display = 'block';
+      statusBox.innerHTML = `
+        <div style="background:var(--admin-card-surface); border-radius:14px; padding:1rem; border:1px solid rgba(180, 205, 230, 0.6); box-shadow:0 4px 14px rgba(180, 205, 230, 0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem;">
+            <strong style="color:var(--admin-text-main); font-size:0.95rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>👑</span> <span>${adminName} (System Admin)</span>
+            </strong>
+            <span style="font-size:0.75rem; font-weight:800; padding:0.25rem 0.65rem; border-radius:20px; background:${isFallback ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)'}; color:${isFallback ? '#d97706' : '#10b981'};">
+              ${isFallback ? '📍 Estimated GPS' : '🟢 Live GPS Lock'}
+            </span>
           </div>
-        `;
-      } else {
-        emergenciesHtml = `
-          <div style="margin-top:0.75rem; background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.25); border-radius:12px; padding:0.65rem 0.85rem; text-align:center; font-size:0.82rem; font-weight:700; color:#059669;">
-            ✅ Community Safety Network is clear. All linked seniors are safe.
-          </div>
-        `;
-      }
-    } catch (e) {}
 
-    list.innerHTML = `
-      <!-- Admin Live GPS Station Card -->
-      <div style="background:var(--admin-card-surface); border-radius:14px; padding:1rem; border:1px solid rgba(180, 205, 230, 0.6); box-shadow:0 4px 14px rgba(180, 205, 230, 0.3);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
-          <div style="font-weight:800; font-size:0.95rem; color:var(--admin-text-main); display:flex; align-items:center; gap:0.4rem;">
-            <span>👑</span>
-            <span>${adminName} (System Admin)</span>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:0.75rem;">
+            <div style="background:var(--admin-card-bg); padding:0.6rem 0.75rem; border-radius:10px; border:1px solid rgba(180, 205, 230, 0.4);">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase;">Latitude</div>
+              <div style="font-family:'Consolas', monospace; font-size:1.05rem; font-weight:800; color:var(--admin-primary); margin-top:0.15rem;">${lat.toFixed(6)}°</div>
+            </div>
+            <div style="background:var(--admin-card-bg); padding:0.6rem 0.75rem; border-radius:10px; border:1px solid rgba(180, 205, 230, 0.4);">
+              <div style="font-size:0.7rem; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase;">Longitude</div>
+              <div style="font-family:'Consolas', monospace; font-size:1.05rem; font-weight:800; color:var(--admin-primary); margin-top:0.15rem;">${lng.toFixed(6)}°</div>
+            </div>
           </div>
-          <span style="font-size:0.72rem; font-weight:800; padding:0.2rem 0.6rem; border-radius:20px; background:${isFallback ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)'}; color:${isFallback ? '#d97706' : '#10b981'};">
-            ${isFallback ? '📍 Estimated GPS' : '🟢 Live GPS Lock'}
-          </span>
-        </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:0.75rem;">
-          <div style="background:var(--admin-card-bg); padding:0.6rem 0.75rem; border-radius:10px; border:1px solid rgba(180, 205, 230, 0.4);">
-            <div style="font-size:0.7rem; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase;">Latitude</div>
-            <div style="font-family:'Consolas', monospace; font-size:1.05rem; font-weight:800; color:var(--admin-primary); margin-top:0.15rem;">${lat.toFixed(6)}°</div>
+          <div style="font-size:0.82rem; color:var(--admin-text-sub); display:flex; flex-direction:column; gap:0.25rem; margin-bottom:0.75rem;">
+            <div>🏢 <strong>Command Office:</strong> ${officeLoc}</div>
+            <div>🎯 <strong>GPS Precision:</strong> ± ${accuracy} meters accuracy</div>
+            <div>🕒 <strong>Fix Acquired:</strong> ${time}</div>
           </div>
-          <div style="background:var(--admin-card-bg); padding:0.6rem 0.75rem; border-radius:10px; border:1px solid rgba(180, 205, 230, 0.4);">
-            <div style="font-size:0.7rem; font-weight:700; color:var(--admin-text-muted); text-transform:uppercase;">Longitude</div>
-            <div style="font-family:'Consolas', monospace; font-size:1.05rem; font-weight:800; color:var(--admin-primary); margin-top:0.15rem;">${lng.toFixed(6)}°</div>
-          </div>
-        </div>
 
-        <div style="font-size:0.8rem; color:var(--admin-text-sub); display:flex; flex-direction:column; gap:0.25rem; margin-bottom:0.85rem;">
-          <div>🏢 <strong>Command Office:</strong> ${officeLoc}</div>
-          <div>🎯 <strong>GPS Precision:</strong> ± ${accuracy} meters accuracy</div>
-          <div>🕒 <strong>Fix Acquired:</strong> ${timestamp}</div>
-        </div>
-
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="flex:1; min-width:140px; display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; padding:0.65rem 1rem; background:var(--admin-primary); color:#ffffff; font-size:0.85rem; font-weight:700; border-radius:10px; text-decoration:none; box-shadow:0 4px 12px rgba(2, 132, 199, 0.35);">
-            <span>🗺️</span>
-            <span>Open in Google Maps</span>
+          <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; padding:0.65rem 1rem; background:var(--admin-primary); color:#ffffff; font-size:0.85rem; font-weight:700; border-radius:10px; text-decoration:none; box-shadow:0 4px 12px rgba(2, 132, 199, 0.35);">
+            <span>🗺️</span> <span>Open in Google Maps</span>
           </a>
-          <button type="button" onclick="openGpsModal()" style="display:inline-flex; align-items:center; justify-content:center; gap:0.35rem; padding:0.65rem 0.95rem; background:var(--admin-card-bg); border:1px solid rgba(180, 205, 230, 0.6); color:var(--admin-text-main); font-size:0.82rem; font-weight:700; border-radius:10px; cursor:pointer;">
-            <span>🔄</span>
-            <span>Refresh GPS</span>
-          </button>
         </div>
-      </div>
+      `;
+    }
 
-      ${emergenciesHtml}
-    `;
+    if (adminMapInstance && typeof L !== 'undefined') {
+      adminMapInstance.setView([lat, lng], 16);
+      if (adminMapMarker) {
+        adminMapMarker.setLatLng([lat, lng]);
+        adminMapMarker.bindPopup(`<strong>👑 System Admin Location</strong><br>GPS: ${lat.toFixed(5)}°, ${lng.toFixed(5)}°<br>Precision: ±${accuracy}m`).openPopup();
+      }
+      setTimeout(() => {
+        if (adminMapInstance) adminMapInstance.invalidateSize();
+      }, 150);
+    }
   };
 
-  // Acquire Live GPS from device
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        renderGpsUI(pos, false);
-      },
+      (pos) => handlePosition(pos, false),
       (err) => {
-        console.warn('Live GPS fallback:', err.message);
-        // Fallback with graceful message
-        renderGpsUI(null, true);
+        console.warn('Geolocation fallback:', err.message);
+        handlePosition(null, true);
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   } else {
-    renderGpsUI(null, true);
+    handlePosition(null, true);
   }
 }
 
+function openGpsModal() {
+  switchAdminTab('tab-gps');
+}
+
 function closeGpsModal() {
-  const modal = document.getElementById('admin-gps-modal');
-  if (modal) modal.classList.add('d-none');
+  switchAdminTab('tab-dashboard');
 }
 
 async function openAdminNotificationsModal() {
@@ -761,6 +774,8 @@ window.closeGpsModal = closeGpsModal;
 window.openAdminNotificationsModal = openAdminNotificationsModal;
 window.closeAdminNotificationsModal = closeAdminNotificationsModal;
 window.clearAdminNotifications = clearAdminNotifications;
+window.fetchAndDisplayAdminGps = fetchAndDisplayAdminGps;
+window.initAdminLiveMap = initAdminLiveMap;
 window.triggerCSVImport = triggerCSVImport;
 window.handleCSVFileSelect = handleCSVFileSelect;
 window.exportAllDataCSV = exportAllDataCSV;
