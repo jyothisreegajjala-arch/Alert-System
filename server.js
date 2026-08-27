@@ -47,33 +47,44 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static frontend files with no-cache headers
-app.use('/public', express.static(path.join(__dirname, 'public'), {
-  etag: false,
-  maxAge: 0,
-  setHeaders: (res) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+// Serve static frontend files with no-cache headers across possible root locations
+const staticLocations = [
+  path.join(__dirname, 'public'),
+  path.join(process.cwd(), 'public'),
+  path.join(__dirname, '..', 'public'),
+  path.join(process.cwd(), 'dist', 'public')
+];
+staticLocations.forEach(sp => {
+  if (fs.existsSync(sp)) {
+    app.use('/public', express.static(sp, {
+      etag: false,
+      maxAge: 0,
+      setHeaders: (res) => {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+      }
+    }));
   }
-}));
-app.use('/views', express.static(path.join(__dirname, 'views'), {
-  etag: false,
-  maxAge: 0,
-  setHeaders: (res) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
-  }
-}));
+});
 
-const downloadHtmlPath = path.join(__dirname, 'views', 'download.html');
-const downloadHtmlContent = fs.existsSync(downloadHtmlPath) ? fs.readFileSync(downloadHtmlPath, 'utf8') : null;
+const serveView = (relPath) => (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+  const candidates = [
+    path.join(__dirname, 'views', relPath),
+    path.join(process.cwd(), 'views', relPath),
+    path.join(__dirname, '..', 'views', relPath),
+    path.join(process.cwd(), 'dist', 'views', relPath),
+    path.join(process.cwd(), 'dist', relPath)
+  ];
+  const found = candidates.find(c => fs.existsSync(c));
+  if (found) {
+    return res.sendFile(found);
+  }
+  res.status(404).send(`View ${relPath} not found`);
+};
 
 // Serve view HTML files directly with array route aliases
-app.get(['/download', '/download.html'], (req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
-  if (downloadHtmlContent) {
-    return res.status(200).type('html').send(downloadHtmlContent);
-  }
-  res.sendFile(path.join(__dirname, 'views', 'download.html'));
-});
+app.get(['/download', '/download.html'], serveView('download.html'));
+
 app.get(['/app-release.apk', '/public/app-release.apk'], (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
   res.setHeader('Content-Type', 'application/vnd.android.package-archive');
@@ -117,19 +128,20 @@ app.get(['/app-debug.apk', '/public/app-debug.apk'], (req, res) => {
   }
   res.status(404).send('Debug APK file not found on server');
 });
-app.get(['/language', '/language.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'language.html')));
-app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
-app.get(['/login', '/login.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login.html')));
-app.get(['/login/senior', '/login/senior.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'senior.html')));
-app.get(['/login/child', '/login/child.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'child.html')));
-app.get(['/login/family', '/login/family.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'family.html')));
-app.get(['/login/neighbor', '/login/neighbor.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'neighbor.html')));
-app.get(['/login/security', '/login/security.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'security.html')));
-app.get(['/login/volunteer', '/login/volunteer.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'volunteer.html')));
-app.get(['/login/admin', '/login/admin.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'login', 'admin.html')));
-app.get(['/register', '/register.html'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'register.html')));
-app.get(['/dashboard', '/dashboard.html', '/dashboard/'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'dashboard.html')));
-app.get(['/admin', '/admin.html', '/admin/'], (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin.html')));
+
+app.get(['/language', '/language.html'], serveView('language.html'));
+app.get(['/', '/index.html'], serveView('index.html'));
+app.get(['/login', '/login.html'], serveView('login.html'));
+app.get(['/login/senior', '/login/senior.html'], serveView(path.join('login', 'senior.html')));
+app.get(['/login/child', '/login/child.html'], serveView(path.join('login', 'child.html')));
+app.get(['/login/family', '/login/family.html'], serveView(path.join('login', 'family.html')));
+app.get(['/login/neighbor', '/login/neighbor.html'], serveView(path.join('login', 'neighbor.html')));
+app.get(['/login/security', '/login/security.html'], serveView(path.join('login', 'security.html')));
+app.get(['/login/volunteer', '/login/volunteer.html'], serveView(path.join('login', 'volunteer.html')));
+app.get(['/login/admin', '/login/admin.html'], serveView(path.join('login', 'admin.html')));
+app.get(['/register', '/register.html'], serveView('register.html'));
+app.get(['/dashboard', '/dashboard.html', '/dashboard/'], serveView('dashboard.html'));
+app.get(['/admin', '/admin.html', '/admin/'], serveView('admin.html'));
 
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
