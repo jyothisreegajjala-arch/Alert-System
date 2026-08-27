@@ -1,6 +1,6 @@
 /* ==========================================================================
    SafeReach - System Administration & Analytics Stylesheet
-   Pure Soft Neomorphic Light Theme (Matching Reference Screenshots 1, 2, 3, 4, 5)
+   Fixed Application Interface & Internal Section Scrolling System
    ========================================================================== */
 
 :root {
@@ -69,18 +69,22 @@ body.dark-theme,
   --admin-pill-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Global Reset */
+/* ==========================================================================
+   FIXED VIEWPORT APPLICATION INTERFACE (NO WHOLE-PAGE SCROLLING)
+   ========================================================================== */
 html, body.admin-body {
   width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden !important;
   margin: 0;
   padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--admin-bg-gradient) !important;
   background-color: var(--admin-bg) !important;
   color: var(--admin-text-main);
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
 }
 
@@ -89,21 +93,22 @@ html, body.admin-body {
 }
 
 /* ==========================================================================
-   TOP ADMIN HEADER (LIGHT NEOMORPHIC)
+   TOP ADMIN HEADER (FIXED STRIP)
    ========================================================================== */
 .admin-top-header {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  background: rgba(237, 245, 252, 0.95);
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1000;
+  background: rgba(237, 245, 252, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(180, 205, 230, 0.4);
   padding: 0.75rem 0;
+  width: 100%;
 }
 
 body.dark-theme .admin-top-header {
-  background: rgba(11, 18, 32, 0.95);
+  background: rgba(11, 18, 32, 0.98);
   border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -111,13 +116,10 @@ body.dark-theme .admin-top-header {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: 0 1.25rem;
 }
 
-/* Top Main Bar: Left (Welcome) + Right (Controls) */
+/* Single Header Bar: Left (Welcome) + Right (Controls) */
 .header-main-bar {
   display: flex;
   align-items: center;
@@ -228,7 +230,7 @@ body.dark-theme .admin-top-header {
   color: #a16207;
 }
 
-/* Language Trigger Pill inside Header */
+/* Language Trigger Pill */
 .language-selector-wrapper {
   position: relative;
   width: auto;
@@ -296,64 +298,54 @@ body.dark-theme .admin-top-header {
   color: #ffffff;
 }
 
-/* Quick Navigation Tabs (Matching Screenshot 1 & 2) */
-.admin-quick-nav-tabs {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  overflow-x: auto;
-  width: 100%;
-  padding: 0.2rem 0;
-  scrollbar-width: none;
-}
-
-.admin-quick-nav-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-.quick-tab-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 1rem;
-  background: var(--admin-card-bg);
-  border: 1px solid rgba(180, 205, 230, 0.4);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--admin-pill-shadow);
-  color: var(--admin-text-sub);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--admin-transition);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.quick-tab-pill:hover {
-  transform: translateY(-1px);
-  color: var(--admin-primary);
-}
-
-.quick-tab-pill.active {
-  background: var(--admin-primary);
-  color: #ffffff;
-  border-color: var(--admin-primary);
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
-}
-
 /* ==========================================================================
-   MAIN DASHBOARD CONTAINER & HERO HEADING
+   MAIN FIXED VIEWPORT CONTAINER & TAB SECTIONS
    ========================================================================== */
 .admin-main-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.25rem 1rem 5rem 1rem;
+  padding: 1.25rem 1.25rem 1rem 1.25rem;
+}
+
+.admin-tab-view {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding-right: 6px;
+  padding-bottom: 2rem;
+  -webkit-overflow-scrolling: touch;
 }
 
+.admin-tab-view.d-none {
+  display: none !important;
+}
+
+/* Sleek subtle scrollbar for the internal section only */
+.admin-tab-view::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-tab-view::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-tab-view::-webkit-scrollbar-thumb {
+  background: rgba(180, 205, 230, 0.7);
+  border-radius: 9999px;
+}
+.admin-tab-view::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.7);
+}
+
+/* Hero Heading */
 .admin-hero-heading {
   display: flex;
   flex-direction: column;
@@ -362,7 +354,7 @@ body.dark-theme .admin-top-header {
 
 .hero-title {
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  font-size: clamp(1.65rem, 5vw, 2.25rem);
+  font-size: clamp(1.65rem, 4.5vw, 2.25rem);
   font-weight: 900;
   letter-spacing: -0.5px;
   color: var(--admin-text-main);
@@ -458,7 +450,7 @@ body.dark-theme .admin-top-header {
 }
 
 /* ==========================================================================
-   SECTION CARDS (WHITE NEOMORPHIC ELEVATED PANELS)
+   SECTION CARDS (ELEVATED NEOMORPHIC PANELS)
    ========================================================================== */
 .admin-section-card {
   background: var(--admin-card-bg);
@@ -872,7 +864,7 @@ body.dark-theme .modal-card-box {
 }
 
 /* ==========================================================================
-   SLIDE-IN MOBILE DRAWER (MATCHING SCREENSHOT 4)
+   FIXED SLIDE-IN SIDEBAR DRAWER OVERLAY (DOES NOT PUSH/RESIZE BACKGROUND)
    ========================================================================== */
 .admin-drawer-backdrop {
   position: fixed;
@@ -886,11 +878,13 @@ body.dark-theme .modal-card-box {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.25s ease, visibility 0.25s ease;
+  pointer-events: none;
 }
 
 .admin-drawer-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .admin-mobile-drawer {
@@ -971,10 +965,6 @@ body.dark-theme .admin-mobile-drawer {
   height: 1px;
   background: #e2e8f0;
   margin: 0.75rem 0;
-}
-
-.drawer-theme-btn {
-  border: 1px solid #cbd5e1;
 }
 
 .drawer-logout-btn {

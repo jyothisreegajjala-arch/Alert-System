@@ -58,21 +58,40 @@ function initAdminHeaderAndProfile() {
 }
 
 // --------------------------------------------------------------------------
-// 2. Quick Navigation Tabs Switching (Screenshot 1 & 2)
+// 2. Section Navigation & View Switching (Fixed Application Architecture)
 // --------------------------------------------------------------------------
 function switchAdminTab(tabId) {
-  const tabButtons = document.querySelectorAll('.quick-tab-pill');
-  tabButtons.forEach(btn => btn.classList.remove('active'));
+  // Update sidebar active highlights
+  const drawerLinks = document.querySelectorAll('.drawer-nav-item');
+  drawerLinks.forEach(link => link.classList.remove('active'));
+
+  // Hide all tab views
+  const tabViews = document.querySelectorAll('.admin-tab-view');
+  tabViews.forEach(view => view.classList.add('d-none'));
 
   if (tabId === 'tab-dashboard') {
-    document.getElementById('tab-btn-dashboard')?.classList.add('active');
-    document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('drawer-nav-dashboard')?.classList.add('active');
+    const view = document.getElementById('section-view-dashboard');
+    if (view) {
+      view.classList.remove('d-none');
+      view.scrollTop = 0;
+    }
   } else if (tabId === 'tab-alerts') {
-    document.getElementById('tab-btn-alerts')?.classList.add('active');
-    document.getElementById('live-alerts-section')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('drawer-nav-alerts')?.classList.add('active');
+    const view = document.getElementById('section-view-alerts');
+    if (view) {
+      view.classList.remove('d-none');
+      view.scrollTop = 0;
+    }
+    loadEmergencyReports();
   } else if (tabId === 'tab-reports') {
-    document.getElementById('tab-btn-reports')?.classList.add('active');
-    document.getElementById('reports-section')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('drawer-nav-reports')?.classList.add('active');
+    const view = document.getElementById('section-view-reports');
+    if (view) {
+      view.classList.remove('d-none');
+      view.scrollTop = 0;
+    }
+    loadEmergencyReports();
   }
 }
 
