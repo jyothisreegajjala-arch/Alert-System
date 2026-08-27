@@ -73,7 +73,8 @@ app.get('/public/*', (req, res, next) => {
     path.join(__dirname, 'public', reqPath),
     path.join(process.cwd(), 'public', reqPath),
     path.join(__dirname, '..', 'public', reqPath),
-    path.join(process.cwd(), 'dist', 'public', reqPath)
+    path.join(process.cwd(), 'dist', 'public', reqPath),
+    path.join(__dirname, 'dist', 'public', reqPath)
   ];
   const found = candidates.find(c => fs.existsSync(c));
   if (found) {
@@ -86,23 +87,28 @@ app.get('/public/*', (req, res, next) => {
       res.type('application/vnd.android.package-archive');
       res.setHeader('Content-Disposition', `attachment; filename="${path.basename(found)}"`);
     }
-    return res.sendFile(found);
+    const data = fs.readFileSync(found);
+    return res.send(data);
   }
   next();
 });
 
 const serveView = (relPath) => (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0');
+  res.type('text/html');
   const candidates = [
     path.join(__dirname, 'views', relPath),
     path.join(process.cwd(), 'views', relPath),
     path.join(__dirname, '..', 'views', relPath),
     path.join(process.cwd(), 'dist', 'views', relPath),
-    path.join(process.cwd(), 'dist', relPath)
+    path.join(process.cwd(), 'dist', relPath),
+    path.join(__dirname, 'dist', 'views', relPath),
+    path.join(__dirname, 'dist', relPath)
   ];
   const found = candidates.find(c => fs.existsSync(c));
   if (found) {
-    return res.sendFile(found);
+    const html = fs.readFileSync(found, 'utf8');
+    return res.send(html);
   }
   res.status(404).send(`View ${relPath} not found`);
 };
