@@ -358,11 +358,76 @@
       <section class="admin-hero-heading">
         <h1 class="hero-title">Reports, Response Logs &amp;<br>Data Operations</h1>
         <p class="hero-description">
-          Access comprehensive historical emergency response audits, user logs, and Microsoft Excel CSV data pipelines.
+          Access comprehensive historical emergency response audits, registered members logs, and Microsoft Excel CSV data pipelines.
         </p>
       </section>
 
-      <!-- Emergency Alerts Details & Response History -->
+      <!-- 1. Registered Community Members Details & Directory (Requested by User) -->
+      <section class="admin-section-card" id="reports-users-section">
+        <div class="section-card-header clickable-header" onclick="toggleSectionExpand('reports-users-content', 'reports-users-arrow-icon')">
+          <div class="section-title-group">
+            <span class="section-icon">👥</span>
+            <h2 class="section-title">Registered Members Directory &amp; Account Details</h2>
+          </div>
+          <span id="reports-users-arrow-icon" class="expand-arrow">▼</span>
+        </div>
+
+        <p class="section-description">
+          Complete community roster of all registered senior citizens, family members, security guards, volunteers, and neighbors with medical profiles and emergency contacts.
+        </p>
+
+        <div class="section-action-bar">
+          <button type="button" onclick="loadUsersTable()" class="action-pill-btn">
+            <span>🔄</span>
+            <span>Refresh Members List</span>
+          </button>
+        </div>
+
+        <div id="reports-users-content" class="expandable-content" style="display:block; margin-top:0.75rem;">
+          <!-- Search & Role Filter Box for Reports -->
+          <div class="user-search-filter-card">
+            <div class="search-input-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="reports-user-search-input" class="search-input-field" placeholder="Search registered members by name, email, or phone number...">
+            </div>
+
+            <div class="filter-controls-row">
+              <div class="role-select-wrapper">
+                <span class="filter-icon">🏷️</span>
+                <select id="reports-user-role-select" class="role-dropdown-select" onchange="handleReportsRoleFilterChange(this.value)">
+                  <option value="all">Filter by All Roles</option>
+                  <option value="senior_citizen">Senior Citizens</option>
+                  <option value="child">Children</option>
+                  <option value="family_member">Family Members</option>
+                  <option value="neighbor">Neighbors</option>
+                  <option value="security_guard">Security Guards</option>
+                  <option value="volunteer">Volunteers</option>
+                  <option value="admin">System Admins</option>
+                </select>
+              </div>
+
+              <button type="button" onclick="executeReportsUserSearch()" class="btn-primary-blue">
+                <span>🔍</span>
+                <span>Search &amp; Filter</span>
+              </button>
+            </div>
+
+            <div style="margin-top:0.5rem;">
+              <button type="button" onclick="resetReportsUserFilter()" class="btn-reset-pill">
+                <span>❌</span>
+                <span>Reset Filters</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Members List Container in Reports -->
+          <div id="admin-reports-users-list-container" class="users-cards-list" style="margin-top:1.25rem;">
+            <!-- Populated dynamically via JS with comprehensive member details -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Emergency Alerts Details & Response History -->
       <section class="admin-section-card" id="reports-section">
         <div class="section-card-header clickable-header" onclick="toggleSectionExpand('history-details-content', 'history-arrow-icon')">
           <div class="section-title-group">
@@ -390,7 +455,7 @@
         </div>
       </section>
 
-      <!-- Excel CSV Data Operations & Import -->
+      <!-- 3. Excel CSV Data Operations & Import -->
       <section class="admin-section-card" id="csv-operations-section">
         <div class="section-card-header">
           <div class="section-title-group">

@@ -100,6 +100,7 @@ function switchAdminTab(tabId) {
       view.scrollTop = 0;
     }
     loadEmergencyReports();
+    loadUsersTable();
   }
 }
 
@@ -264,11 +265,29 @@ async function loadEmergencyReports() {
 }
 
 // --------------------------------------------------------------------------
-// 9. Load User Directory & Filtering (Screenshot 5)
+// 9. Load User Directory & Filtering (Dashboard & Reports View)
 // --------------------------------------------------------------------------
+let reportsRoleFilter = 'all';
+let reportsSearchQuery = '';
+
+function getRoleIcon(role) {
+  switch (role) {
+    case 'senior_citizen': return '🧓';
+    case 'child': return '🧒';
+    case 'family_member': return '👨‍👩‍👧';
+    case 'neighbor': return '🏡';
+    case 'security_guard': return '👮';
+    case 'volunteer': return '🤝';
+    case 'admin': return '👑';
+    default: return '👤';
+  }
+}
+
 async function loadUsersTable(role = currentRoleFilter, query = currentSearchQuery) {
-  const container = document.getElementById('admin-users-list-container');
-  if (!container) return;
+  const containerDashboard = document.getElementById('admin-users-list-container');
+  const containerReports = document.getElementById('admin-reports-users-list-container');
+
+  if (!containerDashboard && !containerReports) return;
 
   try {
     const params = new URLSearchParams();
@@ -278,28 +297,57 @@ async function loadUsersTable(role = currentRoleFilter, query = currentSearchQue
     const data = await SafeReach.api(`/api/admin/users?${params.toString()}`);
     const users = data?.users || [];
 
-    if (users.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--admin-text-muted); font-size:0.88rem;">No user accounts found matching query.</div>`;
-      return;
-    }
+    const renderCard = (u) => {
+      const roleIcon = getRoleIcon(u.role);
+      const joinedDate = u.createdAt ? new Date(u.createdAt).toLocaleString() : 'Active Member';
+      const addressInfo = [u.address, u.apartmentNumber].filter(Boolean).join(', ');
+      const medicalDetails = u.medicalInfo ? `🩺 <strong>Medical:</strong> ${u.medicalInfo}` : '';
+      const emergencyContactsList = Array.isArray(u.emergencyContacts) && u.emergencyContacts.length > 0
+        ? `🚨 <strong>Emergency Contacts:</strong> ${u.emergencyContacts.map(c => `${c.name || 'Contact'} (${c.phone || '—'})`).join(', ')}`
+        : (u.emergencyContact ? `🚨 <strong>Emergency Contact:</strong> ${u.emergencyContact}` : '');
 
-    container.innerHTML = users.map(u => `
-      <div style="background:var(--admin-card-surface); border-radius:14px; padding:0.9rem; border:1px solid rgba(180, 205, 230, 0.4); margin-bottom:0.65rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
-        <div>
-          <div style="font-weight:800; font-size:0.92rem; color:var(--admin-text-main);">${u.name}</div>
-          <div style="font-size:0.78rem; color:var(--admin-text-muted);">📧 ${u.email} | 📞 ${u.phone || '—'}</div>
-          <div style="font-size:0.75rem; color:var(--admin-primary); font-weight:700; margin-top:0.15rem;">Role: ${SafeReach.formatRole(u.role)}</div>
+      return `
+        <div style="background:var(--admin-card-surface); border-radius:14px; padding:1rem; border:1px solid rgba(180, 205, 230, 0.4); margin-bottom:0.75rem; box-shadow:var(--admin-pill-shadow); display:flex; flex-direction:column; gap:0.6rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:1.4rem;">${roleIcon}</span>
+              <div>
+                <span style="font-weight:800; font-size:0.95rem; color:var(--admin-text-main);">${u.name}</span>
+                <span style="margin-left:0.4rem; font-size:0.75rem; font-weight:800; color:var(--admin-primary); background:var(--admin-primary-light); padding:0.2rem 0.55rem; border-radius:8px;">${SafeReach.formatRole(u.role)}</span>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <button onclick="toggleUserStatus('${u._id}')" style="padding:0.35rem 0.65rem; border-radius:10px; font-size:0.75rem; font-weight:800; cursor:pointer; border:none; background:${u.active ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)'}; color:${u.active ? '#10b981' : '#64748b'};">
+                ${u.active ? '🟢 Active' : '🔴 Deactivated'}
+              </button>
+              <button onclick="deleteUserAccount('${u._id}', '${escapeHtml(u.name)}')" style="padding:0.35rem 0.65rem; border-radius:10px; font-size:0.75rem; font-weight:700; cursor:pointer; border:1px solid rgba(239, 68, 68, 0.3); background:rgba(239, 68, 68, 0.1); color:#ef4444;" title="Delete User Account">
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.4rem; font-size:0.8rem; color:var(--admin-text-sub); border-top:1px dashed rgba(180, 205, 230, 0.5); padding-top:0.5rem;">
+            <div>📧 <strong>Email:</strong> ${u.email}</div>
+            <div>📞 <strong>Phone:</strong> ${u.phone || '—'}</div>
+            ${addressInfo ? `<div>🏠 <strong>Address:</strong> ${addressInfo}</div>` : ''}
+            <div>📅 <strong>Joined:</strong> ${joinedDate}</div>
+          </div>
+
+          ${medicalDetails || emergencyContactsList ? `
+            <div style="font-size:0.78rem; color:var(--admin-text-sub); background:var(--admin-card-bg); padding:0.45rem 0.65rem; border-radius:8px; border:1px solid rgba(180, 205, 230, 0.3); display:flex; flex-direction:column; gap:0.2rem;">
+              ${medicalDetails ? `<div>${medicalDetails}</div>` : ''}
+              ${emergencyContactsList ? `<div>${emergencyContactsList}</div>` : ''}
+            </div>
+          ` : ''}
         </div>
-        <div style="display:flex; gap:0.4rem; align-items:center;">
-          <button onclick="toggleUserStatus('${u._id}')" style="padding:0.35rem 0.65rem; border-radius:10px; font-size:0.75rem; font-weight:800; cursor:pointer; border:none; background:${u.active ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)'}; color:${u.active ? '#10b981' : '#64748b'};">
-            ${u.active ? '🟢 Active' : '🔴 Deactivated'}
-          </button>
-          <button onclick="deleteUserAccount('${u._id}', '${escapeHtml(u.name)}')" style="padding:0.35rem 0.65rem; border-radius:10px; font-size:0.75rem; font-weight:700; cursor:pointer; border:1px solid rgba(239, 68, 68, 0.3); background:rgba(239, 68, 68, 0.1); color:#ef4444;">
-            🗑️
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    };
+
+    const emptyHtml = `<div style="text-align:center; padding:1.5rem; color:var(--admin-text-muted); font-size:0.88rem;">No registered member accounts found matching query.</div>`;
+    const contentHtml = users.length === 0 ? emptyHtml : users.map(renderCard).join('');
+
+    if (containerDashboard) containerDashboard.innerHTML = contentHtml;
+    if (containerReports) containerReports.innerHTML = contentHtml;
 
   } catch (err) {
     console.error('User directory load error:', err);
@@ -326,6 +374,29 @@ function resetUserFilter() {
   if (select) select.value = 'all';
   currentSearchQuery = '';
   currentRoleFilter = 'all';
+  loadUsersTable('all', '');
+}
+
+function handleReportsRoleFilterChange(role) {
+  reportsRoleFilter = role;
+  loadUsersTable(reportsRoleFilter, reportsSearchQuery);
+}
+
+function executeReportsUserSearch() {
+  const input = document.getElementById('reports-user-search-input');
+  reportsSearchQuery = input ? input.value.trim() : '';
+  const select = document.getElementById('reports-user-role-select');
+  reportsRoleFilter = select ? select.value : 'all';
+  loadUsersTable(reportsRoleFilter, reportsSearchQuery);
+}
+
+function resetReportsUserFilter() {
+  const input = document.getElementById('reports-user-search-input');
+  const select = document.getElementById('reports-user-role-select');
+  if (input) input.value = '';
+  if (select) select.value = 'all';
+  reportsSearchQuery = '';
+  reportsRoleFilter = 'all';
   loadUsersTable('all', '');
 }
 
@@ -764,6 +835,9 @@ window.loadUsersTable = loadUsersTable;
 window.handleRoleFilterChange = handleRoleFilterChange;
 window.executeUserSearch = executeUserSearch;
 window.resetUserFilter = resetUserFilter;
+window.handleReportsRoleFilterChange = handleReportsRoleFilterChange;
+window.executeReportsUserSearch = executeReportsUserSearch;
+window.resetReportsUserFilter = resetReportsUserFilter;
 window.toggleUserStatus = toggleUserStatus;
 window.deleteUserAccount = deleteUserAccount;
 window.openAdminProfileModal = openAdminProfileModal;
