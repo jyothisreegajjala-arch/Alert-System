@@ -6,9 +6,9 @@
   <title>Sign In – SafeReach Emergency System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css">
-  <link rel="stylesheet" href="/public/css/accessibility.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/style.css?v=3.0.0">
+  <link rel="stylesheet" href="/public/css/accessibility.css?v=3.0.0">
   <style>
     .auth-wrapper {
       min-height: 100vh;
@@ -17,8 +17,7 @@
       align-items: center;
       justify-content: center;
       padding: 2.5rem 1rem;
-      background: var(--bg-primary);
-      transition: background-color 0.25s ease;
+      background: var(--bg-canvas);
     }
     .auth-card {
       width: 100%;
@@ -52,9 +51,6 @@
     <div class="top-lang-bar">
       <a href="/" class="btn btn-secondary btn-sm">🏠 <span>Home</span></a>
       <div id="login-language-selector-container"></div>
-      <button type="button" onclick="toggleThemeMode()" class="btn btn-secondary btn-sm" aria-label="Toggle Theme">
-        <span id="theme-toggle-icon">🌙</span>
-      </button>
       <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-secondary btn-sm" data-i18n="accessibility_mode">
         👁️ Accessibility
       </button>
@@ -89,7 +85,7 @@
 
       <!-- Dedicated Role Login Portals -->
       <div class="neo-card-inset" style="margin-top:1.5rem;">
-        <p style="font-size:0.82rem; font-weight:700; color:var(--accent-amber); text-transform:uppercase; letter-spacing:0.5px; text-align:center;">
+        <p style="font-size:0.82rem; font-weight:700; color:#d97706; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">
           🔑 Direct Role Login Portals
         </p>
         <div class="demo-role-grid">
@@ -116,24 +112,7 @@
   <script src="/public/js/auth.js"></script>
   <script src="/public/js/fcm.js"></script>
   <script>
-    function toggleThemeMode() {
-      const isLight = document.body.classList.toggle('light-theme');
-      const icon = document.getElementById('theme-toggle-icon');
-      if (icon) icon.textContent = isLight ? '☀️' : '🌙';
-      try {
-        localStorage.setItem('careconnect_theme', isLight ? 'light' : 'dark');
-      } catch (e) {}
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      try {
-        if (localStorage.getItem('careconnect_theme') === 'light') {
-          document.body.classList.add('light-theme');
-          const icon = document.getElementById('theme-toggle-icon');
-          if (icon) icon.textContent = '☀️';
-        }
-      } catch (e) {}
-
       if (window.CareConnectI18n) {
         CareConnectI18n.renderLanguageSelector('login-language-selector-container');
       }

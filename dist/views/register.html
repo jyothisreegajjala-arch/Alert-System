@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css">
-  <link rel="stylesheet" href="/public/css/accessibility.css">
+  <link rel="stylesheet" href="/public/css/style.css?v=3.0.0">
+  <link rel="stylesheet" href="/public/css/accessibility.css?v=3.0.0">
   <style>
     .auth-wrapper {
       min-height: 100vh;
@@ -17,8 +17,7 @@
       align-items: center;
       justify-content: center;
       padding: 2.5rem 1rem;
-      background: var(--bg-primary);
-      transition: background-color 0.25s ease;
+      background: var(--bg-canvas);
     }
     .auth-card {
       width: 100%;
@@ -55,9 +54,6 @@
     <div class="top-lang-bar">
       <a href="/" class="btn btn-secondary btn-sm">🏠 <span>Home</span></a>
       <div id="register-language-selector-container"></div>
-      <button type="button" onclick="toggleThemeMode()" class="btn btn-secondary btn-sm" aria-label="Toggle Theme">
-        <span id="theme-toggle-icon">🌙</span>
-      </button>
       <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-secondary btn-sm" data-i18n="accessibility_mode">
         👁️ Accessibility
       </button>
@@ -92,7 +88,7 @@
 
         <div class="form-group">
           <label for="reg-role">User Role</label>
-          <select id="reg-role" class="form-control" style="background:var(--surface-inset); color:var(--text-primary);" required>
+          <select id="reg-role" class="form-control" style="background:var(--surface); color:var(--text-primary);" required>
             <option value="senior_citizen">👵 Senior Citizen (SOS User)</option>
             <option value="child">👶 Child / Dependent (SOS User)</option>
             <option value="family_member">👨‍👩‍👧 Family Member</option>
@@ -119,7 +115,7 @@
           <input type="text" id="reg-medical" class="form-control" placeholder="e.g. Asthma, Pacemaker, Mobility limitation">
         </div>
 
-        <div id="field-admin" class="form-group role-specific-field" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); padding: 1rem; border-radius: var(--radius-md); color: #fca5a5; font-size: 0.88rem;">
+        <div id="field-admin" class="form-group role-specific-field" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); padding: 1rem; border-radius: var(--radius-md); color: #b91c1c; font-size: 0.88rem;">
           🛡️ <strong>System Administrator Privileges:</strong> Registering as System Administrator grants complete authority over the entire system, including user accounts, active emergency monitoring, system reset, and operational metrics.
         </div>
 
@@ -138,27 +134,10 @@
   </div>
 
   <script src="/public/js/i18n.js"></script>
-  <script src="/public/js/app.js?v=1.0.2"></script>
-  <script src="/public/js/auth.js?v=1.0.2"></script>
+  <script src="/public/js/app.js?v=3.0.0"></script>
+  <script src="/public/js/auth.js?v=3.0.0"></script>
   <script>
-    function toggleThemeMode() {
-      const isLight = document.body.classList.toggle('light-theme');
-      const icon = document.getElementById('theme-toggle-icon');
-      if (icon) icon.textContent = isLight ? '☀️' : '🌙';
-      try {
-        localStorage.setItem('careconnect_theme', isLight ? 'light' : 'dark');
-      } catch (e) {}
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      try {
-        if (localStorage.getItem('careconnect_theme') === 'light') {
-          document.body.classList.add('light-theme');
-          const icon = document.getElementById('theme-toggle-icon');
-          if (icon) icon.textContent = '☀️';
-        }
-      } catch (e) {}
-
       if (window.CareConnectI18n) {
         CareConnectI18n.renderLanguageSelector('register-language-selector-container');
       }

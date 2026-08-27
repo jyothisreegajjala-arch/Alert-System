@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>SafeReach – Smart Community Emergency Alert System</title>
   <meta name="description" content="SafeReach connects senior citizens and vulnerable individuals directly with linked family members, neighbors, security guards, and volunteers for instant response and live GPS tracking.">
-  <meta name="theme-color" content="#151a24">
+  <meta name="theme-color" content="#e0e5ec">
 
   <!-- Google Fonts Unicode & Multilingual Support -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,32 +13,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Primary Stylesheets -->
-  <link rel="stylesheet" href="/public/css/style.css?v=2.0.0">
-  <link rel="stylesheet" href="/public/css/accessibility.css?v=2.0.0">
+  <link rel="stylesheet" href="/public/css/style.css?v=3.0.0">
+  <link rel="stylesheet" href="/public/css/accessibility.css?v=3.0.0">
 
-  <!-- Embedded Definitive Neomorphic Stylesheet (Zero Cache Latency) -->
+  <!-- Embedded Definitive Neomorphic Light Stylesheet (Zero Cache Latency) -->
   <style>
     :root {
-      --bg-canvas: #151a24;
-      --surface: #151a24;
-      --surface-soft: #181e2b;
-      --surface-hover: #1b2230;
-      --surface-inset: #11151e;
-      --border-color: rgba(255, 255, 255, 0.06);
-      --border-color-hover: rgba(255, 255, 255, 0.18);
-      --border-accent: rgba(14, 165, 233, 0.4);
-      --text-primary: #ffffff;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --neo-flat: 8px 8px 18px #0d1017, -8px -8px 18px #1d2431;
-      --neo-raised: 12px 12px 26px #0b0e14, -12px -12px 26px #1f2634;
-      --neo-inset: inset 5px 5px 10px #0c0f16, inset -5px -5px 10px #1e2532;
-      --neo-btn: 6px 6px 14px #0d1017, -6px -6px 14px #1d2431;
-      --neo-btn-active: inset 4px 4px 8px #0b0e14, inset -4px -4px 8px #1f2634;
+      --bg-canvas: #e0e5ec;
+      --surface: #e0e5ec;
+      --surface-soft: #d8e0eb;
+      --surface-hover: #e8eef5;
+      --surface-inset: #d3dbe6;
+      --border-color: rgba(0, 0, 0, 0.04);
+      --border-color-hover: rgba(0, 0, 0, 0.12);
+      --border-accent: rgba(14, 165, 233, 0.5);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --neo-flat: 9px 9px 18px #bcc5d3, -9px -9px 18px #ffffff;
+      --neo-raised: 13px 13px 28px #b4becd, -13px -13px 28px #ffffff;
+      --neo-inset: inset 5px 5px 10px #bcc5d3, inset -5px -5px 10px #ffffff;
+      --neo-btn: 7px 7px 15px #bcc5d3, -7px -7px 15px #ffffff;
+      --neo-btn-active: inset 5px 5px 10px #bcc5d3, inset -5px -5px 10px #ffffff;
       --primary: #ef4444;
-      --primary-glow: rgba(239, 68, 68, 0.4);
+      --primary-glow: rgba(239, 68, 68, 0.35);
       --accent-cyan: #0ea5e9;
-      --accent-cyan-glow: rgba(14, 165, 233, 0.35);
+      --accent-cyan-glow: rgba(14, 165, 233, 0.3);
       --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
       --radius-sm: 10px;
@@ -48,26 +49,8 @@
       --radius-full: 9999px;
       --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    body.light-theme {
-      --bg-canvas: #e0e5ec;
-      --surface: #e0e5ec;
-      --surface-soft: #d8e0eb;
-      --surface-hover: #e6ebf2;
-      --surface-inset: #d3dbe6;
-      --border-color: rgba(0, 0, 0, 0.04);
-      --border-color-hover: rgba(0, 0, 0, 0.12);
-      --border-accent: rgba(14, 165, 233, 0.5);
-      --text-primary: #0f172a;
-      --text-secondary: #334155;
-      --text-muted: #64748b;
-      --neo-flat: 9px 9px 18px #bcc5d3, -9px -9px 18px #ffffff;
-      --neo-raised: 13px 13px 28px #b4becd, -13px -13px 28px #ffffff;
-      --neo-inset: inset 6px 6px 12px #bcc5d3, inset -6px -6px 12px #ffffff;
-      --neo-btn: 7px 7px 15px #bcc5d3, -7px -7px 15px #ffffff;
-      --neo-btn-active: inset 5px 5px 10px #bcc5d3, inset -5px -5px 10px #ffffff;
-    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-main); background-color: var(--bg-canvas); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; transition: background-color 0.25s ease; }
+    body { font-family: var(--font-main); background-color: var(--bg-canvas); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
     .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
     @media (max-width: 767px) { .container { padding: 0 1rem; } }
     .navbar { position: sticky; top: 0; z-index: 1000; background: var(--bg-canvas); box-shadow: var(--neo-flat); padding: 0.85rem 0; }
@@ -88,12 +71,12 @@
     @media (max-width: 767px) { .nav-links, .nav-actions-desktop { display: none; } .mobile-menu-btn { display: flex; } }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; padding: 0.65rem 1.35rem; border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: var(--transition); user-select: none; }
     .btn-sm { padding: 0.45rem 0.85rem; font-size: 0.88rem; border-radius: var(--radius-sm); }
-    .btn-primary { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff !important; box-shadow: 0 6px 18px var(--accent-cyan-glow), var(--neo-btn); }
+    .btn-primary { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff !important; box-shadow: 0 6px 18px var(--accent-cyan-glow), var(--neo-btn); border: 1px solid rgba(255, 255, 255, 0.25); }
     .btn-primary:active { box-shadow: var(--neo-btn-active); }
     .btn-secondary { background: var(--surface); color: var(--text-primary) !important; border: 1px solid var(--border-color); box-shadow: var(--neo-btn); }
     .btn-secondary:hover { transform: translateY(-2px); box-shadow: var(--neo-raised); }
     .btn-secondary:active { transform: translateY(0); box-shadow: var(--neo-btn-active); }
-    .btn-hero-primary { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff !important; padding: 0.95rem 2rem; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 8px 24px var(--accent-cyan-glow), var(--neo-raised); }
+    .btn-hero-primary { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff !important; padding: 0.95rem 2rem; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-lg); box-shadow: 0 8px 24px var(--accent-cyan-glow), var(--neo-raised); border: 1px solid rgba(255, 255, 255, 0.3); }
     .btn-hero-primary:active { box-shadow: var(--neo-btn-active); }
     .btn-hero-secondary { background: var(--surface); color: var(--text-primary) !important; padding: 0.95rem 2rem; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--neo-flat); }
     .btn-hero-secondary:active { box-shadow: var(--neo-btn-active); }
@@ -107,13 +90,12 @@
     .sos-svg-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
     .sos-ring-bg { fill: none; stroke: rgba(239, 68, 68, 0.2); stroke-width: 8; }
     .sos-ring-progress { fill: none; stroke: #ef4444; stroke-width: 8; stroke-dasharray: 660; stroke-dashoffset: 660; stroke-linecap: round; transition: stroke-dashoffset 0.1s linear; }
-    .main-sos-circle-btn { width: clamp(135px, 35vw, 185px); height: clamp(135px, 35vw, 185px); border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f87171 0%, #ef4444 45%, #b91c1c 100%); border: 4px solid rgba(255, 255, 255, 0.35); box-shadow: 0 0 35px rgba(239, 68, 68, 0.6), var(--neo-raised); display: flex; align-items: center; justify-content: center; color: #fff !important; text-decoration: none; cursor: pointer; user-select: none; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease; }
-    .main-sos-circle-btn:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(239, 68, 68, 0.85), var(--neo-raised); }
-    .main-sos-circle-btn:active { transform: scale(0.95); box-shadow: 0 0 25px rgba(239, 68, 68, 0.9), var(--neo-inset); }
+    .main-sos-circle-btn { width: clamp(135px, 35vw, 185px); height: clamp(135px, 35vw, 185px); border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f87171 0%, #ef4444 45%, #b91c1c 100%); border: 4px solid rgba(255, 255, 255, 0.55); box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), var(--neo-raised); display: flex; align-items: center; justify-content: center; color: #fff !important; text-decoration: none; cursor: pointer; user-select: none; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease; }
+    .main-sos-circle-btn:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(239, 68, 68, 0.75), var(--neo-raised); }
+    .main-sos-circle-btn:active { transform: scale(0.95); box-shadow: 0 0 25px rgba(239, 68, 68, 0.8), var(--neo-inset); }
     .sos-btn-text { display: flex; flex-direction: column; align-items: center; font-family: var(--font-heading); font-weight: 900; font-size: clamp(1.6rem, 5vw, 2.2rem); letter-spacing: 2px; }
     .sos-subtext-group { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
-    .sos-line-1 { font-size: clamp(1rem, 3vw, 1.15rem); font-weight: 700; color: #ff6b6b; }
-    body.light-theme .sos-line-1 { color: #dc2626; }
+    .sos-line-1 { font-size: clamp(1rem, 3vw, 1.15rem); font-weight: 700; color: #dc2626; }
     .sos-line-2 { font-size: clamp(0.85rem, 2.5vw, 0.95rem); color: var(--text-muted); }
     .hero-action-buttons { display: flex; align-items: center; justify-content: center; gap: 1.25rem; width: 100%; max-width: 540px; }
     .hero-action-buttons .btn { flex: 1; min-height: 54px; }
@@ -147,24 +129,14 @@
     .role-tier-badge { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); margin-bottom: 0.85rem; background: var(--surface); box-shadow: var(--neo-inset); }
     .role-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem; }
     .role-card .btn { width: 100%; }
-    .main-footer { background: var(--bg-canvas); border-top: 1px solid var(--border-color); box-shadow: var(--neo-flat); padding: 3rem 0 2rem; color: var(--text-muted); margin-top: auto; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 2.5rem; margin-bottom: 2.5rem; }
-    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; } }
-    @media (max-width: 580px) { .footer-grid { grid-template-columns: 1fr; gap: 1.75rem; } }
-    .footer-heading { font-size: 0.98rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem; }
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-    .footer-links a { color: var(--text-muted); font-size: 0.9rem; text-decoration: none; }
-    .footer-links a:hover { color: var(--text-primary); }
-    .safety-notice-box { background: var(--surface); border: 1px solid rgba(239, 68, 68, 0.2); box-shadow: var(--neo-inset); border-radius: var(--radius-md); padding: 0.95rem; font-size: 0.84rem; color: #ff8b8b; }
-    body.light-theme .safety-notice-box { color: #b91c1c; }
-    .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.86rem; flex-wrap: wrap; gap: 0.85rem; }
+    .main-footer { background: var(--bg-canvas); border-top: 1px solid var(--border-color); box-shadow: var(--neo-flat); padding: 1.5rem 0 5rem 0; color: var(--text-muted); margin-top: auto; }
     .floating-assist-bar { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 999; display: flex; align-items: center; justify-content: center; gap: 0.65rem; background: var(--surface); padding: 0.45rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color); box-shadow: var(--neo-raised); max-width: calc(100vw - 2rem); }
   </style>
 </head>
 <body>
 
   <!-- ========================================================================
-       1. NAVIGATION HEADER (RESPONSIVE NEOMORPHIC)
+       1. NAVIGATION HEADER (NEOMORPHIC LIGHT)
        ======================================================================== -->
   <nav class="navbar" id="main-nav">
     <div class="container nav-content">
@@ -195,14 +167,9 @@
         <!-- Desktop Language Selector Container -->
         <div id="home-language-selector-container"></div>
 
-        <!-- Light / Dark Theme Switcher -->
-        <button type="button" id="btn-theme-toggle" onclick="toggleThemeMode()" class="btn btn-secondary btn-sm" aria-label="Toggle Theme Mode">
-          <span id="theme-toggle-icon">🌙</span>
-        </button>
-
         <!-- Accessibility Toggle -->
         <button type="button" id="btn-toggle-accessibility" onclick="toggleAccessibilityMode()" class="btn btn-secondary btn-sm" aria-label="Toggle Accessibility Controls" data-i18n="accessibility_mode">
-          👁️
+          👁️ Accessibility
         </button>
 
         <!-- Primary Register Account CTA -->
@@ -235,15 +202,10 @@
       <!-- Mobile Language Selector Container -->
       <div id="mobile-language-selector-container" class="mobile-lang-container"></div>
 
-      <!-- Mobile Theme & Accessibility Controls Row -->
-      <div class="mobile-controls-row">
-        <button type="button" onclick="toggleThemeMode()" class="btn btn-secondary btn-sm">
-          <span id="theme-toggle-icon-mobile">🌙</span> <span id="theme-toggle-text-mobile">Theme</span>
-        </button>
-        <button type="button" onclick="toggleAccessibilityMode()" class="btn btn-secondary btn-sm" data-i18n="accessibility_mode">
-          👁️ Accessibility
-        </button>
-      </div>
+      <!-- Mobile Accessibility Control -->
+      <button type="button" onclick="toggleAccessibilityMode()" class="btn btn-secondary btn-sm" data-i18n="accessibility_mode">
+        👁️ Accessibility Mode
+      </button>
 
       <!-- Full-Width Mobile Register CTA -->
       <a href="/register" class="btn btn-primary" style="margin-top:0.25rem; text-align:center; justify-content:center;" data-i18n="register">
@@ -529,7 +491,7 @@
   <!-- ========================================================================
        7. CLEAN MINIMAL FOOTER
        ======================================================================== -->
-  <footer class="main-footer" style="padding: 1.5rem 0 5rem 0; text-align: center;">
+  <footer class="main-footer">
     <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.88rem;">
       <div>&copy; 2026 SafeReach Emergency Network. All rights reserved.</div>
       <div style="display:flex; align-items:center; gap:1.25rem;">
@@ -550,23 +512,6 @@
   <script src="/public/js/fcm.js"></script>
 
   <script>
-    // Theme Mode Toggle
-    function toggleThemeMode() {
-      if (window.CareConnectTheme && typeof window.CareConnectTheme.toggle === 'function') {
-        window.CareConnectTheme.toggle();
-      } else {
-        const isLight = document.body.classList.toggle('light-theme');
-        const icon = document.getElementById('theme-toggle-icon');
-        const iconMobile = document.getElementById('theme-toggle-icon-mobile');
-        if (icon) icon.textContent = isLight ? '☀️' : '🌙';
-        if (iconMobile) iconMobile.textContent = isLight ? '☀️' : '🌙';
-        try {
-          localStorage.setItem('safereach_theme', isLight ? 'light' : 'dark');
-          localStorage.setItem('careconnect_theme', isLight ? 'light' : 'dark');
-        } catch (e) {}
-      }
-    }
-
     // Accessibility Mode Toggle
     function toggleAccessibilityMode() {
       if (window.CareConnectAccessibility && typeof window.CareConnectAccessibility.toggle === 'function') {
@@ -611,7 +556,7 @@
       let holdTimer = null;
       let startTime = null;
       const totalHoldMs = 3000;
-      const circumference = 2 * Math.PI * 95; // r=95 => ~596.9
+      const circumference = 2 * Math.PI * 95;
 
       progressCircle.style.strokeDasharray = `${circumference}`;
       progressCircle.style.strokeDashoffset = `${circumference}`;
@@ -626,7 +571,7 @@
         const secondsLeft = Math.ceil((totalHoldMs - elapsed) / 1000);
         if (countdownText && secondsLeft > 0) {
           countdownText.textContent = `HOLD FOR ${secondsLeft} SECOND${secondsLeft > 1 ? 'S' : ''}...`;
-          countdownText.style.color = '#f87171';
+          countdownText.style.color = '#dc2626';
         }
 
         if (progress >= 1) {
@@ -683,21 +628,8 @@
       sosBtn.addEventListener('touchcancel', cancelHold);
     })();
 
-    // Initialize Multilingual Language Selector and Themes on load
+    // Initialize Multilingual Language Selector on load
     document.addEventListener('DOMContentLoaded', () => {
-      // Sync theme icons
-      try {
-        const savedTheme = localStorage.getItem('safereach_theme') || localStorage.getItem('careconnect_theme');
-        if (savedTheme === 'light') {
-          document.body.classList.add('light-theme');
-          const icon = document.getElementById('theme-toggle-icon');
-          const iconMobile = document.getElementById('theme-toggle-icon-mobile');
-          if (icon) icon.textContent = '☀️';
-          if (iconMobile) iconMobile.textContent = '☀️';
-        }
-      } catch (e) {}
-
-      // Mount Language Dropdowns
       if (window.CareConnectI18n && typeof window.CareConnectI18n.renderLanguageSelector === 'function') {
         window.CareConnectI18n.renderLanguageSelector('home-language-selector-container');
         window.CareConnectI18n.renderLanguageSelector('mobile-language-selector-container');

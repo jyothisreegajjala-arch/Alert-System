@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/style.css?v=3.0.0">
   <style>
     .download-wrapper {
       min-height: 100vh;
@@ -16,8 +16,7 @@
       align-items: center;
       justify-content: center;
       padding: 2.5rem 1rem;
-      background: var(--bg-primary);
-      transition: background-color 0.25s ease;
+      background: var(--bg-canvas);
     }
     .download-card {
       max-width: 520px;
@@ -39,19 +38,19 @@
     .qr-container {
       margin: 1.5rem 0;
       padding: 1.25rem;
-      background: var(--surface-inset);
+      background: var(--surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border-color);
-      box-shadow: var(--neo-shadow-inset);
+      box-shadow: var(--neo-inset);
       text-align: center;
     }
     .steps-box {
       text-align: left;
-      background: var(--surface-inset);
+      background: var(--surface);
       border-radius: var(--radius-lg);
       padding: 1.25rem;
       border: 1px solid var(--border-color);
-      box-shadow: var(--neo-shadow-inset);
+      box-shadow: var(--neo-inset);
       margin-top: 1.5rem;
     }
     .steps-box h3 {
@@ -85,8 +84,8 @@
       <h1 style="font-size:1.85rem; font-weight:800; color:var(--text-primary); margin-bottom:0.25rem;">SafeReach APK</h1>
       <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.25rem;">Smart Community Emergency Alert System for Android</p>
 
-      <div style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--surface-inset); border:1px solid var(--border-color); padding:0.4rem 0.9rem; border-radius:var(--radius-full); font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem; box-shadow:var(--neo-shadow-inset);">
-        <span>Version 1.0.2</span> &bull; Android 7.0+ (ARM64 & x86_64)
+      <div style="display:inline-flex; align-items:center; gap:0.5rem; background:var(--surface); border:1px solid var(--border-color); padding:0.4rem 0.9rem; border-radius:var(--radius-full); font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem; box-shadow:var(--neo-inset);">
+        <span>Version 1.0.4</span> &bull; Android 7.0+ (ARM64 & x86_64)
       </div>
 
       <a href="/app-release.apk" download="app-release.apk" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:1.05rem; margin-bottom:1rem;" id="apkDownloadLink">
@@ -101,7 +100,7 @@
         <p style="color:var(--text-secondary); font-size:0.86rem; font-weight:600; margin-bottom:0.75rem;">
           📷 Scan with your Phone to Download APK Directly:
         </p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://safereach-alert-system.vercel.app/download" alt="SafeReach QR Code" style="border-radius:12px; border:4px solid #ffffff; width:160px; height:160px; box-shadow:var(--neo-shadow-flat);">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://safereach-alert-system.vercel.app/download" alt="SafeReach QR Code" style="border-radius:12px; border:4px solid #ffffff; width:160px; height:160px; box-shadow:var(--neo-flat);">
       </div>
 
       <div class="steps-box">

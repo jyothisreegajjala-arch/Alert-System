@@ -297,9 +297,9 @@ const SafeReach = {
   }
 };
 
-/* CareConnect Theme Controller */
+/* CareConnect Theme Controller - Default Light Neomorphic */
 const CareConnectTheme = {
-  getTheme: () => localStorage.getItem('safereach_theme') || localStorage.getItem('careconnect_theme') || 'dark',
+  getTheme: () => localStorage.getItem('safereach_theme') || localStorage.getItem('careconnect_theme') || 'light',
   
   setTheme: (theme) => {
     localStorage.setItem('safereach_theme', theme);
@@ -309,33 +309,18 @@ const CareConnectTheme = {
 
   toggle: () => {
     const current = CareConnectTheme.getTheme();
-    const next = current === 'light' ? 'dark' : 'light';
+    const next = current === 'light' ? 'light' : 'light';
     CareConnectTheme.setTheme(next);
-    if (window.SafeReach && SafeReach.showToast) {
-      SafeReach.showToast(`Switched to ${next === 'light' ? 'Light' : 'Dark'} Mode`, 'info');
-    }
   },
 
   applyTheme: (theme) => {
-    const isLight = theme === 'light';
     if (document.body) {
-      if (isLight) {
-        document.body.classList.add('light-theme');
-      } else {
-        document.body.classList.remove('light-theme');
-      }
+      document.body.classList.remove('dark-theme');
     }
-
-    const iconEls = document.querySelectorAll('.theme-toggle-icon, #theme-toggle-icon, #theme-toggle-icon-mobile');
-    const textEls = document.querySelectorAll('.theme-toggle-text, #theme-toggle-text-mobile');
-
-    iconEls.forEach(el => { el.textContent = isLight ? '☀️' : '🌙'; });
-    textEls.forEach(el => { el.textContent = isLight ? 'Light' : 'Dark'; });
   },
 
   init: () => {
-    const savedTheme = CareConnectTheme.getTheme();
-    CareConnectTheme.applyTheme(savedTheme);
+    CareConnectTheme.applyTheme('light');
   }
 };
 
