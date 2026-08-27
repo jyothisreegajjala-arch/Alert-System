@@ -23,6 +23,7 @@
 
   /* Classic Tactile Neomorphic Dual Shadows */
   --admin-shadow-raised: 10px 10px 20px #bcc5d3, -10px -10px 20px #ffffff;
+  --admin-card-shadow: 10px 10px 20px #bcc5d3, -10px -10px 20px #ffffff;
   --admin-shadow-flat: 7px 7px 15px #bcc5d3, -7px -7px 15px #ffffff;
   --admin-shadow-sm: 5px 5px 10px #bcc5d3, -5px -5px 10px #ffffff;
   --admin-shadow-hover: 12px 12px 24px #b4becd, -12px -12px 24px #ffffff;
