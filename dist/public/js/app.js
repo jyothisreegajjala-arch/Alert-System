@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await SafeReach.autoRedirectIfLoggedIn();
 });
 
-// Global Link Navigation Interceptor for Native App & Local File Protocols
+// Global Link Navigation Interceptor for Native Capacitor App & Local File Protocols
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a');
   if (!a) return;
@@ -391,9 +391,9 @@ document.addEventListener('click', (e) => {
   if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
 
   const isCapacitorNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
-  const isLocalHost = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const isFileProtocol = window.location.protocol === 'file:';
 
-  if (isCapacitorNative || isLocalHost) {
+  if (isCapacitorNative || isFileProtocol) {
     e.preventDefault();
     SafeReach.navigate(href);
   }

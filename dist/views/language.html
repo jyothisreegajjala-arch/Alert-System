@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/public/css/style.css?v=20260820_lightblue_v1">
-  <link rel="stylesheet" href="/public/css/dashboard.css?v=20260820_lightblue_v1">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/dashboard.css">
   <link rel="stylesheet" href="/public/css/accessibility.css">
   
   <style>
@@ -31,9 +31,9 @@
       .lang-card { padding: 1rem; }
     }
     .lang-card {
-      background: var(--neo-bg);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 18px;
+      background: var(--dark-card);
+      border: 2px solid var(--dark-border);
+      border-radius: 16px;
       padding: 1.5rem;
       text-align: center;
       cursor: pointer;
@@ -42,13 +42,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 6px 6px 14px var(--neo-shadow-dark), -6px -6px 14px var(--neo-shadow-light);
     }
     .lang-card:hover, .lang-card.selected {
-      border-color: rgba(2, 132, 199, 0.5);
-      background: var(--neo-bg);
-      transform: translateY(-3px);
-      box-shadow: inset 3px 3px 6px var(--neo-shadow-dark), inset -3px -3px 6px var(--neo-shadow-light);
+      border-color: #00f0ff;
+      background: rgba(0, 240, 255, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.25);
     }
     .lang-flag {
       font-size: 2.5rem;
@@ -57,12 +56,12 @@
     .lang-native {
       font-size: 1.5rem;
       font-weight: 800;
-      color: #0f172a;
+      color: #ffffff;
       margin-bottom: 0.25rem;
     }
     .lang-english {
       font-size: 0.95rem;
-      color: #64748b;
+      color: var(--dark-muted);
     }
     .lang-header {
       text-align: center;
@@ -89,8 +88,8 @@
 
   <div class="container lang-container">
     <div class="lang-header">
-      <h1 style="font-size:2.4rem; font-weight:900; color:#0f172a;">Language Settings</h1>
-      <p style="color:#475569; font-size:1.1rem; margin-top:0.5rem;" data-i18n="language_subtitle">Choose your language to customize your emergency care experience</p>
+      <h1 style="font-size:2.4rem; font-weight:900; color:#fff;" data-i18n="select_language">Select Your Preferred Language</h1>
+      <p style="color:#cbd5e1; font-size:1.1rem; margin-top:0.5rem;" data-i18n="language_subtitle">Choose your language to customize your emergency care experience</p>
     </div>
 
     <!-- 12 Languages Grid -->

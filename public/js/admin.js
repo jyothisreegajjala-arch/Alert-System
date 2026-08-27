@@ -1,11 +1,10 @@
 /* SafeReach - Admin Management Console Controller */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await SafeReach.syncNativeStorage();
   const user = SafeReach.getUser();
   if (!user || user.role !== 'admin') {
     SafeReach.showToast('Access denied: Admin authorization required.', 'danger');
-    SafeReach.navigate('/dashboard');
+    window.location.href = '/dashboard';
     return;
   }
 
@@ -13,15 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadUsersTable();
   initSearchAndFilter();
   initSystemStreamLog();
-  if (typeof loadUserNotifications === 'function') {
-    loadUserNotifications();
-  }
-  if (typeof loadActiveEmergencies === 'function') {
-    loadActiveEmergencies();
-  }
-  if (typeof loadEmergencyHistory === 'function') {
-    loadEmergencyHistory();
-  }
 });
 
 // Load KPI Metrics
@@ -31,9 +21,6 @@ async function loadAdminStats() {
     const stats = data.stats;
 
     document.getElementById('kpi-total-users').textContent = stats.totalUsers || 0;
-    if (document.getElementById('kpi-senior-citizens')) {
-      document.getElementById('kpi-senior-citizens').textContent = stats.totalSeniors || 0;
-    }
     document.getElementById('kpi-neighbors').textContent = stats.totalNeighbors || 0;
     document.getElementById('kpi-guards').textContent = stats.totalSecurityGuards || 0;
     document.getElementById('kpi-volunteers').textContent = stats.totalVolunteers || 0;
@@ -47,7 +34,7 @@ async function loadAdminStats() {
   }
 }
 
-// Load Users Management & Reports Table
+// Load Users Management Table
 async function loadUsersTable(roleFilter = 'all', searchQuery = '') {
   try {
     const query = new URLSearchParams();
@@ -55,61 +42,34 @@ async function loadUsersTable(roleFilter = 'all', searchQuery = '') {
     if (searchQuery) query.append('search', searchQuery);
 
     const data = await SafeReach.api(`/api/admin/users?${query.toString()}`);
-    const tbodyAdmin = document.getElementById('admin-users-table-body');
-    const tbodyReports = document.getElementById('reports-users-table-body');
+    const tbody = document.getElementById('admin-users-table-body');
+    if (!tbody) return;
 
     if (!data.users || data.users.length === 0) {
-      if (tbodyAdmin) tbodyAdmin.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No users found matching query.</td></tr>`;
-      if (tbodyReports) tbodyReports.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No registered members found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No users found matching query.</td></tr>`;
       return;
     }
 
-    if (tbodyAdmin) {
-      tbodyAdmin.innerHTML = '';
-      data.users.forEach(u => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td>${u.phone}</td>
-          <td><span class="badge badge-accepted">${SafeReach.formatRole(u.role)}</span></td>
-          <td>${u.apartmentNumber || u.address || '—'}</td>
-          <td>
-            <button onclick="toggleUserStatus('${u._id}')" class="btn btn-sm ${u.active ? 'btn-success' : 'btn-secondary'}">
-              ${u.active ? '🟢 Active' : '🔴 Deactivated'}
-            </button>
-          </td>
-          <td>
-            <button onclick="deleteUserAccount('${u._id}', '${u.name}')" class="btn btn-outline-danger btn-sm">🗑️ Delete</button>
-          </td>
-        `;
-        tbodyAdmin.appendChild(tr);
-      });
-    }
-
-    if (tbodyReports) {
-      tbodyReports.innerHTML = '';
-      data.users.forEach(u => {
-        const tr = document.createElement('tr');
-        const gpsStr = (u.latitude && u.longitude) ? `${Number(u.latitude).toFixed(4)}, ${Number(u.longitude).toFixed(4)}` : '12.9716, 77.5946';
-        tr.innerHTML = `
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td>${u.phone}</td>
-          <td><span class="badge badge-accepted">${SafeReach.formatRole(u.role)}</span></td>
-          <td>${u.apartmentNumber ? `${u.apartmentNumber} (${u.address || ''})` : (u.address || '—')}</td>
-          <td>${u.medicalInfo || u.dutyStatus || u.availability || 'None recorded'}</td>
-          <td>📍 ${gpsStr}</td>
-          <td><span class="badge ${u.active ? 'badge-accepted' : 'badge-pending'}">${u.active ? '🟢 Active' : '🔴 Deactivated'}</span></td>
-          <td>
-            <button onclick="deleteUserAccount('${u._id}', '${u.name}')" class="btn btn-outline-danger btn-sm" title="Permanently delete user account">
-              🗑️ Delete
-            </button>
-          </td>
-        `;
-        tbodyReports.appendChild(tr);
-      });
-    }
+    tbody.innerHTML = '';
+    data.users.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${u.name}</strong></td>
+        <td>${u.email}</td>
+        <td>${u.phone}</td>
+        <td><span class="badge badge-accepted">${SafeReach.formatRole(u.role)}</span></td>
+        <td>${u.apartmentNumber || u.address || '—'}</td>
+        <td>
+          <button onclick="toggleUserStatus('${u._id}')" class="btn btn-sm ${u.active ? 'btn-success' : 'btn-secondary'}">
+            ${u.active ? '🟢 Active' : '🔴 Deactivated'}
+          </button>
+        </td>
+        <td>
+          <button onclick="deleteUserAccount('${u._id}', '${u.name}')" class="btn btn-outline-danger btn-sm">🗑️ Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
   } catch (err) {
     console.error('Failed to load users:', err);
   }
@@ -160,40 +120,6 @@ async function deleteUserAccount(userId, name) {
     SafeReach.showToast(err.message, 'danger');
   }
 }
-
-// Collapsible Reports & Logs Section Toggle
-function toggleReportsSection(contentId, arrowId) {
-  const contentEl = document.getElementById(contentId);
-  const arrowEl = document.getElementById(arrowId);
-  if (!contentEl) return;
-
-  if (contentEl.style.display === 'none') {
-    contentEl.style.display = 'block';
-    if (arrowEl) arrowEl.textContent = '▼';
-  } else {
-    contentEl.style.display = 'none';
-    if (arrowEl) arrowEl.textContent = '▶';
-  }
-}
-window.toggleReportsSection = toggleReportsSection;
-
-// Search & Role Filter Members in Reports & Logs Section
-function searchReportsMembers() {
-  const query = document.getElementById('reports-user-search-input')?.value || '';
-  const selectedRole = document.getElementById('reports-role-filter-select')?.value || 'all';
-  loadUsersTable(selectedRole, query);
-}
-
-function clearReportsMembersSearch() {
-  const input = document.getElementById('reports-user-search-input');
-  const roleSelect = document.getElementById('reports-role-filter-select');
-  if (input) input.value = '';
-  if (roleSelect) roleSelect.value = 'all';
-  loadUsersTable('all', '');
-}
-
-window.searchReportsMembers = searchReportsMembers;
-window.clearReportsMembersSearch = clearReportsMembersSearch;
 
 // Real-Time Socket Log Stream
 function initSystemStreamLog() {

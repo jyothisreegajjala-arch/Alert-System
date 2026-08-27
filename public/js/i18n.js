@@ -47,7 +47,6 @@ const CareConnectI18n = {
       senior_citizen: "Senior Citizen",
       child_dependent: "Child / Dependent",
       admin: "System Admin",
-      emergency_console: "Emergency Console",
       medical_info: "Medical Information",
       incident_status: "Incident Status",
       reports: "Reports & Logs",
@@ -70,54 +69,7 @@ const CareConnectI18n = {
       welcome_voice: "Welcome to CareConnect. Your emergency care network is active.",
       sos_voice_prompt: "Press the red SOS button for emergency assistance.",
       sos_success_voice: "Your emergency alert has been sent successfully. Alerting nearby responders.",
-      responder_way_voice: "A volunteer responder is on the way.",
-      how_it_works: "How It Works",
-      features: "Features",
-      instant_escalation_badge: "⚡ Instant 60-Second Community Escalation",
-      hero_title: "Smart Community Emergency Alert System",
-      hero_subtitle: "Connect Senior Citizens directly with linked Family Members, Neighbors, Security Guards, and Volunteers for instant response and GPS tracking.",
-      press_hold_sos: "Press & Hold 3 Seconds to Trigger SOS",
-      socket_broadcast: "Immediate Socket Broadcast to Linked Responders",
-      register_now: "🚀 Register Account Now",
-      access_role_portals: "🔑 Access Role Portals",
-      workflow_title: "Automated 60-Second Emergency Workflow",
-      workflow_sub: "No emergency request goes unanswered with two-tier community escalation.",
-      step1_title: "Press & Hold SOS",
-      step1_desc: "User holds the SOS button for 3 seconds. Live GPS location, date, time, and emergency ID are captured instantly.",
-      step2_title: "Tier 1: Neighbors & Guards",
-      step2_desc: "Immediate socket broadcast to registered nearby neighbors and building security guards with live countdown timer.",
-      step3_title: "60-Sec Escalation",
-      step3_desc: "If no neighbor or security accepts within 60 seconds, the server automatically escalates the alert to family & volunteers.",
-      step4_title: "Resolution & Tracking",
-      step4_desc: "Responders navigate via Google Maps, assist the victim, and mark the emergency as resolved in MongoDB database.",
-      features_title: "Built for Speed, Reliability, and Community Safety",
-      feat1_title: "3-Second Hold SOS",
-      feat1_desc: "Prevents accidental triggers with radial visual progress, vibration, and synthesized alarm audio.",
-      feat2_title: "Socket.IO Real-Time Engine",
-      feat2_desc: "Instantaneous websockets push live emergency popups to nearby responders without page refresh.",
-      feat3_title: "Google Maps Navigation",
-      feat3_desc: "Interactive Leaflet tracking plus one-click Google Maps turn-by-turn navigation link generation.",
-      feat4_title: "JWT Authentication",
-      feat4_desc: "Secure password hashing and token-based role permission middleware across all API routes.",
-      feat5_title: "7 Specialized Roles",
-      feat5_desc: "Dedicated user interfaces for Seniors, Children, Families, Neighbors, Security Guards, Volunteers, and Admins.",
-      feat6_title: "Admin Operational Analytics",
-      feat6_desc: "Comprehensive user management, response time telemetry, and emergency audit logs in MongoDB Atlas.",
-      footer_copyright: "© 2026 SafeReach / CareConnect Emergency Network • Smart Community Emergency Alert System",
-      refresh_feed: "🔄 Refresh Feed",
-      add_contact: "➕ Add Contact",
-      alert_id: "Alert ID",
-      user_name: "User Name",
-      date_time: "Date & Time",
-      location_address: "Location Address",
-      status: "Status",
-      accepted_by: "Accepted By",
-      response_time: "Response Time",
-      email_address: "Email Address",
-      password: "Password",
-      forgot_password: "Forgot?",
-      select_role_portal: "🔑 Select Dedicated Role Login Portal",
-      dont_have_account: "Don't have an account?"
+      responder_way_voice: "A volunteer responder is on the way."
     },
     te: {
       brand: "కేర్‌కనెక్ట్",
@@ -171,12 +123,7 @@ const CareConnectI18n = {
       welcome_voice: "కేర్‌కనెక్ట్‌కు స్వాగతం. మీ అత్యవసర సంరక్షణ నెట్‌వర్క్ క్రియాశీలంగా ఉంది.",
       sos_voice_prompt: "అత్యవసర సహాయం కోసం ఎర్రటి SOS బటన్‌ను నొక్కండి.",
       sos_success_voice: "మీ అత్యవసర హెచ్చరిక విజయవంతంగా పంపబడింది. సమీప స్పందనదారులను హెచ్చరిస్తున్నాము.",
-      responder_way_voice: "వాలంటీర్ స్పందనదారు వస్తున్నారు.",
-      email_address: "ఈమెయిల్ చిరునామా",
-      password: "పాస్‌వర్డ్",
-      forgot_password: "మర్చిపోయారా?",
-      select_role_portal: "🔑 ప్రత్యేక రోల్ లాగిన్ పోర్టల్‌ను ఎంచుకోండి",
-      dont_have_account: "ఖాతా లేదా?"
+      responder_way_voice: "వాలంటీర్ స్పందనదారు వస్తున్నారు."
     },
     hi: {
       brand: "केयरकनेक्ट",
@@ -284,49 +231,7 @@ const CareConnectI18n = {
       welcome_voice: "கேர்கனெக்ட்டிற்கு நல்வரவு.",
       sos_voice_prompt: "அவசர உதவிக்கு சிவப்பு SOS பொத்தானை அழுத்தவும்.",
       sos_success_voice: "உங்கள் அவசர எச்சரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது.",
-      responder_way_voice: "தன்னார்வலர் வந்துகொண்டிருக்கிறார்.",
-      how_it_works: "இது எவ்வாறு செயல்படுகிறது",
-      features: "அம்சங்கள்",
-      instant_escalation_badge: "⚡ உடனடி 60-வினாடி சமூக ஏற்றம்",
-      hero_title: "ஸ்மார்ட் சமூக அவசர எச்சரிக்கை அமைப்பு",
-      hero_subtitle: "மூத்த குடிமக்களைக் குடும்ப உறுப்பினர்கள், அண்டை வீட்டார், பாதுகாப்புக் காவலர்கள் மற்றும் தன்னார்வலர்களுடன் இணைக்கவும்.",
-      press_hold_sos: "SOS ஐத் தொடங்க 3 வினாடிகள் அழுத்திப் பிடிக்கவும்",
-      socket_broadcast: "இணைக்கப்பட்ட பதிலளிப்பவர்களுக்கு உடனடி ஒளிபரப்பு",
-      register_now: "🚀 கணக்கைப் பதிவு செய்யவும்",
-      access_role_portals: "🔑 பங்கு இணையதளங்களை அணுகவும்",
-      workflow_title: "தானியங்கி 60-வினாடி அவசர பணிப்பாய்வு",
-      workflow_sub: "இரண்டு அடுக்கு சமூக ஏற்றத்துடன் எந்த அவசர கோரிக்கையும் பதிலளிக்கப்படாமல் போவதில்லை.",
-      step1_title: "SOS அழுத்திப் பிடிக்கவும்",
-      step1_desc: "பயனர் 3 வினாடிகள் SOS பொத்தானைப் பிடிக்கிறார். நேரலை GPS இருப்பிடம், தேதி, நேரம் உடனடியாகப் பதிவு செய்யப்படுகின்றன.",
-      step2_title: "அடுக்கு 1: அண்டை வீட்டார் & காவலர்கள்",
-      step2_desc: "நேரலை கவுண்ட்டவுன் டைமருடன் அருகிலுள்ள பதிவுசெய்யப்பட்ட அண்டை வீட்டார் மற்றும் பாதுகாப்புக் காவலர்களுக்கு உடனடி ஒளிபரப்பு.",
-      step3_title: "60-வினாடி ஏற்றம்",
-      step3_desc: "60 வினாடிகளுக்குள் யாரும் ஏற்கவில்லை என்றால், சேவையகம் தானாகவே குடும்பத்தினருக்கும் தன்னார்வலர்களுக்கும் எச்சரிக்கையை அனுப்பும்.",
-      step4_title: "தீர்வு & கண்காணிப்பு",
-      step4_desc: "பதிலளிப்பவர்கள் Google Maps மூலம் வழிசெலுத்தி, பாதிக்கப்பட்டவருக்கு உதவி செய்து, அவசரநிலையைத் தீர்க்கப்பட்டதாகக் குறிக்கிறார்கள்.",
-      features_title: "வேகம், நம்பகத்தன்மை மற்றும் சமூகப் பாதுகாப்பிற்காகக் கட்டப்பட்டது",
-      feat1_title: "3-வினாடி பிடிப்பு SOS",
-      feat1_desc: "காட்சி முன்னேற்றம், அதிர்வு மற்றும் அலாரம் மூலம் தற்செயலான தூண்டுதல்களைத் தடுக்கிறது.",
-      feat2_title: "Socket.IO நிகழ்நேர இயந்திரம்",
-      feat2_desc: "பக்கத்தைப் புதுப்பிக்காமல் அருகிலுள்ள பதிலளிப்பவர்களுக்கு நேரலை பாப்அப்களைத் தள்ளுகிறது.",
-      feat3_title: "Google Maps வழிசெலுத்தல்",
-      feat3_desc: "ஊடாடும் வரைபடக் கண்காணிப்பு மற்றும் ஒரே கிளிக்கில் கூகிள் வரைபட வழிசெலுத்தல் இணைப்பு.",
-      feat4_title: "JWT அங்கீகாரம்",
-      feat4_desc: "அனைத்து API பாதைகளிலும் பாதுகாப்பான கடவுச்சொல் மற்றும் டோக்கன் அடிப்படையிலான அனுமதிகள்.",
-      feat5_title: "7 சிறப்புப் பங்குகள்",
-      feat5_desc: "மூத்த குடிமக்கள், குழந்தைகள், குடும்பங்கள், அண்டை வீட்டார், காவலர்கள், தன்னார்வலர்கள் மற்றும் நிர்வாகிகளுக்கான பிரத்யேக இடைமுகங்கள்.",
-      feat6_title: "நிர்வாக பகுப்பாய்வு",
-      feat6_desc: "விரிவான பயனர் நிர்வாகம் மற்றும் அவசர தணிக்கைப் பதிவுகள்.",
-      footer_copyright: "© 2026 சேஃப்ரீச் / கேர்கனெக்ட் அவசர நெட்வொர்க் • ஸ்மார்ட் சமூக அவசர எச்சரிக்கை அமைப்பு",
-      refresh_feed: "🔄 புதுப்பி",
-      add_contact: "➕ தொடர்பைச் சேர்",
-      alert_id: "எச்சரிக்கை ID",
-      user_name: "பயனர் பெயர்",
-      date_time: "தேதி & நேரம்",
-      location_address: "இருப்பிட முகவரி",
-      status: "நிலை",
-      accepted_by: "ஏற்றவர்",
-      response_time: "பதிலளிப்பு நேரம்"
+      responder_way_voice: "தன்னார்வலர் வந்துகொண்டிருக்கிறார்."
     },
     kn: {
       brand: "ಕೇರ್‌ಕನೆಕ್ಟ್",
@@ -380,49 +285,7 @@ const CareConnectI18n = {
       welcome_voice: "ಕೇರ್‌ಕನೆಕ್ಟ್‌ಗೆ ಸ್ವಾಗತ.",
       sos_voice_prompt: "ತುರ್ತು ಸಹಾಯಕ್ಕಾಗಿ ಕೆಂಪು SOS ಬಟನ್ ಒತ್ತಿರಿ.",
       sos_success_voice: "ನಿಮ್ಮ ತುರ್ತು ಎಚ್ಚರಿಕೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಕಳುಹಿಸಲಾಗಿದೆ.",
-      responder_way_voice: "ಸೇವಕರು ದಾರಿಯಲ್ಲಿದ್ದಾರೆ.",
-      how_it_works: "ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
-      features: "ವೈಶಿಷ್ಟ್ಯಗಳು",
-      instant_escalation_badge: "⚡ ತಕ್ಷಣದ 60-ಸೆಕೆಂಡಿನ ಎಸ್ಕಲೇಶನ್",
-      hero_title: "ಸ್ಮಾರ್ಟ್ ಸಮುದಾಯ ತುರ್ತು ಎಚ್ಚರಿಕೆ ವ್ಯವಸ್ಥೆ",
-      hero_subtitle: "ಹಿರಿಯ ನಾಗರಿಕರನ್ನು ಕುಟುಂಬದ ಸದಸ್ಯರು, ನೆರೆಹೊರೆಯವರು ಮತ್ತು ಭದ್ರತಾ ಸಿಬ್ಬಂದಿಯೊಂದಿಗೆ ಸಂಪರ್ಕಿಸಿ.",
-      press_hold_sos: "SOS ಸಕ್ರಿಯಗೊಳಿಸಲು 3 ಸೆಕೆಂಡು ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
-      socket_broadcast: "ಸಂಪರ್ಕಿತ ಸ್ಪಂದಕರಿಗೆ ತಕ್ಷಣದ ಪ್ರಸಾರ",
-      register_now: "🚀 ಈಗ ನೋಂದಾಯಿಸಿ",
-      access_role_portals: "🔑 ಪೋರ್ಟಲ್‌ಗಳನ್ನು ಪ್ರವೇಶಿಸಿ",
-      workflow_title: "ಸ್ವಯಂಚಾಲಿತ 60-ಸೆಕೆಂಡಿನ ತುರ್ತು ಕಾರ್ಯಪ್ರವಾಹ",
-      workflow_sub: "ಎರಡು ಹಂತದ ಎಸ್ಕಲೇಶನ್‌ನೊಂದಿಗೆ ಪ್ರತಿಯೊಂದು ತುರ್ತು ವಿನಂತಿಗೆ ಸ್ಪಂದನೆ ಸಿಗುತ್ತದೆ.",
-      step1_title: "SOS ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
-      step1_desc: "ಬಳಕೆದಾರರು 3 ಸೆಕೆಂಡುಗಳ ಕಾಲ SOS ಬಟನ್ ಹಿಡಿಯುತ್ತಾರೆ. ಲೈವ್ GPS ಸ್ಥಳ ಮತ್ತು ಸಮಯ ತಕ್ಷಣವೇ ದಾಖಲಾಗುತ್ತದೆ.",
-      step2_title: "ಹಂತ 1: ನೆರೆಹೊರೆಯವರು & ಸಿಬ್ಬಂದಿ",
-      step2_desc: "ಲೈವ್ ಕೌಂಟ್‌ಡೌನ್ ಟೈಮರ್‌ನೊಂದಿಗೆ ಸಮೀಪದ ನೆರೆಹೊರೆಯವರಿಗೆ ಮತ್ತು ಭದ್ರತಾ ಸಿಬ್ಬಂದಿಗೆ ಪ್ರಸಾರ.",
-      step3_title: "60-ಸೆಕೆಂಡಿನ ಎಸ್ಕಲೇಶನ್",
-      step3_desc: "60 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಯಾರೂ ಸ್ವೀಕರಿಸದಿದ್ದರೆ, ಸಿಸ್ಟಮ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಕುಟುಂಬ ಮತ್ತು ಸೇವಕರಿಗೆ ಎಚ್ಚರಿಕೆ ಕಳುಹಿಸುತ್ತದೆ.",
-      step4_title: "ಪರಿಹಾರ & ಟ್ರ್ಯಾಕಿಂಗ್",
-      step4_desc: "ಸ್ಪಂದಕರು ಗೂಗಲ್ ಮ್ಯಾಪ್ಸ್ ಮೂಲಕ ಸಹಾಯ ಮಾಡಲು ತಲುಪುತ್ತಾರೆ.",
-      features_title: "ವೇಗ ಮತ್ತು ಸಮುದಾಯ ಸುರಕ್ಷತೆಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ",
-      feat1_title: "3-ಸೆಕೆಂಡಿನ ಹೋಲ್ಡ್ SOS",
-      feat1_desc: "ಆಕಸ್ಮಿಕ ಒತ್ತಡವನ್ನು ತಡೆಯುತ್ತದೆ.",
-      feat2_title: "Socket.IO ರಿಯಲ್-ಟೈಮ್ ಇಂಜಿನ್",
-      feat2_desc: "ತಕ್ಷಣದ ಪಾಪ್‌ಅಪ್ ಎಚ್ಚರಿಕೆಗಳನ್ನು ನೀಡುತ್ತದೆ.",
-      feat3_title: "Google Maps ನ್ಯಾವಿಗೇಷನ್",
-      feat3_desc: "ಒಂದು ಕ್ಲಿಕ್ ನ್ಯಾವಿಗೇಷನ್ ಲಿಂಕ್.",
-      feat4_title: "JWT ಪ್ರಾಮಾಣೀಕರಣ",
-      feat4_desc: "ಸುರಕ್ಷಿತ ಪಾಸ್‌ವರ್ಡ್ ಮತ್ತು ಟೋಕನ್ ಭದ್ರತೆ.",
-      feat5_title: "7 ವಿಶೇಷ ಪಾತ್ರಗಳು",
-      feat5_desc: "ವಿವಿಧ ಬಳಕೆದಾರರಿಗೆ ಪ್ರತ್ಯೇಕ ಇಂಟರ್‌ಫೇಸ್‌ಗಳು.",
-      feat6_title: "ಅಡ್ಮಿನ್ ವಿಶ್ಲೇಷಣೆ",
-      feat6_desc: "ಸಮಗ್ರ ತುರ್ತು ವರದಿಗಳು.",
-      footer_copyright: "© 2026 ಸೇಫ್‌ರೀಚ್ / ಕೇರ್‌ಕನೆಕ್ಟ್ ತುರ್ತು ನೆಟ್‌ವರ್ಕ್",
-      refresh_feed: "🔄 ರಿಫ್ರೆಶ್ ಮಾಡಿ",
-      add_contact: "➕ ಸಂಪರ್ಕ ಸೇರಿಸಿ",
-      alert_id: "ಎಚ್ಚರಿಕೆ ID",
-      user_name: "ಬಳಕೆದಾರರ ಹೆಸರು",
-      date_time: "ದಿನಾಂಕ & ಸಮಯ",
-      location_address: "ಸ್ಥಳದ ವಿಳಾಸ",
-      status: "ಸ್ಥಿತಿ",
-      accepted_by: "ಸ್ವೀಕರಿಸಿದವರು",
-      response_time: "ಸ್ಪಂದನೆಯ ಸಮಯ"
+      responder_way_voice: "ಸೇವಕರು ದಾರಿಯಲ್ಲಿದ್ದಾರೆ."
     },
     ml: {
       brand: "കെയർകണക്റ്റ്",
@@ -849,23 +712,20 @@ const CareConnectI18n = {
   updateDOM: () => {
     const lang = CareConnectI18n.getLanguage();
     const dict = CareConnectI18n.translations[lang] || CareConnectI18n.translations.en;
-    const enDict = CareConnectI18n.translations.en || {};
 
     // Translate all text elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      const val = dict[key] || enDict[key];
-      if (val) {
-        el.textContent = val;
+      if (dict[key]) {
+        el.textContent = dict[key];
       }
     });
 
     // Translate all placeholders with data-i18n-placeholder
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.getAttribute('data-i18n-placeholder');
-      const val = dict[key] || enDict[key];
-      if (val) {
-        el.setAttribute('placeholder', val);
+      if (dict[key]) {
+        el.setAttribute('placeholder', dict[key]);
       }
     });
 
@@ -927,97 +787,58 @@ const CareConnectI18n = {
     }
   },
 
+  // Render Custom Line-by-Line Language Selector Switcher Dropdown (Requirement 8)
   renderLanguageSelector: (containerId) => {
-    const container = document.getElementById(containerId);
-    if (container) container.innerHTML = '';
-  },
-
-  // Render Clean Header Language Dropdown Menu (With 12 Supported Languages)
-  renderHeaderLanguageDropdown: (containerId) => {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const currentLang = CareConnectI18n.getLanguage();
-    const activeLang = CareConnectI18n.supportedLanguages.find(l => l.code === currentLang) || CareConnectI18n.supportedLanguages[0];
+    const activeLangObj = CareConnectI18n.supportedLanguages.find(l => l.code === currentLang) || CareConnectI18n.supportedLanguages[0];
 
-    const menuItemsHTML = CareConnectI18n.supportedLanguages.map(l => {
-      const isSelected = l.code === currentLang;
-      return `
-        <button type="button" class="lang-menu-item ${isSelected ? 'selected' : ''}" onclick="CareConnectI18n.selectHeaderLanguage('${l.code}', '${containerId}')" style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.55rem 0.85rem; border:none; background:${isSelected ? 'rgba(2,132,199,0.1)' : 'transparent'}; border-radius:10px; cursor:pointer; font-weight:${isSelected ? '800' : '600'}; font-size:0.88rem; color:${isSelected ? '#0284c7' : '#0f172a'}; transition:all 0.15s ease;">
-          <div style="display:flex; align-items:center; gap:0.55rem;">
-            <span>${l.flag}</span> <span>${l.native}</span> <small style="color:#64748b; font-size:0.8em;">(${l.name})</small>
+    const lineItemsHtml = CareConnectI18n.supportedLanguages.map(l => `
+      <div class="lang-line-item ${l.code === currentLang ? 'selected' : ''}" onclick="CareConnectI18n.selectAndClose('${l.code}')">
+        <div class="lang-line-left">
+          <span class="lang-line-flag">${l.flag}</span>
+          <div class="lang-line-details">
+            <span class="lang-line-native">${l.native}</span>
+            <span class="lang-line-name">${l.name}</span>
           </div>
-          ${isSelected ? '<span style="color:#0284c7; font-weight:900;">✓</span>' : ''}
-        </button>
-      `;
-    }).join('');
+        </div>
+        ${l.code === currentLang ? '<span class="lang-line-check">✓</span>' : ''}
+      </div>
+    `).join('');
 
     container.innerHTML = `
-      <div class="language-dropdown-wrapper" style="position:relative; display:inline-block;">
-        <button type="button" class="btn btn-outline-secondary btn-sm lang-dropdown-btn" onclick="CareConnectI18n.toggleHeaderMenu(this, event)" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.85rem; border-radius:9999px; font-weight:700; font-size:0.85rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:1px solid rgba(2,132,199,0.25); color:#0f172a; cursor:pointer;">
-          <span class="lang-trigger-flag">${activeLang.flag}</span>
-          <span class="lang-trigger-label">${activeLang.native}</span>
-          <span style="font-size:0.75rem; color:#64748b;">▾</span>
+      <div class="language-selector-wrapper">
+        <button type="button" class="lang-trigger-btn" onclick="CareConnectI18n.toggleDropdown(this)">
+          <span class="lang-trigger-flag">${activeLangObj.flag}</span>
+          <span class="lang-trigger-label">${activeLangObj.native}</span>
+          <span class="lang-trigger-arrow">▾</span>
         </button>
-        
-        <div class="lang-header-menu" style="display:none; position:absolute; right:0; top:calc(100% + 8px); width:230px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.95); border-radius:16px; padding:0.4rem; box-shadow:0 15px 35px rgba(2,132,199,0.15); z-index:2500; max-height:340px; overflow-y:auto;">
-          ${menuItemsHTML}
+
+        <div class="lang-popover-menu d-none">
+          <div class="lang-popover-header" data-i18n="select_language">
+            🌐 Select Your Preferred Language
+          </div>
+          <div class="lang-line-list">
+            ${lineItemsHtml}
+          </div>
         </div>
       </div>
     `;
-  },
-
-  toggleHeaderMenu: (btn, event) => {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    const wrapper = btn.closest('.language-dropdown-wrapper');
-    if (!wrapper) return;
-    const menu = wrapper.querySelector('.lang-header-menu');
-    if (!menu) return;
-    
-    const isVisible = menu.classList.contains('show') || menu.style.display === 'block';
-    
-    document.querySelectorAll('.lang-header-menu').forEach(m => {
-      m.classList.remove('show');
-      m.style.display = 'none';
-    });
-
-    if (!isVisible) {
-      menu.classList.add('show');
-      menu.style.display = 'block';
-    }
-  },
-
-  selectHeaderLanguage: (langCode, containerId) => {
-    CareConnectI18n.setLanguage(langCode);
-    document.querySelectorAll('.lang-header-menu').forEach(m => {
-      m.classList.remove('show');
-      m.style.display = 'none';
-    });
-    if (containerId) {
-      CareConnectI18n.renderHeaderLanguageDropdown(containerId);
-    }
   }
 };
 
-// Close dropdown menu when clicking anywhere outside
+// Close popover when clicking outside
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.language-dropdown-wrapper')) {
-    document.querySelectorAll('.lang-header-menu').forEach(menu => {
-      menu.classList.remove('show');
-      menu.style.display = 'none';
-    });
+  if (!e.target.closest('.language-selector-wrapper')) {
+    document.querySelectorAll('.lang-popover-menu').forEach(menu => menu.classList.add('d-none'));
   }
 });
 
 // Initialize i18n on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   CareConnectI18n.setLanguage(CareConnectI18n.getLanguage());
-  if (document.getElementById('header-language-selector')) {
-    CareConnectI18n.renderHeaderLanguageDropdown('header-language-selector');
-  }
 });
 
 window.CareConnectI18n = CareConnectI18n;

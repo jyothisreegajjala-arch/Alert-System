@@ -12,10 +12,9 @@
   justify-content: space-between;
   margin-bottom: 2rem;
   padding: 1.25rem 2rem;
-  background: #ffffff;
+  background: var(--dark-card);
   border-radius: var(--radius-lg);
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--dark-border);
 }
 
 .user-info-meta {
@@ -28,7 +27,7 @@
   width: 52px;
   height: 52px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  background: linear-gradient(135deg, var(--secondary), #00d2ff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +47,7 @@
   color: var(--dark-muted);
 }
 
-/* Glassmorphism SOS Hub Section */
+/* SOS Hub Section */
 .sos-hub {
   display: flex;
   flex-direction: column;
@@ -56,26 +55,24 @@
   justify-content: center;
   text-align: center;
   padding: 3.5rem 2rem;
-  min-height: 55vh;
-  background: linear-gradient(135deg, rgba(254, 226, 226, 0.7) 0%, rgba(255, 255, 255, 0.85) 65%, rgba(224, 242, 254, 0.6) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 2px solid rgba(239, 68, 68, 0.35) !important;
+  min-height: 60vh;
+  background: radial-gradient(circle at center, rgba(255, 59, 48, 0.22) 0%, rgba(15, 23, 42, 0.98) 75%);
+  border: 2px solid rgba(255, 59, 48, 0.45);
   border-radius: var(--radius-lg);
   position: relative;
   overflow: hidden;
   margin-top: 1rem;
   margin-bottom: 2.5rem;
-  box-shadow: 0 20px 50px rgba(239, 68, 68, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 15px 45px rgba(255, 59, 48, 0.25), 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .sos-title {
   font-size: 3.2rem;
   font-weight: 900;
   letter-spacing: 3px;
-  color: #0f172a !important;
+  color: #ffffff;
   margin-bottom: 0.75rem;
-  text-shadow: 0 2px 10px rgba(2, 132, 199, 0.12);
+  text-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
 }
 
 .sos-subtitle {
@@ -143,11 +140,11 @@
 }
 
 .sos-ring-bg {
-  stroke: rgba(239, 68, 68, 0.2);
+  stroke: rgba(255, 255, 255, 0.15);
 }
 
 .sos-ring-progress {
-  stroke: #ef4444;
+  stroke: #ff2a2a;
   stroke-dasharray: 792; /* 2 * PI * 126 */
   stroke-dashoffset: 792;
   stroke-linecap: round;
@@ -158,14 +155,14 @@
   width: min(240px, 62vw);
   height: min(240px, 62vw);
   border-radius: var(--radius-full);
-  background: linear-gradient(145deg, #ef4444, #dc2626) !important;
-  border: 4px solid rgba(255, 255, 255, 0.9) !important;
-  color: #ffffff !important;
+  background: linear-gradient(145deg, #ff3b30, #b31010);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 14px 40px rgba(239, 68, 68, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 50px rgba(255, 59, 48, 0.8), inset 0 3px 8px rgba(255, 255, 255, 0.5);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   z-index: 10;
   cursor: pointer;
@@ -213,24 +210,21 @@
   gap: 0.5rem;
 }
 
-/* Neatly Styled Active Emergency Alert Glass Card */
+/* Active Alert Alert Banner */
 .active-sos-card {
   width: 100%;
-  background: linear-gradient(135deg, rgba(254, 226, 226, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 2px solid rgba(239, 68, 68, 0.4) !important;
-  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.2), rgba(15, 23, 42, 0.9));
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-md);
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.15), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
-  animation: pulse-border 2.5s infinite ease-in-out;
+  margin-bottom: 2rem;
+  animation: pulse-border 2s infinite;
 }
 
 @keyframes pulse-border {
-  0% { border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.12); }
-  50% { border-color: rgba(239, 68, 68, 0.85); box-shadow: 0 16px 45px rgba(239, 68, 68, 0.28); }
-  100% { border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.12); }
+  0% { border-color: rgba(255, 59, 48, 0.4); }
+  50% { border-color: rgba(255, 59, 48, 1); }
+  100% { border-color: rgba(255, 59, 48, 0.4); }
 }
 
 /* Interactive Map Section */
@@ -591,31 +585,6 @@
   color: #f87171;
   font-size: 0.95rem;
   margin-bottom: 0.75rem;
-}
-
-/* Universal Fluid Container & Grid Adaptability for Mobile Phones (Desktop Site ON/OFF) */
-.user-profile-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.dashboard-grid, .location-grid, .alert-meta-grid, .contacts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 1.25rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.sos-hub {
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {

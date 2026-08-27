@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         SafeReach.showToast(`Welcome back, ${data.user.name}!`, 'success');
         setTimeout(() => {
           if (data.user.role === 'admin') {
-            SafeReach.navigate('/admin');
+            window.location.href = '/admin';
           } else {
-            SafeReach.navigate('/dashboard');
+            window.location.href = '/dashboard';
           }
         }, 800);
       } catch (err) {
@@ -95,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         SafeReach.showToast(`Welcome back, ${data.user.name}! Account created successfully.`, 'success');
         setTimeout(() => {
           if (data.user.role === 'admin') {
-            SafeReach.navigate('/admin');
+            window.location.href = '/admin';
           } else {
-            SafeReach.navigate('/dashboard');
+            window.location.href = '/dashboard';
           }
         }, 800);
       } catch (err) {

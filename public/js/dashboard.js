@@ -5,10 +5,9 @@ let socket = null;
 let activeCountdownIntervals = new Map();
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await SafeReach.syncNativeStorage();
   currentUser = SafeReach.getUser();
   if (!currentUser || !SafeReach.getToken()) {
-    SafeReach.navigate('/login');
+    window.location.href = '/login';
     return;
   }
 
@@ -58,39 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Render Header User Info
 function renderUserProfile() {
   const nameEl = document.getElementById('user-display-name');
-  const topNameEl = document.getElementById('top-user-name');
-  const topRoleEl = document.getElementById('top-user-role');
   const roleEl = document.getElementById('user-display-role');
   const avatarEl = document.getElementById('user-avatar');
   const editBtn = document.getElementById('btn-edit-profile');
 
-  const formattedRole = SafeReach.formatRole(currentUser.role);
-  const cleanName = (currentUser.name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
-  if (nameEl) nameEl.textContent = cleanName;
-  if (topNameEl) topNameEl.textContent = cleanName;
-  if (topRoleEl) topRoleEl.textContent = formattedRole;
-  if (roleEl) roleEl.textContent = `${formattedRole} • ${currentUser.apartmentNumber || currentUser.address || ''}`;
-  if (avatarEl) avatarEl.textContent = cleanName.charAt(0).toUpperCase();
-
-  const profileSignoutBtn = document.getElementById('btn-profile-signout');
-  if (profileSignoutBtn) {
-    if (currentUser.role === 'senior_citizen' || currentUser.role === 'child' || currentUser.role === 'family_member' || currentUser.role === 'admin' || currentUser.role === 'neighbor' || currentUser.role === 'security_guard' || currentUser.role === 'volunteer') {
-      profileSignoutBtn.style.display = 'none';
-    } else {
-      profileSignoutBtn.style.display = 'inline-flex';
-    }
-  }
-
-  const adminPanelBtn = document.getElementById('btn-admin-panel');
-  if (adminPanelBtn) {
-    if (currentUser.role === 'admin') {
-      adminPanelBtn.classList.remove('d-none');
-      adminPanelBtn.style.display = 'inline-flex';
-    } else {
-      adminPanelBtn.classList.add('d-none');
-      adminPanelBtn.style.display = 'none';
-    }
-  }
+  if (nameEl) nameEl.textContent = currentUser.name;
+  if (roleEl) roleEl.textContent = `${SafeReach.formatRole(currentUser.role)} • ${currentUser.apartmentNumber || currentUser.address || ''}`;
+  if (avatarEl) avatarEl.textContent = currentUser.name.charAt(0).toUpperCase();
 
   if (editBtn) {
     if (currentUser.role === 'senior_citizen' || currentUser.role === 'child') {
@@ -105,20 +78,18 @@ function renderUserProfile() {
   if (dutyContainer) {
     if (currentUser.role === 'security_guard') {
       dutyContainer.innerHTML = `
-        <button id="btn-toggle-duty" class="status-pill-btn ${currentUser.dutyStatus === 'ON_DUTY' ? 'status-online' : 'status-offline'}" title="Click to toggle duty status">
-          ${currentUser.dutyStatus === 'ON_DUTY' ? '🟢 On Duty' : '🔴 Off Duty'}
+        <button id="btn-toggle-duty" class="btn btn-sm ${currentUser.dutyStatus === 'ON_DUTY' ? 'btn-success' : 'btn-secondary'}">
+          ${currentUser.dutyStatus === 'ON_DUTY' ? '🟢 ON DUTY' : '⚪ OFF DUTY'}
         </button>
       `;
       document.getElementById('btn-toggle-duty')?.addEventListener('click', toggleDutyStatus);
     } else if (currentUser.role === 'volunteer') {
       dutyContainer.innerHTML = `
-        <button id="btn-toggle-avail" class="status-pill-btn ${currentUser.availability === 'AVAILABLE' ? 'status-online' : 'status-offline'}" title="Click to toggle availability">
-          ${currentUser.availability === 'AVAILABLE' ? '🟢 Available' : '🔴 Busy'}
+        <button id="btn-toggle-avail" class="btn btn-sm ${currentUser.availability === 'AVAILABLE' ? 'btn-success' : 'btn-secondary'}">
+          ${currentUser.availability === 'AVAILABLE' ? '⚡ AVAILABLE' : '🌙 UNAVAILABLE'}
         </button>
       `;
       document.getElementById('btn-toggle-avail')?.addEventListener('click', toggleVolunteerAvailability);
-    } else {
-      dutyContainer.innerHTML = '';
     }
   }
 }
@@ -127,14 +98,12 @@ function renderUserProfile() {
 function initSocketConnection() {
   if (typeof io === 'undefined') return;
 
-  const socketUrl = window.SafeReach ? SafeReach.getSocketUrl() : '';
-  socket = io(socketUrl);
-  window.socket = socket;
+  socket = io();
 
   socket.on('connect', () => {
     console.log('[Socket] Connected to SafeReach network. Joining rooms...');
     socket.emit('join_rooms', {
-      userId: currentUser.id || currentUser._id,
+      userId: currentUser.id,
       role: currentUser.role
     });
   });
@@ -162,10 +131,6 @@ function initSocketConnection() {
     SafeReach.showToast(data.message, 'success');
     loadActiveEmergencies();
     loadEmergencyHistory();
-    loadUserNotifications();
-    if (data.emergency) {
-      focusLiveGpsOnEmergency(data.emergency);
-    }
   });
 
   socket.on('EMERGENCY_RESOLVED', (data) => {
@@ -177,15 +142,6 @@ function initSocketConnection() {
   socket.on('SOS_STATUS_UPDATE', (data) => {
     SafeReach.showToast(data.message, data.status === 'ACCEPTED' ? 'success' : 'warning');
     renderActiveSOSTracker(data.emergency);
-    loadEmergencyHistory();
-    loadUserNotifications();
-  });
-
-  socket.on('NEW_NOTIFICATION', (data) => {
-    if (data && (data.message || data.title)) {
-      SafeReach.showToast(data.message || data.title, 'info');
-    }
-    loadUserNotifications();
   });
 }
 
@@ -206,56 +162,41 @@ function playNotificationSound() {
   } catch (e) {}
 }
 
-// Render Dashboard View
+// Render Dashboard View according to Role
 function renderRoleDashboard() {
-  if (!currentUser) return;
-  const role = currentUser.role || 'senior_citizen';
+  const role = currentUser.role;
 
+  const profileBar = document.getElementById('user-profile-bar');
+  const emergencyLogsBtn = document.getElementById('btn-emergency-logs');
   const seniorSosView = document.getElementById('view-senior-sos');
   const responderFeed = document.getElementById('view-responder-feed');
   const mapSection = document.getElementById('view-map-section');
   const historySection = document.getElementById('history');
   const locationWidget = document.getElementById('location-widget-section');
-  const seniorLinkRequests = document.getElementById('senior-link-requests-section');
 
-  // Remove d-none inside tab containers
+  // Explicitly enable Live Location Widget & Map for ALL roles
   if (locationWidget) locationWidget.classList.remove('d-none');
   if (mapSection) mapSection.classList.remove('d-none');
-  if (historySection) historySection.classList.remove('d-none');
-  if (seniorLinkRequests) seniorLinkRequests.classList.remove('d-none');
 
-  const settingsNavItems = document.querySelectorAll('.nav-item[data-tab="tab-settings"]');
-  const contactsNavItems = document.querySelectorAll('.nav-item[data-tab="tab-contacts"]');
-
-  settingsNavItems.forEach(item => {
-    if (role === 'senior_citizen' || role === 'child' || role === 'family_member' || role === 'admin' || role === 'neighbor' || role === 'security_guard' || role === 'volunteer') {
-      item.style.display = 'none';
-    } else {
-      item.style.display = 'flex';
-    }
-  });
-
-  contactsNavItems.forEach(item => {
-    if (role === 'family_member' || role === 'admin' || role === 'neighbor' || role === 'security_guard' || role === 'volunteer') {
-      item.style.display = 'none';
-    } else {
-      item.style.display = 'flex';
-    }
-  });
-
+  // Senior Citizen or Child View
   if (role === 'senior_citizen' || role === 'child') {
-    if (seniorSosView) seniorSosView.classList.remove('d-none');
-    if (responderFeed) responderFeed.classList.add('d-none');
-    initSOSButtonEngine();
-  } else {
-    if (seniorSosView) seniorSosView.classList.add('d-none');
-    if (responderFeed) responderFeed.classList.remove('d-none');
-  }
+    if (profileBar) profileBar.classList.remove('d-none');
+    if (emergencyLogsBtn) emergencyLogsBtn.classList.add('d-none');
 
-  // Ensure initial tab selection via CareConnectNav
-  if (window.CareConnectNav && window.CareConnectNav.init) {
-    const initialTab = (role === 'senior_citizen' || role === 'child') ? 'tab-dashboard' : 'tab-alerts';
-    CareConnectNav.switchTab(initialTab, false);
+    if (responderFeed) responderFeed.classList.add('d-none');
+    if (historySection) historySection.classList.add('d-none');
+
+    if (seniorSosView) seniorSosView.classList.remove('d-none');
+    initSOSButtonEngine();
+  } 
+  // Responders (Neighbor / Security / Volunteer / Family Member / Admin)
+  else {
+    if (profileBar) profileBar.classList.remove('d-none');
+    if (emergencyLogsBtn) emergencyLogsBtn.classList.remove('d-none');
+    if (responderFeed) responderFeed.classList.remove('d-none');
+    if (historySection) historySection.classList.remove('d-none');
+
+    if (seniorSosView) seniorSosView.classList.add('d-none');
   }
 }
 
@@ -297,7 +238,6 @@ function initSOSButtonEngine() {
         SafeReach.showToast('🚨 EMERGENCY ALERT BROADCASTED WITH LOCATION!', 'danger');
         renderActiveSOSTracker(data.emergency);
         loadActiveEmergencies();
-        loadEmergencyHistory();
       } catch (err) {
         SafeReach.showToast(err.message, 'danger');
       }
@@ -318,33 +258,19 @@ function renderActiveSOSTracker(emergency) {
 
   trackerEl.classList.remove('d-none');
   
-  let statusBadge = `<span class="badge badge-pending" style="background:#fee2e2; color:#dc2626; border:1px solid rgba(239,68,68,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">⏳ PENDING (NOTIFYING NEIGHBORS & SECURITY)</span>`;
+  let statusBadge = `<span class="badge badge-pending">PENDING (NOTIFYING NEIGHBORS & SECURITY)</span>`;
   if (emergency.status === 'ACCEPTED') {
-    statusBadge = `<span class="badge badge-accepted" style="background:#dcfce7; color:#15803d; border:1px solid rgba(34,197,94,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">✅ RESPONDER ACCEPTED</span>`;
+    statusBadge = `<span class="badge badge-accepted">RESPONDER ACCEPTED</span>`;
   } else if (emergency.status === 'ESCALATED_VOLUNTEER') {
-    statusBadge = `<span class="badge badge-escalated" style="background:#ffedd5; color:#c2410c; border:1px solid rgba(249,115,22,0.3); font-weight:800; padding:0.4rem 0.85rem; border-radius:9999px; font-size:0.82rem;">⚡ ESCALATED TO VOLUNTEERS & FAMILY</span>`;
+    statusBadge = `<span class="badge badge-escalated">ESCALATED TO VOLUNTEERS & FAMILY</span>`;
   }
 
-  let responderInfo = `
-    <div style="margin-top:0.85rem; padding:0.85rem 1rem; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border-radius:14px; border:1px solid rgba(2,132,199,0.25); color:#0f172a; font-size:0.9rem; display:flex; align-items:center; gap:0.75rem;">
-      <div style="font-size:1.5rem;">📡</div>
-      <div>
-        <div style="font-weight:700; color:#0369a1;">Searching for nearby responders...</div>
-        <div style="font-size:0.83rem; color:#64748b;">Community security guard & neighbor notifications active</div>
-      </div>
-    </div>
-  `;
-
+  let responderInfo = 'Searching for nearby responders...';
   if (emergency.acceptedBy && emergency.acceptedBy.name) {
     responderInfo = `
-      <div style="margin-top:0.85rem; padding:0.85rem 1rem; background:rgba(220,252,231,0.85); backdrop-filter:blur(8px); border-radius:14px; border:1px solid rgba(34,197,94,0.3); color:#14532d; font-size:0.9rem; display:flex; align-items:center; gap:0.85rem; box-shadow:0 4px 12px rgba(34,197,94,0.1);">
-        <div style="font-size:1.8rem;">👨‍⚕️</div>
-        <div>
-          <div style="font-weight:800; font-size:0.98rem; color:#15803d;">Assigned Responder: ${emergency.acceptedBy.name} (${SafeReach.formatRole(emergency.acceptedBy.role)})</div>
-          <div style="font-size:0.88rem; font-weight:600; margin-top:0.15rem;">
-            📞 Phone: <a href="tel:${emergency.acceptedBy.phone}" style="color:#0284c7; text-decoration:underline; font-weight:800;">${emergency.acceptedBy.phone}</a>
-          </div>
-        </div>
+      <div style="margin-top:0.75rem; padding:0.75rem; background:rgba(0,122,255,0.15); border-radius:8px; border:1px solid #007aff;">
+        <strong>Assigned Responder:</strong> ${emergency.acceptedBy.name} (${SafeReach.formatRole(emergency.acceptedBy.role)})<br>
+        <strong>Phone:</strong> <a href="tel:${emergency.acceptedBy.phone}">${emergency.acceptedBy.phone}</a>
       </div>
     `;
   }
@@ -353,36 +279,18 @@ function renderActiveSOSTracker(emergency) {
 
   trackerEl.innerHTML = `
     <div class="active-sos-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; border-bottom:1px solid rgba(239,68,68,0.2); padding-bottom:0.85rem; margin-bottom:0.85rem;">
-        <h3 style="color:#991b1b; font-size:1.25rem; font-weight:900; display:flex; align-items:center; gap:0.5rem; margin:0;">
-          <span>🚨</span> <span>ACTIVE EMERGENCY ALERT: #${emergency.alertId}</span>
-        </h3>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="color:#ffffff; font-size:1.3rem;">🚨 ACTIVE EMERGENCY ALERT: #${emergency.alertId}</h3>
         ${statusBadge}
       </div>
-
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:0.85rem; margin-top:0.75rem;">
-        <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); border-radius:12px; padding:0.65rem 0.85rem; border:1px solid rgba(255,255,255,0.9);">
-          <div style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Triggered Time & Address</div>
-          <div style="font-size:0.92rem; font-weight:700; color:#0f172a; margin-top:0.15rem;">${SafeReach.formatTime(emergency)} on ${SafeReach.formatDate(emergency)}</div>
-          <div style="font-size:0.85rem; color:#334155; margin-top:0.15rem;">${emergency.address || 'Registered Address'}</div>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); border-radius:12px; padding:0.65rem 0.85rem; border:1px solid rgba(255,255,255,0.9);">
-          <div style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px;">Live GPS Coordinates</div>
-          <div style="font-size:0.92rem; font-weight:800; color:#0284c7; margin-top:0.15rem;">📍 ${Number(emergency.latitude).toFixed(6)}, ${Number(emergency.longitude).toFixed(6)}</div>
-          <div style="font-size:0.82rem; color:#16a34a; font-weight:700; margin-top:0.15rem;">High Accuracy Satellite Tracking</div>
-        </div>
+      <p style="margin-top:0.5rem; color:#cbd5e1;">Triggered at ${SafeReach.formatTime(emergency)} on ${SafeReach.formatDate(emergency)} (${emergency.address})</p>
+      <div style="margin-top:0.5rem; font-size:0.88rem; color:#38bdf8;">
+        📍 GPS Coords: <strong>${Number(emergency.latitude).toFixed(6)}, ${Number(emergency.longitude).toFixed(6)}</strong>
       </div>
-
       ${responderInfo}
-
-      <div style="margin-top:1.15rem; display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:flex-end;">
-        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.65rem 1.25rem; font-weight:700; font-size:0.88rem;">
-          📍 View My Location on Google Maps
-        </a>
-        <button onclick="cancelActiveEmergency('${emergency._id}')" class="btn btn-outline-danger btn-sm" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.65rem 1.25rem; font-weight:700; font-size:0.88rem;">
-          ✖️ Cancel Alert
-        </button>
+      <div style="margin-top:1.25rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">📍 View My Location on Google Maps</a>
+        <button onclick="cancelActiveEmergency('${emergency._id}')" class="btn btn-outline-danger btn-sm">Cancel Alert</button>
       </div>
     </div>
   `;
@@ -418,22 +326,6 @@ async function cancelActiveEmergency(emergencyId) {
   }
 }
 
-// Client Dismissed Alerts Storage
-const getDismissedAlertIds = () => {
-  try {
-    return new Set(JSON.parse(sessionStorage.getItem('safereach_dismissed_alerts') || '[]'));
-  } catch (e) {
-    return new Set();
-  }
-};
-
-const markAlertAsDismissed = (emergencyId) => {
-  if (!emergencyId) return;
-  const set = getDismissedAlertIds();
-  set.add(String(emergencyId));
-  sessionStorage.setItem('safereach_dismissed_alerts', JSON.stringify(Array.from(set)));
-};
-
 // Fetch and render Active Emergencies Feed for Responders
 async function loadActiveEmergencies() {
   try {
@@ -452,44 +344,28 @@ async function loadActiveEmergencies() {
     }
 
     const alertsContainer = document.getElementById('active-alerts-feed');
-    const streamContainer = document.getElementById('active-alerts-feed-stream');
-    if (!alertsContainer && !streamContainer) return;
+    if (!alertsContainer) return;
 
-    const dismissedSet = getDismissedAlertIds();
-    const activeEmergencies = (data.emergencies || []).filter(e => !dismissedSet.has(String(e._id)) && !dismissedSet.has(String(e.id)));
-
-    if (activeEmergencies.length === 0) {
-      const emptyHtml = `
+    if (!data.emergencies || data.emergencies.length === 0) {
+      alertsContainer.innerHTML = `
         <div class="glass-card" style="text-align:center; padding:2rem; color:var(--dark-muted);">
           <span style="font-size:2rem;">🛡️</span>
           <p style="margin-top:0.5rem;">No active emergency alerts in your community right now.</p>
         </div>
       `;
-      if (alertsContainer) alertsContainer.innerHTML = emptyHtml;
-      if (streamContainer) streamContainer.innerHTML = emptyHtml;
       return;
     }
 
-    if (alertsContainer) {
-      alertsContainer.innerHTML = '';
-      activeEmergencies.forEach(emergency => {
-        const card = createAlertCard(emergency);
-        alertsContainer.appendChild(card);
-      });
-    }
-
-    if (streamContainer) {
-      streamContainer.innerHTML = '';
-      activeEmergencies.forEach(emergency => {
-        const card = createAlertCard(emergency);
-        streamContainer.appendChild(card);
-      });
-    }
+    alertsContainer.innerHTML = '';
+    data.emergencies.forEach(emergency => {
+      const card = createAlertCard(emergency);
+      alertsContainer.appendChild(card);
+    });
 
     // If map section exists and is visible, center map on first active emergency
     const mapSection = document.getElementById('view-map-section');
-    if (activeEmergencies.length > 0 && document.getElementById('map') && mapSection && !mapSection.classList.contains('d-none')) {
-      const first = activeEmergencies[0];
+    if (data.emergencies.length > 0 && document.getElementById('map') && mapSection && !mapSection.classList.contains('d-none')) {
+      const first = data.emergencies[0];
       SafeReachMap.init('map', first.latitude, first.longitude, 15);
       SafeReachMap.addMarker(first.latitude, first.longitude, first.userName, `<b>${first.userName}</b><br>${first.address}`, 'red');
     }
@@ -537,7 +413,7 @@ function createAlertCard(emergency) {
       </div>
     ` : ''}
 
-    <div class="alert-actions-group">
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem;">
       ${emergency.status !== 'ACCEPTED' && emergency.status !== 'RESOLVED' ? `
         <button onclick="acceptEmergencyAlert('${emergency._id}')" class="btn btn-success btn-sm">✅ ACCEPT EMERGENCY</button>
         <button onclick="rejectEmergencyAlert('${emergency._id}')" class="btn btn-secondary btn-sm">❌ Dismiss</button>
@@ -547,7 +423,7 @@ function createAlertCard(emergency) {
         <button onclick="resolveEmergencyAlert('${emergency._id}')" class="btn btn-success btn-sm">🏁 Mark as Resolved</button>
       ` : ''}
 
-      <a href="${mapUrl}" target="_blank" class="btn btn-primary btn-sm">🗺️ Google Maps Navigation</a>
+      <a href="${mapUrl}" target="_blank" class="btn btn-primary btn-sm">🗺️ Open Google Maps Navigation</a>
       <a href="tel:${emergency.userPhone}" class="btn btn-secondary btn-sm">📞 Call ${emergency.userName}</a>
     </div>
   `;
@@ -587,96 +463,24 @@ function startClientCountdown(emergency) {
   activeCountdownIntervals.set(emergency._id, interval);
 }
 
-// Focus Live GPS Controls & Satellite Map on Senior Citizen Emergency
-function focusLiveGpsOnEmergency(emergency) {
-  if (!emergency) return;
-  const lat = Number(emergency.latitude) || 12.9716;
-  const lng = Number(emergency.longitude) || 77.5946;
-  const seniorName = emergency.userName || 'Senior Citizen';
-  const address = emergency.address || 'Emergency Location';
-  const phone = emergency.userPhone || '';
-  const alertId = emergency.alertId || '';
-
-  // 1. Switch active dashboard tab to Live GPS
-  if (window.CareConnectNav && window.CareConnectNav.switchTab) {
-    CareConnectNav.switchTab('tab-gps');
-  }
-
-  // 2. Update Location Controls & Status Panel
-  const statusEl = document.getElementById('location-status-text');
-  const infoEl = document.getElementById('location-info-display');
-
-  if (statusEl) {
-    statusEl.className = 'location-status status-active';
-    statusEl.innerHTML = `🚨 <strong>TRACKING LIVE SENIOR CITIZEN EMERGENCY:</strong> ${seniorName} • Alert #${alertId}`;
-  }
-
-  if (infoEl) {
-    infoEl.classList.remove('d-none');
-    const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-    infoEl.innerHTML = `
-      <div style="background: rgba(2, 132, 199, 0.08); border: 1px solid rgba(2, 132, 199, 0.25); padding: 1rem; border-radius: 12px; margin-top: 0.75rem;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
-          <div>
-            <h5 style="color:#0f172a; font-weight:800; margin:0; font-size:1.05rem;">🆘 Senior Citizen: ${seniorName}</h5>
-            <p style="margin:0.25rem 0 0 0; font-size:0.9rem; color:#334155;">📍 <strong>Address:</strong> ${address}</p>
-            <p style="margin:0.2rem 0 0 0; font-size:0.85rem; color:#0284c7; font-weight:700;">🌐 GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
-          </div>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            ${phone ? `<a href="tel:${phone}" class="btn btn-secondary btn-sm">📞 Call ${seniorName}</a>` : ''}
-            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">🗺️ Open Google Maps Navigation</a>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  // 3. Center Live Map on Senior Citizen Emergency Coordinates
-  const mapSection = document.getElementById('view-map-section');
-  if (mapSection) mapSection.classList.remove('d-none');
-
-  setTimeout(() => {
-    if (window.SafeReachMap) {
-      SafeReachMap.init('map', lat, lng, 16);
-      SafeReachMap.addMarker(
-        lat,
-        lng,
-        `Senior Citizen: ${seniorName}`,
-        `<b>🚨 Senior Citizen Emergency: ${seniorName}</b><br>Address: ${address}<br>Phone: ${phone}<br>GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`,
-        'red'
-      );
-      if (SafeReachMap.invalidateMapSize) {
-        SafeReachMap.invalidateMapSize();
-      }
-    }
-  }, 200);
-}
-
-window.focusLiveGpsOnEmergency = focusLiveGpsOnEmergency;
-
 // Responder Actions
 async function acceptEmergencyAlert(emergencyId) {
   try {
     const data = await SafeReach.api(`/api/emergency/accept/${emergencyId}`, { method: 'PUT' });
-    SafeReach.showToast(data.message || 'Emergency accepted successfully!', 'success');
+    SafeReach.showToast(data.message, 'success');
     loadActiveEmergencies();
-    if (data.emergency) {
-      focusLiveGpsOnEmergency(data.emergency);
-    }
   } catch (err) {
     SafeReach.showToast(err.message, 'danger');
   }
 }
 
 async function rejectEmergencyAlert(emergencyId) {
-  markAlertAsDismissed(emergencyId);
   try {
-    await SafeReach.api(`/api/emergency/reject/${emergencyId}`, { method: 'POST' }).catch(() => {});
-    SafeReach.showToast('Alert dismissed and removed from dashboard', 'info');
+    await SafeReach.api(`/api/emergency/reject/${emergencyId}`, { method: 'POST' });
+    SafeReach.showToast('Alert dismissed for view', 'info');
     loadActiveEmergencies();
   } catch (err) {
-    loadActiveEmergencies();
-    SafeReach.showToast('Alert dismissed from dashboard', 'info');
+    SafeReach.showToast(err.message, 'danger');
   }
 }
 
@@ -697,67 +501,39 @@ async function resolveEmergencyAlert(emergencyId) {
 
 // Emergency History Loader
 async function loadEmergencyHistory() {
+  if (currentUser.role === 'senior_citizen' || currentUser.role === 'child') {
+    return; // Bypass history table loading for Senior Citizens to keep view clutter-free
+  }
+
   try {
     const data = await SafeReach.api('/api/emergency/history');
-    const tbodyHistory = document.getElementById('history-table-body');
-    const tbodyReports = document.getElementById('reports-history-table-body');
+    const tbody = document.getElementById('history-table-body');
+    if (!tbody) return;
 
     if (!data.emergencies || data.emergencies.length === 0) {
-      if (tbodyHistory) tbodyHistory.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
-      if (tbodyReports) tbodyReports.innerHTML = `<tr><td colspan="10" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--dark-muted); padding:1.5rem;">No historical emergency logs found.</td></tr>`;
       return;
     }
 
-    if (tbodyHistory) {
-      tbodyHistory.innerHTML = '';
-      data.emergencies.forEach(item => {
-        let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
-        if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
-        if (item.status === 'PENDING_LOCAL') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
-        if (item.status === 'ESCALATED_VOLUNTEER') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
+    tbody.innerHTML = '';
+    data.emergencies.forEach(item => {
+      let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
+      if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
+      if (item.status === 'PENDING_LOCAL') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
+      if (item.status === 'ESCALATED_VOLUNTEER') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>#${item.alertId}</strong></td>
-          <td>${item.userName}</td>
-          <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
-          <td>${item.address}</td>
-          <td>${statusBadge}</td>
-          <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${item.acceptedBy.role})` : 'Unassigned'}</td>
-          <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : 'N/A'}</td>
-        `;
-        tbodyHistory.appendChild(tr);
-      });
-    }
-
-    if (tbodyReports) {
-      tbodyReports.innerHTML = '';
-      data.emergencies.forEach(item => {
-        let statusBadge = `<span class="badge badge-resolved">RESOLVED</span>`;
-        if (item.status === 'ACCEPTED') statusBadge = `<span class="badge badge-accepted">ACCEPTED</span>`;
-        if (item.status === 'PENDING_LOCAL' || item.status === 'PENDING_FAMILY') statusBadge = `<span class="badge badge-pending">PENDING</span>`;
-        if (item.status === 'ESCALATED_VOLUNTEER' || item.status === 'ESCALATED_NEIGHBOR_GUARD') statusBadge = `<span class="badge badge-escalated">ESCALATED</span>`;
-        if (item.status === 'CANCELLED') statusBadge = `<span class="badge" style="background:#64748b; color:#ffffff;">CANCELLED</span>`;
-
-        const lat = item.location?.coordinates?.[1] || item.latitude || 12.9716;
-        const lng = item.location?.coordinates?.[0] || item.longitude || 77.5946;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>#${item.alertId}</strong></td>
-          <td><strong>${item.userName}</strong></td>
-          <td>${item.userPhone || '—'}</td>
-          <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
-          <td>${item.address}</td>
-          <td>📍 ${Number(lat).toFixed(4)}, ${Number(lng).toFixed(4)}</td>
-          <td>${item.medicalInfo || item.emergencyType || 'SOS Emergency Triggered'}</td>
-          <td>${statusBadge}</td>
-          <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${SafeReach.formatRole(item.acceptedBy.role)})` : (item.status === 'CANCELLED' ? 'Cancelled by User' : 'Unassigned')}</td>
-          <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : (item.status === 'CANCELLED' ? 'N/A' : 'Pending')}</td>
-        `;
-        tbodyReports.appendChild(tr);
-      });
-    }
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>#${item.alertId}</strong></td>
+        <td>${item.userName}</td>
+        <td>${SafeReach.formatDate(item)} ${SafeReach.formatTime(item)}</td>
+        <td>${item.address}</td>
+        <td>${statusBadge}</td>
+        <td>${item.acceptedBy?.name ? `${item.acceptedBy.name} (${item.acceptedBy.role})` : 'Unassigned'}</td>
+        <td>${item.responseTimeSeconds ? `${item.responseTimeSeconds} sec` : 'N/A'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
   } catch (err) {
     console.error('History load error:', err);
   }
@@ -953,7 +729,7 @@ function openEditProfileModal() {
   }
   // 6. Senior Citizen / Dependent (Complete Safety Network Profile in 2-Column Grid)
   else {
-    modalTitle.innerHTML = (role === 'child') ? `👶 <span data-i18n="profile">Child / Dependent Profile & Safety Network</span>` : `👵 <span data-i18n="profile">Senior Citizen Profile & Safety Network</span>`;
+    modalTitle.innerHTML = `👵 <span data-i18n="profile">Senior Citizen Profile & Safety Network</span>`;
     modalBody.innerHTML = `
       <div class="edit-section-card">
         <div class="edit-section-title">👤 1. Personal & Health Information</div>
@@ -1132,7 +908,6 @@ async function handleSaveProfile(e) {
     }
 
     SafeReach.showToast('✅ Profile updated successfully!', 'success');
-    alert('Profile updated successfully!');
   } catch (err) {
     SafeReach.showToast(err.message || 'Failed to update profile details', 'danger');
   }
@@ -1474,40 +1249,29 @@ function renderNotificationList() {
       <div class="notif-card ${cardClass}">
         <div class="notif-header">
           <div class="notif-sender">
-            <span>👤</span>
-            <span>${n.senderName}</span>
-            <small style="font-size:0.82rem; color:#64748b; font-weight:600;">(${n.senderRole || 'User'})</small>
+            ${n.senderName} <small style="font-size:0.85rem; color:#94a3b8; font-weight:600;">(${n.senderRole || 'User'})</small>
           </div>
           <span class="badge ${n.status === 'PENDING' ? 'badge-pending' : n.status === 'ACCEPTED' ? 'badge-accepted' : 'badge-escalated'}">
-            ${n.status === 'PENDING' ? '🔴 PENDING' : n.status === 'ACCEPTED' ? '🟢 ACCEPTED' : n.status}
+            ${n.status}
           </span>
         </div>
 
-        <p style="color:#0f172a; font-size:0.95rem; font-weight:700; margin:0.4rem 0 0.75rem 0; line-height:1.5;">
+        <p style="color:#ffffff; font-size:0.95rem; font-weight:700; margin:0.4rem 0;">
           ${n.message}
         </p>
 
         <div class="notif-meta-grid">
-          <div class="notif-meta-item">
-            <span class="notif-meta-label">Type</span>
-            <span class="notif-meta-val">${n.emergencyType || 'Connection Request'}</span>
-          </div>
-          <div class="notif-meta-item">
-            <span class="notif-meta-label">Location / Apt</span>
-            <span class="notif-meta-val">${n.address || 'Springboard Community'} ${n.apartment ? '(' + n.apartment + ')' : ''}</span>
-          </div>
-          <div class="notif-meta-item">
-            <span class="notif-meta-label">Date & Time</span>
-            <span class="notif-meta-val">${SafeReach.formatDate(n) || 'Recent'} ${SafeReach.formatTime(n) || ''}</span>
-          </div>
+          <div><strong style="color:#94a3b8;">Request Type:</strong><br><span style="color:#fff; font-weight:700;">${n.emergencyType || 'Connection Request'}</span></div>
+          <div><strong style="color:#94a3b8;">Address / Apartment:</strong><br><span style="color:#fff; font-weight:700;">${n.address || 'Springboard Community'} ${n.apartment ? '(' + n.apartment + ')' : ''}</span></div>
+          <div><strong style="color:#94a3b8;">Date & Time:</strong><br><span style="color:#fff; font-weight:700;">${SafeReach.formatDate(n) || 'Recent'} ${SafeReach.formatTime(n) || ''}</span></div>
         </div>
 
         ${n.status === 'PENDING' ? `
           <div class="notif-actions">
-            <button onclick="acceptNotificationAction('${n._id}')" class="btn btn-primary btn-sm" style="font-weight:800; padding:0.5rem 1.35rem;">
-              ✅ Accept Connection
+            <button onclick="acceptNotificationAction('${n._id}')" class="btn btn-success btn-sm" style="font-weight:800; padding:0.5rem 1.25rem;">
+              ✅ Accept
             </button>
-            <button onclick="declineNotificationAction('${n._id}')" class="btn btn-outline-danger btn-sm" style="font-weight:700; padding:0.5rem 1.35rem;">
+            <button onclick="declineNotificationAction('${n._id}')" class="btn btn-outline-danger btn-sm" style="font-weight:700; padding:0.5rem 1.25rem;">
               ❌ Decline
             </button>
           </div>
@@ -1567,42 +1331,12 @@ function updateHelperAssignedCards(alertId, helperName, helperRole) {
   });
 }
 
-async function clearNotificationHistoryAction() {
-  if (!confirm('Are you sure you want to clear all notification history?')) return;
-
-  try {
-    const data = await SafeReach.api('/api/notifications/clear', { method: 'DELETE' });
-    SafeReach.showToast(data.message || 'Notification history cleared successfully', 'success');
-
-    currentNotifications = [];
-
-    const countPendingEl = document.getElementById('count-pending');
-    const countAcceptedEl = document.getElementById('count-accepted');
-    const countReadEl = document.getElementById('count-read');
-    const badgeEl = document.getElementById('nav-unread-badge');
-    const container = document.getElementById('notifications-list-content');
-
-    if (countPendingEl) countPendingEl.textContent = '0';
-    if (countAcceptedEl) countAcceptedEl.textContent = '0';
-    if (countReadEl) countReadEl.textContent = '0';
-    if (badgeEl) badgeEl.classList.add('d-none');
-
-    if (container) {
-      container.innerHTML = `
-        <div style="text-align:center; padding:3rem 1.5rem; color:#475569;">
-          <div style="font-size:2.8rem; margin-bottom:0.6rem;">🔔</div>
-          <h4 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-bottom:0.25rem;">No Notifications Found</h4>
-          <p style="font-size:0.9rem; font-weight:500; color:#64748b;">Your notification history has been completely cleared.</p>
-        </div>
-      `;
-    }
-  } catch (err) {
-    SafeReach.showToast(err.message || 'Failed to clear history', 'danger');
-  }
+function logout() {
+  SafeReach.clearAuth();
+  window.location.href = '/login';
 }
 
 window.logout = logout;
-window.clearNotificationHistoryAction = clearNotificationHistoryAction;
 window.acceptEmergencyAlert = acceptEmergencyAlert;
 window.rejectEmergencyAlert = rejectEmergencyAlert;
 window.resolveEmergencyAlert = resolveEmergencyAlert;
@@ -1618,26 +1352,4 @@ window.closeNotificationsModal = closeNotificationsModal;
 window.filterNotifications = filterNotifications;
 window.acceptNotificationAction = acceptNotificationAction;
 window.declineNotificationAction = declineNotificationAction;
-
-// Requirement 35: Android Back Button Handling
-if (window.Capacitor?.Plugins?.App) {
-  window.Capacitor.Plugins.App.addListener('backButton', () => {
-    const openModals = document.querySelectorAll('.modal.show, .modal-backdrop, [style*="display: block"]');
-    let modalClosed = false;
-    openModals.forEach(m => {
-      if (m.classList.contains('modal') && m.style.display !== 'none') {
-        m.style.display = 'none';
-        modalClosed = true;
-      }
-    });
-    if (modalClosed) return;
-
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.Capacitor.Plugins.App.minimizeApp();
-    }
-  });
-}
-
 
