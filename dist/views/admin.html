@@ -16,188 +16,114 @@
   <!-- Mobile Sidebar / Drawer Backdrop -->
   <div id="admin-drawer-backdrop" class="admin-drawer-backdrop" onclick="closeAdminDrawer()"></div>
 
-  <!-- Mobile Slide-In Sidebar Drawer -->
+  <!-- Mobile Slide-In Sidebar Drawer (Matching Screenshot 4) -->
   <aside id="admin-mobile-drawer" class="admin-mobile-drawer">
     <div class="drawer-header">
       <div class="drawer-brand">
-        <span class="drawer-brand-icon">🛡️</span>
-        <div>
-          <h3 class="drawer-brand-title">SafeReach</h3>
-          <span class="drawer-brand-badge">Admin Console</span>
-        </div>
+        <span class="drawer-brand-icon">👑</span>
+        <h3 class="drawer-brand-title">SafeReach Admin</h3>
       </div>
       <button class="drawer-close-btn" onclick="closeAdminDrawer()" aria-label="Close Drawer">✕</button>
     </div>
 
-    <div class="drawer-profile-snippet">
-      <div class="drawer-avatar">A</div>
-      <div class="drawer-profile-meta">
-        <h4 id="drawer-admin-name">System Administrator</h4>
-        <p>admin@safereach.com</p>
-      </div>
-    </div>
-
     <nav class="drawer-nav">
-      <a href="#overview" class="drawer-link active" onclick="closeAdminDrawer()">
-        <span class="drawer-link-icon">🏠</span>
-        <span>Dashboard Overview</span>
+      <a href="#overview" class="drawer-nav-item active" onclick="switchAdminTab('tab-dashboard'); closeAdminDrawer();">
+        <span class="drawer-nav-icon">🏠</span>
+        <span>Dashboard</span>
       </a>
-      <a href="#recent-emergencies-section" class="drawer-link" onclick="closeAdminDrawer()">
-        <span class="drawer-link-icon">🚨</span>
+      <a href="#live-alerts-section" class="drawer-nav-item" onclick="switchAdminTab('tab-alerts'); closeAdminDrawer();">
+        <span class="drawer-nav-icon">🚨</span>
         <span>Emergency Alerts</span>
-        <span id="drawer-active-sos-badge" class="drawer-pill-badge">0</span>
       </a>
-      <a href="javascript:void(0)" onclick="openGpsModal(); closeAdminDrawer();" class="drawer-link">
-        <span class="drawer-link-icon">📍</span>
-        <span>Live GPS Telemetry</span>
+      <a href="javascript:void(0)" onclick="openGpsModal(); closeAdminDrawer();" class="drawer-nav-item">
+        <span class="drawer-nav-icon">📍</span>
+        <span>Live GPS</span>
       </a>
-      <a href="#admin-analytics-section" class="drawer-link" onclick="closeAdminDrawer()">
-        <span class="drawer-link-icon">📊</span>
-        <span>Analytics & Metrics</span>
+      <a href="#reports-section" class="drawer-nav-item" onclick="switchAdminTab('tab-reports'); closeAdminDrawer();">
+        <span class="drawer-nav-icon">📊</span>
+        <span>Reports &amp; Logs</span>
       </a>
-      <a href="#users-directory-section" class="drawer-link" onclick="closeAdminDrawer()">
-        <span class="drawer-link-icon">👥</span>
-        <span>User Directory & Roles</span>
+      <a href="javascript:void(0)" onclick="openAdminProfileModal(); closeAdminDrawer();" class="drawer-nav-item">
+        <span class="drawer-nav-icon">👤</span>
+        <span>Profile</span>
       </a>
-      <a href="#csv-operations-section" class="drawer-link" onclick="closeAdminDrawer()">
-        <span class="drawer-link-icon">📁</span>
-        <span>Excel CSV Operations</span>
-      </a>
-      <a href="javascript:void(0)" onclick="openAdminProfileModal(); closeAdminDrawer();" class="drawer-link">
-        <span class="drawer-link-icon">👤</span>
-        <span>Admin Profile</span>
-      </a>
-      <a href="/dashboard" class="drawer-link">
-        <span class="drawer-link-icon">📱</span>
+      
+      <div class="drawer-divider"></div>
+      <a href="/dashboard" class="drawer-nav-item">
+        <span class="drawer-nav-icon">📱</span>
         <span>Emergency Console</span>
       </a>
-      <div class="drawer-divider"></div>
-      <button onclick="toggleAdminTheme()" class="drawer-action-btn">
-        <span id="drawer-theme-icon">🌙</span>
-        <span id="drawer-theme-text">Dark Theme</span>
+      <button onclick="toggleAdminTheme()" class="drawer-nav-item drawer-theme-btn">
+        <span id="drawer-theme-icon" class="drawer-nav-icon">🌙</span>
+        <span id="drawer-theme-text">Toggle Theme</span>
       </button>
-      <button onclick="logout()" class="drawer-logout-btn">
-        <span>🚪</span>
+      <button onclick="logout()" class="drawer-nav-item drawer-logout-btn">
+        <span class="drawer-nav-icon">🚪</span>
         <span>Sign Out</span>
       </button>
     </nav>
   </aside>
 
   <!-- ========================================================
-       TOP ADMIN HEADER (RESPONSIVE: DESKTOP & MOBILE FIRST)
+       TOP ADMIN HEADER (MATCHING SCREENSHOT 1 & 2)
        ======================================================== -->
   <header class="admin-top-header">
     <div class="admin-header-container">
       
-      <!-- DESKTOP HEADER LAYOUT (>= 1024px) -->
-      <div class="desktop-header-row">
-        <div class="desktop-header-left">
-          <a href="/admin" class="admin-logo-link">
-            <div class="admin-emblem">🛡️</div>
-            <div class="admin-logo-text">
-              <span class="admin-brand-name">SafeReach</span>
-              <span class="admin-role-badge">System Admin</span>
-            </div>
-          </a>
-          <div class="header-divider-v"></div>
-          <div class="admin-welcome-text">
-            <span class="welcome-label">Welcome to SafeReach,</span>
-            <strong id="desktop-admin-name" class="welcome-name">Administrator</strong>
-          </div>
-        </div>
+      <!-- Top Row: Hamburger + Welcome message -->
+      <div class="header-top-row">
+        <button class="header-menu-btn" onclick="openAdminDrawer()" aria-label="Toggle Navigation Menu">
+          <span id="menu-icon-symbol">☰</span>
+        </button>
 
-        <div class="desktop-header-actions">
-          <!-- Language Selector -->
-          <div id="desktop-language-selector-container" class="header-lang-wrapper"></div>
-
-          <!-- Notifications Button -->
-          <button id="btn-desktop-notifications" onclick="openAdminNotificationsModal()" class="admin-header-btn" title="View Notifications">
-            <span class="btn-icon">🔔</span>
-            <span class="btn-label">Notifications</span>
-            <span id="desktop-unread-badge" class="header-unread-badge d-none">0</span>
-          </button>
-
-          <!-- Theme Toggle Button -->
-          <button id="btn-desktop-theme" onclick="toggleAdminTheme()" class="admin-header-btn" title="Toggle Light/Dark Theme">
-            <span id="desktop-theme-icon" class="btn-icon">🌙</span>
-            <span id="desktop-theme-text" class="btn-label">Dark</span>
-          </button>
-
-          <!-- Admin Profile Button -->
-          <button id="btn-desktop-profile" onclick="openAdminProfileModal()" class="admin-header-btn" title="View Admin Profile">
-            <span class="btn-icon">👤</span>
-            <span class="btn-label">Admin</span>
-          </button>
-
-          <!-- Emergency Console Link -->
-          <a href="/dashboard" class="admin-header-btn emergency-console-link" title="Open Emergency SOS Console">
-            <span class="btn-icon">📱</span>
-            <span class="btn-label">Emergency Console</span>
-          </a>
-
-          <!-- Sign Out Button -->
-          <button onclick="logout()" class="admin-header-btn btn-danger-pill" title="Sign Out of Admin Console">
-            <span class="btn-icon">🚪</span>
-            <span class="btn-label">Sign Out</span>
-          </button>
+        <div class="header-welcome-block">
+          <span>Welcome to CareConnect , <strong id="admin-welcome-name" class="admin-name-highlight">tarun tej</strong> (</span>
+          <span class="admin-role-text">System Admin )</span>
         </div>
       </div>
 
-      <!-- MOBILE HEADER LAYOUT (<= 767px) -->
-      <div class="mobile-header-stack">
-        <!-- Row 1: Hamburger | SafeReach Brand | Notifications & Profile -->
-        <div class="mobile-header-row1">
-          <button class="mobile-hamburger-btn" onclick="openAdminDrawer()" aria-label="Open Navigation Menu">
-            <span>☰</span>
-          </button>
-          
-          <a href="/admin" class="mobile-brand-title">
-            <span class="mobile-brand-icon">🛡️</span>
-            <span class="mobile-brand-text">SafeReach</span>
-          </a>
+      <!-- Controls Row: Language | Notifications | Sign Out -->
+      <div class="header-controls-row">
+        <div id="admin-language-selector-container" class="lang-selector-box"></div>
 
-          <div class="mobile-header-quick-actions">
-            <button onclick="openAdminNotificationsModal()" class="mobile-icon-btn" aria-label="Notifications">
-              <span>🔔</span>
-              <span id="mobile-unread-badge" class="mobile-badge d-none">0</span>
-            </button>
-            <button onclick="openAdminProfileModal()" class="mobile-icon-btn" aria-label="Admin Profile">
-              <span>👤</span>
-            </button>
-          </div>
-        </div>
+        <button onclick="openAdminNotificationsModal()" class="header-control-pill notif-pill" title="View Notifications">
+          <span>🔔</span>
+          <span>Notifications <span id="header-notif-count">2</span></span>
+        </button>
 
-        <!-- Row 2: Welcome message & Admin role badge -->
-        <div class="mobile-header-row2">
-          <div class="mobile-welcome-line">Welcome to SafeReach,</div>
-          <div class="mobile-name-line">
-            <span id="mobile-admin-name">Admin</span>
-            <span class="mobile-admin-tag">(System Admin)</span>
-          </div>
-        </div>
-
-        <!-- Row 3: Language Selector & Notifications Side-by-Side -->
-        <div class="mobile-header-row3">
-          <div id="mobile-language-selector-container" class="mobile-lang-box"></div>
-          <button onclick="openAdminNotificationsModal()" class="mobile-pill-btn mobile-notif-pill">
-            <span>🔔</span>
-            <span>Notifications</span>
-            <span id="mobile-pill-badge" class="mobile-pill-counter d-none">0</span>
-          </button>
-        </div>
-
-        <!-- Row 4: Emergency Console & Sign Out -->
-        <div class="mobile-header-row4">
-          <a href="/dashboard" class="mobile-pill-btn mobile-console-pill">
-            <span>📱</span>
-            <span>Emergency Console</span>
-          </a>
-          <button onclick="logout()" class="mobile-pill-btn mobile-signout-pill">
-            <span>🚪</span>
-            <span>Sign Out</span>
-          </button>
-        </div>
+        <button onclick="logout()" class="header-control-pill signout-pill" title="Sign Out">
+          <span>🚪</span>
+          <span>Sign Out</span>
+        </button>
       </div>
+
+      <!-- Quick Navigation Tabs (Matching Screenshot 1 & 2) -->
+      <nav class="admin-quick-nav-tabs">
+        <button type="button" id="tab-btn-dashboard" class="quick-tab-pill active" onclick="switchAdminTab('tab-dashboard')">
+          <span>🏠</span>
+          <span>Dashboard</span>
+        </button>
+
+        <button type="button" id="tab-btn-alerts" class="quick-tab-pill" onclick="switchAdminTab('tab-alerts')">
+          <span>🚨</span>
+          <span>Alerts</span>
+        </button>
+
+        <button type="button" id="tab-btn-gps" class="quick-tab-pill" onclick="openGpsModal()">
+          <span>📍</span>
+          <span>Live GPS</span>
+        </button>
+
+        <button type="button" id="tab-btn-reports" class="quick-tab-pill" onclick="switchAdminTab('tab-reports')">
+          <span>📊</span>
+          <span>Reports</span>
+        </button>
+
+        <button type="button" id="tab-btn-profile" class="quick-tab-pill" onclick="openAdminProfileModal()">
+          <span>👤</span>
+          <span>Profile</span>
+        </button>
+      </nav>
 
     </div>
   </header>
@@ -207,148 +133,89 @@
        ======================================================== -->
   <main class="admin-main-container">
 
-    <!-- ADMIN QUICK NAVIGATION (4 ACTION CARDS) -->
-    <section class="admin-quick-nav-section">
-      <div class="quick-nav-grid">
-        <a href="#recent-emergencies-section" class="quick-nav-card nav-alerts">
-          <div class="quick-nav-icon">🚨</div>
-          <div class="quick-nav-content">
-            <span class="quick-nav-title">Alerts</span>
-            <span class="quick-nav-desc">Live Incidents</span>
-          </div>
-        </a>
-
-        <button type="button" onclick="openGpsModal()" class="quick-nav-card nav-gps">
-          <div class="quick-nav-icon">📍</div>
-          <div class="quick-nav-content">
-            <span class="quick-nav-title">Live GPS</span>
-            <span class="quick-nav-desc">Location Radar</span>
-          </div>
-        </button>
-
-        <a href="#csv-operations-section" class="quick-nav-card nav-reports">
-          <div class="quick-nav-icon">📊</div>
-          <div class="quick-nav-content">
-            <span class="quick-nav-title">Reports</span>
-            <span class="quick-nav-desc">Excel CSV Data</span>
-          </div>
-        </a>
-
-        <button type="button" onclick="openAdminProfileModal()" class="quick-nav-card nav-profile">
-          <div class="quick-nav-icon">👤</div>
-          <div class="quick-nav-content">
-            <span class="quick-nav-title">Profile</span>
-            <span class="quick-nav-desc">Admin Settings</span>
-          </div>
-        </button>
-      </div>
-    </section>
-
-    <!-- MAIN ADMIN DASHBOARD HEADING & HERO DESCRIPTION -->
-    <section class="admin-hero-heading-section" id="overview">
-      <div class="hero-text-wrapper">
-        <h1 class="admin-main-heading">System Administration &amp; Analytics</h1>
-        <p class="admin-main-description">
-          Monitor real-time network telemetry, manage users, and review emergency response metrics.
-        </p>
-      </div>
-      <div class="hero-status-pill">
-        <span class="status-indicator-dot pulse"></span>
-        <span id="system-status-indicator">All Network Nodes Operational</span>
-      </div>
+    <!-- Hero Title & Subtitle (Matching Screenshot 1 & 2) -->
+    <section class="admin-hero-heading" id="overview">
+      <h1 class="hero-title">System Administration &amp;<br>Analytics</h1>
+      <p class="hero-description">
+        Monitor real-time network telemetry, manage users, and review emergency response metrics.
+      </p>
     </section>
 
     <!-- ========================================================
-         STATISTICS CARDS (THE 8 TARGET KPI CARDS)
+         STATISTICS CARDS (THE 8 KPI CARDS - MATCHING SCREENSHOT 1)
          ======================================================== -->
     <section class="admin-kpi-section">
       <div class="kpi-cards-grid">
         
-        <!-- 1. TOTAL USERS (Blue) -->
-        <div class="neo-stat-card card-users">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-blue">👥</div>
-            <div class="stat-meta">
-              <span class="stat-label">TOTAL USERS</span>
-              <div id="kpi-total-users" class="stat-value">0</div>
-            </div>
+        <!-- 1. TOTAL USERS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-blue">👥</div>
+          <div class="kpi-info">
+            <span class="kpi-label">TOTAL<br>USERS</span>
+            <div id="kpi-total-users" class="kpi-number">16</div>
           </div>
         </div>
 
-        <!-- 2. SENIOR CITIZENS (Cyan/Blue) -->
-        <div class="neo-stat-card card-seniors">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-cyan">👴</div>
-            <div class="stat-meta">
-              <span class="stat-label">SENIORS</span>
-              <div id="kpi-seniors" class="stat-value">0</div>
-            </div>
+        <!-- 2. SENIOR CITIZENS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-cyan">🧓</div>
+          <div class="kpi-info">
+            <span class="kpi-label">SENIOR<br>CITIZENS</span>
+            <div id="kpi-seniors" class="kpi-number">5</div>
           </div>
         </div>
 
-        <!-- 3. NEIGHBORS (Green) -->
-        <div class="neo-stat-card card-neighbors">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-emerald">🏠</div>
-            <div class="stat-meta">
-              <span class="stat-label">NEIGHBORS</span>
-              <div id="kpi-neighbors" class="stat-value">0</div>
-            </div>
+        <!-- 3. NEIGHBORS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-green">🏡</div>
+          <div class="kpi-info">
+            <span class="kpi-label">NEIGHB<br>ORS</span>
+            <div id="kpi-neighbors" class="kpi-number">1</div>
           </div>
         </div>
 
-        <!-- 4. SECURITY GUARDS (Purple) -->
-        <div class="neo-stat-card card-guards">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-purple">🛡️</div>
-            <div class="stat-meta">
-              <span class="stat-label">GUARDS</span>
-              <div id="kpi-guards" class="stat-value">0</div>
-            </div>
+        <!-- 4. SECURITY GUARDS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-purple">👮</div>
+          <div class="kpi-info">
+            <span class="kpi-label">SECURIT<br>Y<br>GUARDS</span>
+            <div id="kpi-guards" class="kpi-number">1</div>
           </div>
         </div>
 
-        <!-- 5. VOLUNTEERS (Orange) -->
-        <div class="neo-stat-card card-volunteers">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-orange">🤝</div>
-            <div class="stat-meta">
-              <span class="stat-label">VOLUNTEERS</span>
-              <div id="kpi-volunteers" class="stat-value">0</div>
-            </div>
+        <!-- 5. VOLUNTEERS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-orange">🤝</div>
+          <div class="kpi-info">
+            <span class="kpi-label">VOLUN<br>TEERS</span>
+            <div id="kpi-volunteers" class="kpi-number">2</div>
           </div>
         </div>
 
-        <!-- 6. FAMILY MEMBERS (Pink) -->
-        <div class="neo-stat-card card-family">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-pink">👨‍👩‍👧</div>
-            <div class="stat-meta">
-              <span class="stat-label">FAMILY</span>
-              <div id="kpi-family-members" class="stat-value">0</div>
-            </div>
+        <!-- 6. FAMILY MEMBERS -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-pink">👨‍👩‍👧</div>
+          <div class="kpi-info">
+            <span class="kpi-label">FAMILY<br>MEMBE<br>RS</span>
+            <div id="kpi-family-members" class="kpi-number">4</div>
           </div>
         </div>
 
-        <!-- 7. ACTIVE EMERGENCIES (Red) -->
-        <div class="neo-stat-card card-active-sos">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-red">🚨</div>
-            <div class="stat-meta">
-              <span class="stat-label">ACTIVE</span>
-              <div id="kpi-active-sos" class="stat-value">0</div>
-            </div>
+        <!-- 7. ACTIVE EMERGENCIES -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-red">🚨</div>
+          <div class="kpi-info">
+            <span class="kpi-label">ACTIVE<br>EMERG<br>ENCIES</span>
+            <div id="kpi-active-sos" class="kpi-number">4</div>
           </div>
         </div>
 
-        <!-- 8. AVG RESPONSE TIME (Green) -->
-        <div class="neo-stat-card card-response-time">
-          <div class="stat-card-inner">
-            <div class="stat-icon-badge bg-green">⚡</div>
-            <div class="stat-meta">
-              <span class="stat-label">RESPONSE</span>
-              <div id="kpi-avg-response" class="stat-value">0s</div>
-            </div>
+        <!-- 8. AVG RESPONSE TIME -->
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-emerald">⚡</div>
+          <div class="kpi-info">
+            <span class="kpi-label">AVG<br>RESPON<br>SE TIME</span>
+            <div id="kpi-avg-response" class="kpi-number">99935s</div>
           </div>
         </div>
 
@@ -356,412 +223,284 @@
     </section>
 
     <!-- ========================================================
-         ADMIN ANALYTICS & TELEMETRY SECTION
+         SECTION 1: LIVE COMMUNITY EMERGENCY ALERTS FEED (SCREENSHOT 2)
          ======================================================== -->
-    <section class="admin-analytics-section" id="admin-analytics-section">
-      <div class="analytics-layout-grid">
-        
-        <!-- Emergency Activity & Telemetry -->
-        <div class="neo-analytics-card">
-          <div class="card-header-row">
-            <div class="card-title-group">
-              <span class="header-icon">📈</span>
-              <div>
-                <h3 class="card-heading">Emergency Activity &amp; Resolution</h3>
-                <p class="card-subheading">Live incident resolution efficiency &amp; response speed</p>
-              </div>
-            </div>
-            <span class="badge-live-pulse">LIVE</span>
-          </div>
-
-          <div class="analytics-metrics-overview">
-            <div class="metric-mini-box">
-              <span class="metric-mini-label">Total Incidents</span>
-              <strong id="analytics-total-incidents" class="metric-mini-num">0</strong>
-            </div>
-            <div class="metric-mini-box">
-              <span class="metric-mini-label">Resolved</span>
-              <strong id="analytics-resolved-incidents" class="metric-mini-num text-success">0</strong>
-            </div>
-            <div class="metric-mini-box">
-              <span class="metric-mini-label">Resolution Rate</span>
-              <strong id="analytics-resolution-rate" class="metric-mini-num text-primary">100%</strong>
-            </div>
-          </div>
-
-          <!-- Dynamic SVG Telemetry Sparkbars -->
-          <div class="analytics-chart-container">
-            <div class="chart-label-row">
-              <span>Incident Velocity (Last 7 Days)</span>
-              <span class="chart-legend"><span class="dot-resolved"></span> Resolved <span class="dot-active"></span> Active</span>
-            </div>
-            <div class="chart-bars-wrapper" id="analytics-bars-wrapper">
-              <!-- Rendered dynamically in JS -->
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 35%;"></div><span class="bar-day">Mon</span></div>
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 55%;"></div><span class="bar-day">Tue</span></div>
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 40%;"></div><span class="bar-day">Wed</span></div>
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 70%;"></div><span class="bar-day">Thu</span></div>
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 60%;"></div><span class="bar-day">Fri</span></div>
-              <div class="chart-bar-col"><div class="bar-fill" style="height: 45%;"></div><span class="bar-day">Sat</span></div>
-              <div class="chart-bar-col active-day"><div class="bar-fill" style="height: 85%;"></div><span class="bar-day">Sun</span></div>
-            </div>
-          </div>
+    <section class="admin-section-card" id="live-alerts-section">
+      <div class="section-card-header">
+        <div class="section-title-group">
+          <span class="section-icon">🚨</span>
+          <h2 class="section-title">Live Community Emergency Alerts Feed</h2>
         </div>
+      </div>
 
-        <!-- Role Distribution Matrix -->
-        <div class="neo-analytics-card">
-          <div class="card-header-row">
-            <div class="card-title-group">
-              <span class="header-icon">👥</span>
-              <div>
-                <h3 class="card-heading">Community Role Distribution</h3>
-                <p class="card-subheading">Network composition across care network roles</p>
-              </div>
-            </div>
-            <button onclick="loadAdminStats()" class="btn-refresh-telemetry" title="Refresh Telemetry">🔄</button>
-          </div>
+      <div class="section-action-bar">
+        <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
+          <span>🔄</span>
+          <span>Refresh Alerts</span>
+        </button>
+      </div>
 
-          <div class="role-distribution-list">
-            
-            <div class="role-dist-item">
-              <div class="role-dist-info">
-                <span class="role-dist-name"><span class="role-emoji">👴</span> Senior Citizens</span>
-                <span id="role-count-seniors" class="role-dist-count">0</span>
-              </div>
-              <div class="role-dist-track"><div id="role-bar-seniors" class="role-dist-bar bg-cyan" style="width: 0%;"></div></div>
-            </div>
-
-            <div class="role-dist-item">
-              <div class="role-dist-info">
-                <span class="role-dist-name"><span class="role-emoji">🏠</span> Neighbors</span>
-                <span id="role-count-neighbors" class="role-dist-count">0</span>
-              </div>
-              <div class="role-dist-track"><div id="role-bar-neighbors" class="role-dist-bar bg-emerald" style="width: 0%;"></div></div>
-            </div>
-
-            <div class="role-dist-item">
-              <div class="role-dist-info">
-                <span class="role-dist-name"><span class="role-emoji">🛡️</span> Security Guards</span>
-                <span id="role-count-guards" class="role-dist-count">0</span>
-              </div>
-              <div class="role-dist-track"><div id="role-bar-guards" class="role-dist-bar bg-purple" style="width: 0%;"></div></div>
-            </div>
-
-            <div class="role-dist-item">
-              <div class="role-dist-info">
-                <span class="role-dist-name"><span class="role-emoji">🤝</span> Volunteers</span>
-                <span id="role-count-volunteers" class="role-dist-count">0</span>
-              </div>
-              <div class="role-dist-track"><div id="role-bar-volunteers" class="role-dist-bar bg-orange" style="width: 0%;"></div></div>
-            </div>
-
-            <div class="role-dist-item">
-              <div class="role-dist-info">
-                <span class="role-dist-name"><span class="role-emoji">👨‍👩‍👧</span> Family Members</span>
-                <span id="role-count-family" class="role-dist-count">0</span>
-              </div>
-              <div class="role-dist-track"><div id="role-bar-family" class="role-dist-bar bg-pink" style="width: 0%;"></div></div>
-            </div>
-
-          </div>
-        </div>
-
+      <!-- Alerts List Display -->
+      <div id="admin-live-alerts-container" class="live-alerts-feed-list">
+        <!-- Dynamically rendered via JS -->
       </div>
     </section>
 
     <!-- ========================================================
-         REAL-TIME SYSTEM EVENT TERMINAL (SOCKET STREAM)
+         SECTION 2: REAL-TIME SYSTEM EVENT STREAM (SCREENSHOT 2)
          ======================================================== -->
-    <section class="admin-event-stream-section">
-      <div class="neo-analytics-card">
-        <div class="card-header-row">
-          <div class="card-title-group">
-            <span class="header-icon">📡</span>
-            <div>
-              <h3 class="card-heading">Real-Time System Event Stream</h3>
-              <p class="card-subheading">Live WebSocket telemetry, SOS dispatches, &amp; automated 60s escalation logs</p>
-            </div>
-          </div>
-          <button onclick="clearEventLog()" class="btn-clear-logs">Clear Logs</button>
+    <section class="admin-section-card" id="event-stream-section">
+      <div class="section-card-header">
+        <div class="section-title-group">
+          <span class="section-icon">📡</span>
+          <h2 class="section-title">Real-Time System Event Stream</h2>
         </div>
+      </div>
 
-        <div id="admin-log-terminal" class="system-log-terminal">
-          <div class="log-entry">
-            <span class="log-time">[Init]</span>
-            <span class="log-msg-success">SafeReach Operational Telemetry Engine connected.</span>
-          </div>
+      <div class="system-event-terminal-box">
+        <div id="admin-log-terminal" class="event-stream-content">
+          <div class="terminal-line"><span class="line-tag">[System]</span></div>
+          <div class="terminal-line"><span class="line-info">Connecting to SafeReach socket stream...</span></div>
+          <div class="terminal-line"><span class="line-time">[11:19:00 pm]</span></div>
+          <div class="terminal-line"><span class="line-success">SafeReach Operations Console Initialized.</span></div>
         </div>
       </div>
     </section>
 
     <!-- ========================================================
-         RECENT EMERGENCIES SECTION (TABLE ON DESKTOP, CARDS ON MOBILE)
+         SECTION 3: COMMUNITY USER ACCOUNTS DIRECTORY (SCREENSHOT 5)
          ======================================================== -->
-    <section class="admin-emergencies-section" id="recent-emergencies-section">
-      <div class="neo-analytics-card">
-        <div class="card-header-row">
-          <div class="card-title-group">
-            <span class="header-icon">🚨</span>
-            <div>
-              <h3 class="card-heading">Recent Emergency Alerts &amp; Incidents</h3>
-              <p class="card-subheading">Live status of SOS alerts, citizen GPS coordinates, and responder response times</p>
-            </div>
+    <section class="admin-section-card" id="users-directory-section">
+      <div class="section-card-header">
+        <div class="section-title-group">
+          <span class="section-icon">👥</span>
+          <h2 class="section-title">Community User Accounts Directory &amp; Access Control</h2>
+        </div>
+      </div>
+
+      <!-- Search & Role Filter Box -->
+      <div class="user-search-filter-card">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="user-search-input" class="search-input-field" placeholder="Search by name, email, or phone number...">
+        </div>
+
+        <div class="filter-controls-row">
+          <div class="role-select-wrapper">
+            <span class="filter-icon">🏷️</span>
+            <select id="user-role-select" class="role-dropdown-select" onchange="handleRoleFilterChange(this.value)">
+              <option value="all">Filter by All Roles</option>
+              <option value="senior_citizen">Senior Citizens</option>
+              <option value="child">Children</option>
+              <option value="family_member">Family Members</option>
+              <option value="neighbor">Neighbors</option>
+              <option value="security_guard">Security Guards</option>
+              <option value="volunteer">Volunteers</option>
+              <option value="admin">System Admins</option>
+            </select>
           </div>
-          <button onclick="loadEmergencyReports()" class="btn-refresh-telemetry" title="Refresh Incidents">🔄</button>
+
+          <button type="button" onclick="executeUserSearch()" class="btn-primary-blue">
+            <span>🔍</span>
+            <span>Search &amp; Filter</span>
+          </button>
         </div>
 
-        <!-- Desktop Table View (>= 768px) -->
-        <div class="desktop-emergencies-table-wrapper">
-          <table class="neo-data-table">
-            <thead>
-              <tr>
-                <th>Emergency / Citizen</th>
-                <th>Contact &amp; Location</th>
-                <th>Status</th>
-                <th>Tier Escalation</th>
-                <th>Response Time</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-emergencies-table-body">
-              <tr>
-                <td colspan="6" class="table-empty-cell">Loading emergency alerts feed...</td>
-              </tr>
-            </tbody>
-          </table>
+        <div style="margin-top:0.5rem;">
+          <button type="button" onclick="resetUserFilter()" class="btn-reset-pill">
+            <span>❌</span>
+            <span>Reset</span>
+          </button>
         </div>
+      </div>
 
-        <!-- Mobile Card Feed (<= 767px) -->
-        <div class="mobile-emergencies-card-feed" id="admin-emergencies-mobile-cards">
-          <div class="mobile-empty-card">Loading emergency alerts feed...</div>
-        </div>
-
+      <!-- User Directory Container -->
+      <div id="admin-users-list-container" class="users-cards-list" style="margin-top:1.25rem;">
+        <!-- Dynamically rendered -->
       </div>
     </section>
 
     <!-- ========================================================
-         EXCEL CSV DATA OPERATIONS & MONGODB MANAGEMENT
+         SECTION 4: EMERGENCY ALERTS DETAILS & RESPONSE HISTORY (SCREENSHOT 5)
          ======================================================== -->
-    <section class="admin-csv-section" id="csv-operations-section">
-      <div class="neo-analytics-card border-accent-blue">
-        <div class="card-header-row">
-          <div class="card-title-group">
-            <span class="header-icon">📊</span>
-            <div>
-              <h3 class="card-heading">Excel CSV Data Operations &amp; MongoDB Management</h3>
-              <p class="card-subheading">
-                Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
-              </p>
-            </div>
-          </div>
+    <section class="admin-section-card" id="reports-section">
+      <div class="section-card-header clickable-header" onclick="toggleSectionExpand('history-details-content', 'history-arrow-icon')">
+        <div class="section-title-group">
+          <span class="section-icon">🚨</span>
+          <h2 class="section-title">Emergency Alerts Details &amp; Response History</h2>
         </div>
+        <span id="history-arrow-icon" class="expand-arrow">▶</span>
+      </div>
 
-        <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
+      <p class="section-description">
+        Complete historical audit log of all triggered SOS alerts, emergency locations, responder assignments, and response times. Click to expand or collapse.
+      </p>
 
-        <div class="csv-buttons-grid">
-          <button onclick="triggerCSVImport()" class="neo-action-btn btn-primary-gradient">
-            <span class="btn-icon">📥</span>
-            <span>Import CSV to Database</span>
-          </button>
+      <div class="section-action-bar">
+        <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
+          <span>🔄</span>
+          <span>Refresh Emergency Logs</span>
+        </button>
+      </div>
 
-          <button onclick="exportAllDataCSV()" class="neo-action-btn btn-emerald-gradient">
-            <span class="btn-icon">📁</span>
-            <span>Export Master Data (Excel CSV)</span>
-          </button>
-
-          <button onclick="exportUsersCSV()" class="neo-action-btn btn-surface-neo">
-            <span class="btn-icon">👥</span>
-            <span>Export Users Directory CSV</span>
-          </button>
-
-          <button onclick="exportEmergenciesCSV()" class="neo-action-btn btn-surface-neo">
-            <span class="btn-icon">🚨</span>
-            <span>Export Emergency Alerts CSV</span>
-          </button>
-
-          <button onclick="downloadSampleCSV()" class="neo-action-btn btn-outline-neo">
-            <span class="btn-icon">📄</span>
-            <span>Download CSV Template</span>
-          </button>
+      <div id="history-details-content" class="expandable-content" style="display:none; margin-top:1rem;">
+        <div id="admin-emergency-history-list" class="emergency-history-feed">
+          <!-- Dynamically populated -->
         </div>
       </div>
     </section>
 
     <!-- ========================================================
-         USER ACCOUNT DIRECTORY & MANAGEMENT
+         SECTION 5: EXCEL CSV DATA OPERATIONS & IMPORT (SCREENSHOT 5)
          ======================================================== -->
-    <section class="admin-users-section" id="users-directory-section">
-      <div class="neo-analytics-card">
-        
-        <div class="users-toolbar-header">
-          <div class="card-title-group">
-            <span class="header-icon">👥</span>
-            <div>
-              <h3 class="card-heading">User Account Directory</h3>
-              <p class="card-subheading">Manage access, status, credentials, and roles across all SafeReach accounts.</p>
-            </div>
-          </div>
-
-          <!-- Instant Live Search Bar -->
-          <div class="user-search-wrapper">
-            <span class="search-lens-icon">🔍</span>
-            <input type="text" id="user-search-input" class="neo-search-input" placeholder="Search by name, email, phone..." autocomplete="off">
-            <button type="button" id="btn-clear-search" class="clear-search-btn d-none" onclick="clearUserSearch()">✕</button>
-          </div>
+    <section class="admin-section-card" id="csv-operations-section">
+      <div class="section-card-header">
+        <div class="section-title-group">
+          <span class="section-icon">📊</span>
+          <h2 class="section-title">Excel CSV Data Operations &amp; Import</h2>
         </div>
+      </div>
 
-        <!-- Role Filter Pills -->
-        <div class="role-filter-pills-bar">
-          <button class="neo-pill-btn active" data-role="all">All Roles</button>
-          <button class="neo-pill-btn" data-role="senior_citizen">Senior Citizens</button>
-          <button class="neo-pill-btn" data-role="child">Children</button>
-          <button class="neo-pill-btn" data-role="family_member">Family</button>
-          <button class="neo-pill-btn" data-role="neighbor">Neighbors</button>
-          <button class="neo-pill-btn" data-role="security_guard">Security Guards</button>
-          <button class="neo-pill-btn" data-role="volunteer">Volunteers</button>
-          <button class="neo-pill-btn" data-role="admin">Admins</button>
-        </div>
+      <p class="section-description">
+        Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
+      </p>
 
-        <!-- Desktop Users Table (>= 768px) -->
-        <div class="desktop-users-table-wrapper">
-          <table class="neo-data-table">
-            <thead>
-              <tr>
-                <th>User / Avatar</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Apartment / Address</th>
-                <th>Account Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-users-table-body">
-              <tr>
-                <td colspan="7" class="table-empty-cell">Loading user directory...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <input type="file" id="csv-file-input" accept=".csv" style="display:none;" onchange="handleCSVFileSelect(event)">
 
-        <!-- Mobile Users Card Feed (<= 767px) -->
-        <div class="mobile-users-card-feed" id="admin-users-mobile-cards">
-          <div class="mobile-empty-card">Loading user directory...</div>
-        </div>
+      <div class="csv-buttons-vertical-list">
+        <button type="button" onclick="triggerCSVImport()" class="csv-action-btn solid-blue">
+          <span class="btn-icon">📥</span>
+          <span>Import CSV File to Database</span>
+        </button>
 
+        <button type="button" onclick="exportAllDataCSV()" class="csv-action-btn solid-blue">
+          <span class="btn-icon">📁</span>
+          <span>Export All Data (Users + Emergencies) CSV</span>
+        </button>
+
+        <button type="button" onclick="exportUsersCSV()" class="csv-action-btn soft-neo">
+          <span class="btn-icon">👥</span>
+          <span>Export Users Details CSV</span>
+        </button>
+
+        <button type="button" onclick="exportEmergenciesCSV()" class="csv-action-btn soft-neo">
+          <span class="btn-icon">🚨</span>
+          <span>Export Emergency Alerts CSV</span>
+        </button>
+
+        <button type="button" onclick="downloadSampleCSV()" class="csv-action-btn soft-neo">
+          <span class="btn-icon">📄</span>
+          <span>Download CSV Template</span>
+        </button>
       </div>
     </section>
 
   </main>
 
   <!-- ========================================================
-       MODALS: GPS TELEMETRY, NOTIFICATIONS & ADMIN PROFILE
+       MODAL 1: SYSTEM ADMIN PROFILE MODAL (MATCHING SCREENSHOT 3)
        ======================================================== -->
-  
-  <!-- GPS & Live Radar Modal -->
-  <div id="admin-gps-modal" class="neo-modal-backdrop d-none">
-    <div class="neo-modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">📍</span>
-          <div>
-            <h3 class="modal-title">Live GPS Location Telemetry</h3>
-            <p class="modal-subtitle">Real-time GPS coordinates of active community members</p>
-          </div>
+  <div id="admin-profile-modal" class="modal-backdrop-overlay d-none">
+    <div class="modal-card-box">
+      <div class="modal-header-bar">
+        <div class="modal-header-left">
+          <span class="modal-title-icon">👑</span>
+          <h3 class="modal-title-text">System Admin</h3>
         </div>
-        <button onclick="closeGpsModal()" class="modal-close-btn">✕</button>
+        <button onclick="closeAdminProfileModal()" class="modal-close-icon" aria-label="Close">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="gps-status-card">
-          <div class="gps-dot-pulse"></div>
-          <div>
-            <strong>High-Accuracy Geolocation Engine Active</strong>
-            <p>GPS tracking is integrated with 1-click Google Maps links for immediate dispatch.</p>
+
+      <div class="modal-inner-content">
+        <div class="modal-inner-card">
+          <div class="inner-card-title">
+            <span class="inner-icon">👤</span>
+            <span>Admin Details</span>
           </div>
-        </div>
-        <div id="admin-gps-locations-list" class="gps-locations-list">
-          <div class="empty-modal-text">Fetching active coordinate points...</div>
+
+          <form id="admin-profile-form" onsubmit="handleSaveProfile(event)">
+            <div class="modal-form-group">
+              <label for="admin-name-input">Administrator Name</label>
+              <input type="text" id="admin-name-input" class="modal-input-control" value="tarun tej" required>
+            </div>
+
+            <div class="modal-form-group">
+              <label for="admin-phone-input">Direct Contact Phone</label>
+              <input type="text" id="admin-phone-input" class="modal-input-control" value="9390816692">
+            </div>
+
+            <div class="modal-form-group">
+              <label for="admin-location-input">Command Center Office Location</label>
+              <input type="text" id="admin-location-input" class="modal-input-control" value="tamilnadu">
+            </div>
+          </form>
         </div>
       </div>
-      <div class="modal-footer">
-        <a href="/dashboard" class="neo-action-btn btn-primary-gradient">Open Live Map in Console</a>
-        <button onclick="closeGpsModal()" class="neo-action-btn btn-surface-neo">Close</button>
+
+      <div class="modal-bottom-actions">
+        <button type="button" onclick="closeAdminProfileModal()" class="btn-modal-cancel">
+          Cancel
+        </button>
+        <button type="button" onclick="document.getElementById('admin-profile-form').requestSubmit()" class="btn-modal-save">
+          <span>💾</span>
+          <span>Save Profile Changes</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Admin Notifications Modal -->
-  <div id="admin-notifications-modal" class="neo-modal-backdrop d-none">
-    <div class="neo-modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">🔔</span>
-          <div>
-            <h3 class="modal-title">System &amp; Emergency Notifications</h3>
-            <p class="modal-subtitle">Operational events and emergency alert broadcasts</p>
+  <!-- ========================================================
+       MODAL 2: LIVE COMMUNITY GPS MODAL
+       ======================================================== -->
+  <div id="admin-gps-modal" class="modal-backdrop-overlay d-none">
+    <div class="modal-card-box">
+      <div class="modal-header-bar">
+        <div class="modal-header-left">
+          <span class="modal-title-icon">📍</span>
+          <h3 class="modal-title-text">Live Community GPS Radar</h3>
+        </div>
+        <button onclick="closeGpsModal()" class="modal-close-icon" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-inner-content">
+        <div class="modal-inner-card">
+          <div class="inner-card-title">
+            <span class="inner-icon">📡</span>
+            <span>Real-Time Coordinates</span>
+          </div>
+          <div id="admin-gps-locations-list" style="margin-top:0.75rem; display:flex; flex-direction:column; gap:0.6rem;">
+            <div class="modal-loading-text">Fetching active coordinates...</div>
           </div>
         </div>
-        <button onclick="closeAdminNotificationsModal()" class="modal-close-btn">✕</button>
       </div>
-      <div class="modal-body">
-        <div id="admin-notifications-list" class="notifications-feed-list">
-          <div class="empty-modal-text">No unread notifications at this time.</div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button onclick="clearAdminNotifications()" class="neo-action-btn btn-outline-neo">Clear History</button>
-        <button onclick="closeAdminNotificationsModal()" class="neo-action-btn btn-surface-neo">Close</button>
+
+      <div class="modal-bottom-actions">
+        <button type="button" onclick="closeGpsModal()" class="btn-modal-cancel">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Admin Profile Modal -->
-  <div id="admin-profile-modal" class="neo-modal-backdrop d-none">
-    <div class="neo-modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">👤</span>
-          <div>
-            <h3 class="modal-title">Administrator Profile</h3>
-            <p class="modal-subtitle">Security credentials &amp; administrative access privileges</p>
-          </div>
+  <!-- ========================================================
+       MODAL 3: NOTIFICATIONS MODAL
+       ======================================================== -->
+  <div id="admin-notifications-modal" class="modal-backdrop-overlay d-none">
+    <div class="modal-card-box">
+      <div class="modal-header-bar">
+        <div class="modal-header-left">
+          <span class="modal-title-icon">🔔</span>
+          <h3 class="modal-title-text">Notifications</h3>
         </div>
-        <button onclick="closeAdminProfileModal()" class="modal-close-btn">✕</button>
+        <button onclick="closeAdminNotificationsModal()" class="modal-close-icon" aria-label="Close">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="admin-profile-card">
-          <div class="profile-avatar-large">👑</div>
-          <div class="profile-meta-large">
-            <h3 id="modal-admin-name">System Administrator</h3>
-            <span class="badge badge-accepted">Root Administrator</span>
-            <p id="modal-admin-email" class="profile-email">admin@safereach.com</p>
-          </div>
-        </div>
 
-        <div class="profile-info-grid">
-          <div class="info-block">
-            <span class="info-label">Security Role</span>
-            <strong class="info-val">Full Authority (Admin)</strong>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Database Mode</span>
-            <strong class="info-val" id="profile-db-status">MongoDB Atlas Connected</strong>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Interface Theme</span>
-            <button onclick="toggleAdminTheme()" class="btn-theme-inline">
-              <span id="modal-theme-icon">🌙</span> <span id="modal-theme-text">Dark Theme</span>
-            </button>
-          </div>
-          <div class="info-block">
-            <span class="info-label">Persistent Session</span>
-            <strong class="info-val text-success">Active (JWT Verified)</strong>
-          </div>
+      <div class="modal-inner-content">
+        <div id="admin-notifications-list" style="display:flex; flex-direction:column; gap:0.6rem;">
+          <div class="modal-loading-text">Loading notifications...</div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button onclick="logout()" class="neo-action-btn btn-danger-pill">🚪 Sign Out</button>
-        <button onclick="closeAdminProfileModal()" class="neo-action-btn btn-surface-neo">Done</button>
+
+      <div class="modal-bottom-actions">
+        <button type="button" onclick="clearAdminNotifications()" class="btn-modal-cancel">Clear History</button>
+        <button type="button" onclick="closeAdminNotificationsModal()" class="btn-modal-save">Close</button>
       </div>
     </div>
   </div>
