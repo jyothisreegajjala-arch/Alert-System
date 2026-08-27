@@ -14,7 +14,6 @@
 
   <!-- Primary Stylesheets -->
   <link rel="stylesheet" href="/public/css/style.css">
-  <link rel="stylesheet" href="/public/css/accessibility.css">
 
   <!-- Embedded Responsive Stylesheet (Guarantees zero unstyled rendering across 320px - 1920px) -->
   <style>
@@ -45,19 +44,6 @@
       --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
       --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
       --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body.light-theme {
-      --bg-primary: #f8fafc;
-      --bg-secondary: #ffffff;
-      --bg-tertiary: #f1f5f9;
-      --bg-card: rgba(255, 255, 255, 0.92);
-      --bg-card-hover: #ffffff;
-      --border-color: #e2e8f0;
-      --border-color-hover: #cbd5e1;
-      --text-primary: #0f172a;
-      --text-secondary: #334155;
-      --text-muted: #64748b;
     }
 
     *, *::before, *::after {
@@ -138,9 +124,6 @@
       border-bottom: 1px solid var(--border-color);
       padding: 0.85rem 0;
     }
-    body.light-theme .navbar {
-      background: rgba(255, 255, 255, 0.92);
-    }
     .nav-content {
       display: flex;
       align-items: center;
@@ -159,9 +142,6 @@
       letter-spacing: -0.5px;
       flex-shrink: 0;
     }
-    body.light-theme .brand-logo {
-      color: #0f172a !important;
-    }
     .logo-icon {
       width: 38px;
       height: 38px;
@@ -178,6 +158,8 @@
       align-items: center;
       gap: 1.5rem;
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
     .nav-links li a {
       color: var(--text-secondary);
@@ -185,19 +167,16 @@
       font-weight: 500;
       padding: 0.35rem 0.5rem;
       border-radius: var(--radius-sm);
+      transition: var(--transition);
     }
     .nav-links li a:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.06);
     }
-    body.light-theme .nav-links li a:hover {
-      color: #0f172a;
-      background: rgba(0, 0, 0, 0.05);
-    }
     .nav-actions-desktop {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.85rem;
       flex-shrink: 0;
     }
     .mobile-menu-btn {
@@ -212,6 +191,10 @@
       cursor: pointer;
       align-items: center;
       justify-content: center;
+      transition: var(--transition);
+    }
+    .mobile-menu-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
     }
     .mobile-nav-drawer {
       display: none;
@@ -237,28 +220,20 @@
       from { opacity: 0; transform: translateY(-8px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .mobile-nav-drawer a, .mobile-nav-drawer button {
+    .mobile-nav-drawer a {
       width: 100%;
       padding: 0.8rem 1rem;
       border-radius: var(--radius-md);
       font-size: 0.95rem;
       font-weight: 600;
-      text-align: left;
-    }
-    .mobile-nav-drawer a {
       background: rgba(255, 255, 255, 0.03);
       color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .mobile-controls-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
-    .mobile-controls-row .btn {
-      flex: 1;
+    .mobile-nav-drawer a:hover {
+      background: rgba(255, 255, 255, 0.08);
     }
 
     @media (max-width: 960px) {
@@ -288,11 +263,11 @@
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
+      transition: var(--transition);
     }
-    body.light-theme .lang-trigger-btn {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-      color: #0f172a;
+    .lang-trigger-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--border-color-hover);
     }
     .lang-popover-menu {
       position: absolute;
@@ -308,11 +283,6 @@
       z-index: 2000;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-    }
-    body.light-theme .lang-popover-menu {
-      background: #ffffff;
-      border-color: #e2e8f0;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.15);
     }
     .lang-popover-header {
       padding: 0.75rem 1rem;
@@ -338,10 +308,10 @@
       padding: 0.65rem 1rem;
       cursor: pointer;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.15s ease;
     }
     .lang-line-item:last-child { border-bottom: none; }
     .lang-line-item:hover { background: rgba(14, 165, 233, 0.15); }
-    body.light-theme .lang-line-item:hover { background: #f1f5f9; }
     .lang-line-item.selected { background: rgba(14, 165, 233, 0.22); }
     .lang-line-left { display: flex; align-items: center; gap: 0.65rem; }
     .lang-line-flag { font-size: 1.25rem; }
@@ -400,11 +370,6 @@
       background: rgba(255, 255, 255, 0.14);
       transform: translateY(-1px);
     }
-    body.light-theme .btn-secondary {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-      color: #0f172a !important;
-    }
     .btn-outline-secondary {
       background: transparent;
       color: var(--text-secondary) !important;
@@ -417,7 +382,7 @@
     .btn-danger {
       background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       color: #ffffff !important;
-      box-shadow: 0 4px 14px var(--primary-glow);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.15);
     }
     .btn-danger:hover {
@@ -502,11 +467,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       word-break: break-word;
-    }
-    body.light-theme .hero-title {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 70%, #334155 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
     .hero-subtitle {
       font-size: clamp(0.98rem, 2.5vw, 1.2rem);
@@ -882,10 +842,6 @@
       color: var(--text-muted);
       margin-top: auto;
     }
-    body.light-theme .main-footer {
-      background: #f1f5f9;
-      border-top-color: #e2e8f0;
-    }
     .footer-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -930,9 +886,6 @@
     .footer-links a:hover {
       color: #ffffff;
       transform: translateX(3px);
-    }
-    body.light-theme .footer-links a:hover {
-      color: #0f172a;
     }
     .safety-notice-box {
       background: rgba(239, 68, 68, 0.08);
@@ -990,23 +943,12 @@
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#role-portals">Role Login</a></li>
-        <li><a href="/download">Download APK</a></li>
       </ul>
 
       <!-- Right: Desktop Actions (>= 768px) -->
       <div class="nav-actions-desktop">
         <!-- Desktop Language Selector -->
         <div id="home-language-selector-container"></div>
-
-        <!-- Dark Mode Toggle -->
-        <button id="btn-theme-toggle" onclick="CareConnectTheme.toggle()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Dark or Light Mode">
-          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Dark</span>
-        </button>
-
-        <!-- Accessibility Mode Toggle -->
-        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" aria-label="Toggle Accessibility High Contrast">
-          👁️ Accessibility
-        </button>
 
         <!-- Register Account Button -->
         <a href="/register" class="btn btn-primary btn-sm">Register Account</a>
@@ -1024,20 +966,9 @@
       <a href="#features" onclick="closeMobileMenu()">✨ Features</a>
       <a href="#role-portals" onclick="closeMobileMenu()">🔑 Access Role Portals</a>
       <a href="/login" onclick="closeMobileMenu()">🚪 Sign In</a>
-      <a href="/download" onclick="closeMobileMenu()" style="color:#38bdf8;">📲 Download Android APK</a>
 
       <!-- Mobile Language Selector Container -->
       <div class="mobile-lang-container" id="mobile-language-selector-container"></div>
-
-      <!-- Mobile Theme & Accessibility Controls -->
-      <div class="mobile-controls-row">
-        <button onclick="CareConnectTheme.toggle()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; justify-content:center; gap:0.4rem;">
-          <span class="theme-toggle-icon">🌙</span> <span class="theme-toggle-text">Theme</span>
-        </button>
-        <button onclick="CareConnectAccessibility.toggle()" class="btn btn-secondary btn-sm" style="display:flex; align-items:center; justify-content:center; gap:0.4rem;">
-          👁️ Accessibility
-        </button>
-      </div>
 
       <!-- Mobile Full-Width Register Account CTA -->
       <a href="/register" onclick="closeMobileMenu()" class="btn btn-primary" style="justify-content:center; font-weight:700; margin-top:0.25rem;">
@@ -1362,16 +1293,11 @@
           </ul>
         </div>
 
-        <!-- Safety Notice & APK -->
+        <!-- Safety Notice -->
         <div>
           <h4 class="footer-heading">Emergency Notice</h4>
           <div class="safety-notice-box">
             🛡️ <strong>Safety Advisory:</strong> SafeReach coordinates community response. In critical life-threatening situations, also notify local public emergency services (112 / 911).
-          </div>
-          <div style="margin-top:1rem;">
-            <a href="/download" class="btn btn-secondary btn-sm" style="width:100%; text-align:center;">
-              📲 Download Android APK
-            </a>
           </div>
         </div>
       </div>
@@ -1383,7 +1309,6 @@
         </div>
         <div style="display:flex; gap:1.25rem;">
           <a href="/language" style="color:var(--text-muted);">🌐 Languages</a>
-          <a href="/download" style="color:var(--text-muted);">📱 Mobile App</a>
           <a href="#main-nav" style="color:var(--text-muted);">↑ Back to Top</a>
         </div>
       </div>
@@ -1404,7 +1329,6 @@
   <script src="/public/js/i18n.js"></script>
   <script src="/public/js/voiceAssistant.js"></script>
   <script src="/public/js/voiceCommands.js"></script>
-  <script src="/public/js/accessibility.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/fcm.js"></script>
 
