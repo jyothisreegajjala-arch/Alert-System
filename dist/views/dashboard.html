@@ -72,6 +72,20 @@
 
       <div class="drawer-divider"></div>
 
+      <!-- Quick Role Switcher in Mobile Drawer -->
+      <div style="padding: 0.5rem 1rem 0.75rem;">
+        <label style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:0.4rem;">Switch Dashboard Role</label>
+        <select id="drawer-role-switcher" onchange="handleRoleSwitchDropdown(this.value)" class="form-control" style="background:var(--surface); color:var(--text-primary); font-weight:700; font-size:0.85rem; padding:0.5rem 0.75rem; border-radius:10px; border:1px solid var(--border-color); width:100%; cursor:pointer;">
+          <option value="senior_citizen">👵 Senior Citizen (Jyothi Sree)</option>
+          <option value="child">🧒 Child / Dependent (Aarav)</option>
+          <option value="family_member">👨‍👩‍👧 Family Guardian (Ankit)</option>
+          <option value="neighbor">🏡 Nearby Neighbor (Shalini)</option>
+          <option value="volunteer">🤝 Volunteer Responder (Karthik)</option>
+          <option value="security_guard">👮 Security Guard (Vikram)</option>
+          <option value="admin">🛡️ System Administrator</option>
+        </select>
+      </div>
+
       <!-- Sign Out -->
       <button onclick="logout()" class="drawer-nav-item drawer-logout-btn">
         <span class="drawer-nav-icon">🚪</span>
@@ -87,12 +101,24 @@
         <button class="drawer-toggle-btn" onclick="openDashboardDrawer()" aria-label="Toggle Sidebar Menu" style="background:var(--surface); border:1px solid var(--border-color); color:var(--text-primary); width:40px; height:40px; border-radius:10px; box-shadow:var(--neo-btn); font-size:1.25rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">
           <span>☰</span>
         </button>
-        <a href="/" class="brand-logo">
+        <a href="/dashboard" class="brand-logo">
           <div class="logo-icon">🆘</div>
           <span>SafeReach</span>
         </a>
       </div>
       <div class="nav-actions" style="display:flex; align-items:center; gap:0.75rem;">
+        <!-- Single Unified Role Switcher Dropdown in Top Bar -->
+        <div class="role-selector-dropdown-wrapper" style="position:relative;">
+          <select id="header-role-switcher" onchange="handleRoleSwitchDropdown(this.value)" class="form-control" style="background:#ffffff; color:#0f172a; font-weight:800; font-size:0.85rem; padding:0.45rem 0.85rem; border-radius:12px; border:1.5px solid #cbd5e1; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.06); outline:none;">
+            <option value="senior_citizen">👵 Senior Citizen (Jyothi Sree)</option>
+            <option value="child">🧒 Child / Dependent (Aarav)</option>
+            <option value="family_member">👨‍👩‍👧 Family Guardian (Ankit)</option>
+            <option value="neighbor">🏡 Nearby Neighbor (Shalini)</option>
+            <option value="volunteer">🤝 Volunteer Responder (Karthik)</option>
+            <option value="security_guard">👮 Security Guard (Vikram)</option>
+            <option value="admin">🛡️ System Administrator</option>
+          </select>
+        </div>
         <div id="dashboard-language-selector-container"></div>
         <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
           <span>🔔</span> <span data-i18n="notifications">Notifications</span>

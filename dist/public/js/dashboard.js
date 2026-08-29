@@ -7,8 +7,6 @@ let activeCountdownIntervals = new Map();
 document.addEventListener('DOMContentLoaded', async () => {
   const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/dashboard';
   const pathToRole = {
-    '/dashboard': 'senior_citizen',
-    '/dashboard.html': 'senior_citizen',
     '/dashboard/senior': 'senior_citizen',
     '/dashboard/senior.html': 'senior_citizen',
     '/dashboard/family': 'family_member',
@@ -23,14 +21,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     '/dashboard/neighbor.html': 'neighbor'
   };
 
-  const targetRole = pathToRole[currentPath] || 'senior_citizen';
+  const explicitRole = pathToRole[currentPath];
   currentUser = SafeReach.getUser();
+
+  // If visiting specific sub-path or if user has no session, initialize appropriate profile
+  if (explicitRole) {
+    if (!currentUser || currentUser.role !== explicitRole) {
+      await switchRoleDemo(explicitRole);
+      return;
+    }
+  } else if (!currentUser || !currentUser.role) {
+    // Default primary role on /dashboard is Senior Citizen
+    currentUser = demoProfiles['senior_citizen'];
+    localStorage.setItem('safereach_user', JSON.stringify(currentUser));
+    localStorage.setItem('safereach_token', 'demo_token_' + Date.now());
+  }
+
   window.currentUser = currentUser;
 
-  if (!currentUser || currentUser.role !== targetRole) {
-    await switchRoleDemo(targetRole);
-    return;
-  }
+  // Sync role switcher dropdowns
+  syncRoleDropdowns(currentUser.role || 'senior_citizen');
 
   renderUserProfile();
   initSocketConnection();
@@ -1909,6 +1919,112 @@ function updateHelperAssignedCards(alertId, helperName, helperRole) {
   });
 }
 
+const demoProfiles = {
+  'senior_citizen': {
+    id: 'user_sr_1',
+    _id: 'user_sr_1',
+    name: 'Gajjala Jyothi Sree',
+    email: 'senior@safereach.com',
+    role: 'senior_citizen',
+    phone: '9398423743',
+    address: 'Nandyala road, Flat A-101',
+    apartmentNumber: 'Flat A-101',
+    medicalInfo: 'Hypertension, Cardiac Pacemaker'
+  },
+  'child': {
+    id: 'user_ch_1',
+    _id: 'user_ch_1',
+    name: 'Aarav Sharma',
+    email: 'child@gmail.com',
+    role: 'child',
+    phone: '9876543210',
+    address: 'Block C-302, Green Meadows',
+    apartmentNumber: 'Flat C-302',
+    medicalInfo: 'Asthma inhaler in bag'
+  },
+  'family_member': {
+    id: 'user_fm_1',
+    _id: 'user_fm_1',
+    name: 'Ankit Kumar',
+    email: 'family@safereach.com',
+    role: 'family_member',
+    phone: '9876543210',
+    address: 'Block B, Flat 201',
+    apartmentNumber: 'Flat B-201'
+  },
+  'neighbor': {
+    id: 'user_nb_1',
+    _id: 'user_nb_1',
+    name: 'Shalini',
+    email: 'neighbor@safereach.com',
+    role: 'neighbor',
+    phone: '9398423743',
+    address: 'Block A, Flat 102 (Same Floor)',
+    apartmentNumber: 'Flat A-102'
+  },
+  'volunteer': {
+    id: 'user_vol_1',
+    _id: 'user_vol_1',
+    name: 'Karthik V',
+    email: 'volunteer@safereach.com',
+    role: 'volunteer',
+    phone: '9876543240',
+    address: 'Block B Volunteer Hub',
+    availability: 'AVAILABLE',
+    medicalInfo: 'First Aid Certified, CPR Trained'
+  },
+  'security_guard': {
+    id: 'user_sec_1',
+    _id: 'user_sec_1',
+    name: 'Security Guard Vikram',
+    email: 'guard@safereach.com',
+    role: 'security_guard',
+    phone: '9876543230',
+    address: 'Main Gate 1 Security Station',
+    dutyStatus: 'ON_DUTY'
+  }
+};
+
+function syncRoleDropdowns(role) {
+  const headerSelect = document.getElementById('header-role-switcher');
+  const drawerSelect = document.getElementById('drawer-role-switcher');
+  if (headerSelect) headerSelect.value = role;
+  if (drawerSelect) drawerSelect.value = role;
+}
+
+function handleRoleSwitchDropdown(newRole) {
+  if (newRole === 'admin') {
+    window.location.href = '/admin';
+    return;
+  }
+  const newProfile = demoProfiles[newRole] || demoProfiles['senior_citizen'];
+  currentUser = newProfile;
+  window.currentUser = newProfile;
+  localStorage.setItem('safereach_user', JSON.stringify(newProfile));
+  localStorage.setItem('safereach_token', 'demo_token_' + newRole + '_' + Date.now());
+
+  syncRoleDropdowns(newRole);
+
+  // Switch role sections smoothly without navigating away from /dashboard
+  renderUserProfile();
+  renderRoleDashboard();
+  loadActiveEmergencies();
+  loadEmergencyHistory();
+  loadUserNotifications();
+
+  if (newRole === 'senior_citizen' || newRole === 'child') {
+    loadSeniorLinkRequests();
+  } else {
+    loadResponderLinkRequests();
+  }
+
+  if (window.CareConnectI18n && typeof CareConnectI18n.updateDOM === 'function') {
+    CareConnectI18n.updateDOM();
+  }
+
+  SafeReach.showToast(`Switched to ${SafeReach.formatRole(newRole)} View`, 'success');
+}
+
 async function switchRoleDemo(role) {
   if (role === 'admin') {
     window.location.href = '/admin';
@@ -1922,72 +2038,6 @@ async function switchRoleDemo(role) {
     'security_guard': { email: 'guard@safereach.com', password: 'password123', slug: 'security' },
     'volunteer': { email: 'volunteer@safereach.com', password: 'password123', slug: 'volunteer' },
     'neighbor': { email: 'neighbor@safereach.com', password: 'password123', slug: 'neighbor' }
-  };
-
-  const demoProfiles = {
-    'senior_citizen': {
-      id: 'user_sr_1',
-      _id: 'user_sr_1',
-      name: 'Gajjala Jyothi Sree',
-      email: 'senior@safereach.com',
-      role: 'senior_citizen',
-      phone: '9398423743',
-      address: 'Nandyala road, Flat A-101',
-      apartmentNumber: 'Flat A-101',
-      medicalInfo: 'Hypertension, Cardiac Pacemaker'
-    },
-    'child': {
-      id: 'user_ch_1',
-      _id: 'user_ch_1',
-      name: 'Aarav Sharma',
-      email: 'child@gmail.com',
-      role: 'child',
-      phone: '9876543210',
-      address: 'Block C-302, Green Meadows',
-      apartmentNumber: 'Flat C-302',
-      medicalInfo: 'Asthma inhaler in bag'
-    },
-    'family_member': {
-      id: 'user_fm_1',
-      _id: 'user_fm_1',
-      name: 'Ankit Kumar',
-      email: 'family@safereach.com',
-      role: 'family_member',
-      phone: '9876543210',
-      address: 'Block B, Flat 201',
-      apartmentNumber: 'Flat B-201'
-    },
-    'neighbor': {
-      id: 'user_nb_1',
-      _id: 'user_nb_1',
-      name: 'Shalini',
-      email: 'neighbor@safereach.com',
-      role: 'neighbor',
-      phone: '9398423743',
-      address: 'Block A, Flat 102 (Same Floor)',
-      apartmentNumber: 'Flat A-102'
-    },
-    'volunteer': {
-      id: 'user_vol_1',
-      _id: 'user_vol_1',
-      name: 'Karthik V',
-      email: 'volunteer@safereach.com',
-      role: 'volunteer',
-      phone: '9876543240',
-      address: 'Block B Volunteer Hub',
-      availability: 'AVAILABLE',
-      medicalInfo: 'First Aid Certified, CPR Trained'
-    },
-    'security_guard': {
-      id: 'user_sec_1',
-      _id: 'user_sec_1',
-      name: 'Security Guard Vikram',
-      email: 'guard@safereach.com',
-      role: 'security_guard',
-      phone: '9876543230',
-      address: 'Main Gate 1 Security Station',
-      dutyStatus: 'ON_DUTY'
-    }
   };
 
   const creds = roleMap[role];
@@ -2148,6 +2198,8 @@ window.openDashboardDrawer = openDashboardDrawer;
 window.closeDashboardDrawer = closeDashboardDrawer;
 window.switchDashboardDrawerSection = switchDashboardDrawerSection;
 window.switchRoleDemo = switchRoleDemo;
+window.handleRoleSwitchDropdown = handleRoleSwitchDropdown;
+window.syncRoleDropdowns = syncRoleDropdowns;
 window.logout = logout;
 window.acceptEmergencyAlert = acceptEmergencyAlert;
 window.rejectEmergencyAlert = rejectEmergencyAlert;
