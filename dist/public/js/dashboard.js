@@ -5,8 +5,10 @@ let socket = null;
 let activeCountdownIntervals = new Map();
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const currentPath = window.location.pathname.toLowerCase();
+  const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/dashboard';
   const pathToRole = {
+    '/dashboard': 'senior_citizen',
+    '/dashboard.html': 'senior_citizen',
     '/dashboard/senior': 'senior_citizen',
     '/dashboard/senior.html': 'senior_citizen',
     '/dashboard/family': 'family_member',
@@ -21,18 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     '/dashboard/neighbor.html': 'neighbor'
   };
 
-  const targetRole = pathToRole[currentPath];
+  const targetRole = pathToRole[currentPath] || 'senior_citizen';
   currentUser = SafeReach.getUser();
   window.currentUser = currentUser;
 
-  if (targetRole) {
-    if (!currentUser || currentUser.role !== targetRole) {
-      await switchRoleDemo(targetRole);
-      return;
-    }
-  } else if (!currentUser || !SafeReach.getToken()) {
-    // Default fallback to Senior Citizen dashboard demo
-    await switchRoleDemo('senior_citizen');
+  if (!currentUser || currentUser.role !== targetRole) {
+    await switchRoleDemo(targetRole);
     return;
   }
 
@@ -1928,8 +1924,78 @@ async function switchRoleDemo(role) {
     'neighbor': { email: 'neighbor@safereach.com', password: 'password123', slug: 'neighbor' }
   };
 
+  const demoProfiles = {
+    'senior_citizen': {
+      id: 'user_sr_1',
+      _id: 'user_sr_1',
+      name: 'Gajjala Jyothi Sree',
+      email: 'senior@safereach.com',
+      role: 'senior_citizen',
+      phone: '9398423743',
+      address: 'Nandyala road, Flat A-101',
+      apartmentNumber: 'Flat A-101',
+      medicalInfo: 'Hypertension, Cardiac Pacemaker'
+    },
+    'child': {
+      id: 'user_ch_1',
+      _id: 'user_ch_1',
+      name: 'Aarav Sharma',
+      email: 'child@gmail.com',
+      role: 'child',
+      phone: '9876543210',
+      address: 'Block C-302, Green Meadows',
+      apartmentNumber: 'Flat C-302',
+      medicalInfo: 'Asthma inhaler in bag'
+    },
+    'family_member': {
+      id: 'user_fm_1',
+      _id: 'user_fm_1',
+      name: 'Ankit Kumar',
+      email: 'family@safereach.com',
+      role: 'family_member',
+      phone: '9876543210',
+      address: 'Block B, Flat 201',
+      apartmentNumber: 'Flat B-201'
+    },
+    'neighbor': {
+      id: 'user_nb_1',
+      _id: 'user_nb_1',
+      name: 'Shalini',
+      email: 'neighbor@safereach.com',
+      role: 'neighbor',
+      phone: '9398423743',
+      address: 'Block A, Flat 102 (Same Floor)',
+      apartmentNumber: 'Flat A-102'
+    },
+    'volunteer': {
+      id: 'user_vol_1',
+      _id: 'user_vol_1',
+      name: 'Karthik V',
+      email: 'volunteer@safereach.com',
+      role: 'volunteer',
+      phone: '9876543240',
+      address: 'Block B Volunteer Hub',
+      availability: 'AVAILABLE',
+      medicalInfo: 'First Aid Certified, CPR Trained'
+    },
+    'security_guard': {
+      id: 'user_sec_1',
+      _id: 'user_sec_1',
+      name: 'Security Guard Vikram',
+      email: 'guard@safereach.com',
+      role: 'security_guard',
+      phone: '9876543230',
+      address: 'Main Gate 1 Security Station',
+      dutyStatus: 'ON_DUTY'
+    }
+  };
+
   const creds = roleMap[role];
   if (!creds) return;
+
+  const targetPath = (role === 'senior_citizen' && window.location.pathname.toLowerCase().startsWith('/dashboard/senior')) 
+    ? '/dashboard/senior' 
+    : (role === 'senior_citizen' ? '/dashboard' : `/dashboard/${creds.slug}`);
 
   try {
     const res = await fetch('/api/auth/login', {
@@ -1938,15 +2004,24 @@ async function switchRoleDemo(role) {
       body: JSON.stringify({ email: creds.email, password: creds.password })
     });
     const data = await res.json();
-    if (data.token) {
+    if (data.token && data.user) {
       localStorage.setItem('safereach_token', data.token);
       localStorage.setItem('safereach_user', JSON.stringify(data.user));
-      window.location.href = `/dashboard/${creds.slug}`;
     } else {
-      window.location.href = `/login/${creds.slug}`;
+      const fallbackUser = demoProfiles[role] || { name: 'Gajjala Jyothi Sree', role };
+      localStorage.setItem('safereach_token', 'demo_token_' + Date.now());
+      localStorage.setItem('safereach_user', JSON.stringify(fallbackUser));
     }
   } catch (e) {
-    window.location.href = '/login';
+    const fallbackUser = demoProfiles[role] || { name: 'Gajjala Jyothi Sree', role };
+    localStorage.setItem('safereach_token', 'demo_token_' + Date.now());
+    localStorage.setItem('safereach_user', JSON.stringify(fallbackUser));
+  }
+
+  if (window.location.pathname.toLowerCase() !== targetPath) {
+    window.location.href = targetPath;
+  } else {
+    window.location.reload();
   }
 }
 
