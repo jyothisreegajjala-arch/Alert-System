@@ -1,13 +1,16 @@
 const Notification = require('../models/Notification');
 const LinkRequest = require('../models/LinkRequest');
+const Emergency = require('../models/Emergency');
 const User = require('../models/User');
 
-// Get User Notifications & Summary Counts
+// Get User Notifications & Summary Counts (Aggregated from Live DB: Notifications, LinkRequests & Emergencies)
 exports.getUserNotifications = async (req, res) => {
   try {
     const user = req.user;
     const isDbConnected = require('mongoose').connection.readyState === 1;
-    let notifications = [];
+    let rawNotifications = [];
+    let linkRequests = [];
+    let emergencies = [];
 
     if (isDbConnected) {
       let filter = {};
@@ -19,7 +22,34 @@ exports.getUserNotifications = async (req, res) => {
         if (user.phone) orConditions.push({ targetPhone: user.phone });
         filter = { $or: orConditions };
       }
-      notifications = await Notification.find(filter).sort({ createdAt: -1 });
+      rawNotifications = await Notification.find(filter).sort({ createdAt: -1 }).lean();
+
+      // Also aggregate live LinkRequests from MongoDB
+      let linkFilter = {};
+      if (user.role !== 'admin') {
+        linkFilter = {
+          $or: [
+            { seniorUserId: user._id },
+            { responderUserId: user._id },
+            { targetEmail: user.email ? user.email.toLowerCase() : '' },
+            { targetPhone: user.phone || '' }
+          ]
+        };
+      }
+      linkRequests = await LinkRequest.find(linkFilter).sort({ createdAt: -1 }).lean();
+
+      // Also aggregate live Emergency alert history from MongoDB
+      let emgFilter = {};
+      if (user.role !== 'admin') {
+        emgFilter = {
+          $or: [
+            { userId: user._id },
+            { 'acceptedBy.userId': user._id },
+            { userPhone: user.phone || '' }
+          ]
+        };
+      }
+      emergencies = await Emergency.find(emgFilter).sort({ createdAt: -1 }).lean();
     } else {
       const memoryStore = require('../config/memoryStore');
       const userIdStr = (user._id || user.id || '').toString();
@@ -27,35 +57,111 @@ exports.getUserNotifications = async (req, res) => {
       const userPhone = user.phone || '';
 
       if (user.role === 'admin') {
-        notifications = (memoryStore.notifications || []);
+        rawNotifications = memoryStore.notifications || [];
+        linkRequests = memoryStore.linkRequests || [];
+        emergencies = memoryStore.emergencies || [];
       } else {
-        notifications = (memoryStore.notifications || []).filter(n =>
+        rawNotifications = (memoryStore.notifications || []).filter(n =>
           (n.recipientUserId && n.recipientUserId.toString() === userIdStr) ||
           (userEmail && n.targetEmail && n.targetEmail.toLowerCase() === userEmail) ||
           (userPhone && n.targetPhone && n.targetPhone === userPhone)
         );
+        linkRequests = (memoryStore.linkRequests || []).filter(lr =>
+          (lr.seniorUserId && lr.seniorUserId.toString() === userIdStr) ||
+          (lr.responderUserId && lr.responderUserId.toString() === userIdStr) ||
+          (userEmail && lr.targetEmail && lr.targetEmail.toLowerCase() === userEmail) ||
+          (userPhone && lr.targetPhone && lr.targetPhone === userPhone)
+        );
+        emergencies = (memoryStore.emergencies || []).filter(e =>
+          (e.userId && e.userId.toString() === userIdStr) ||
+          (e.acceptedBy && e.acceptedBy.userId && e.acceptedBy.userId.toString() === userIdStr) ||
+          (userPhone && e.userPhone === userPhone)
+        );
       }
     }
 
-    // Deduplicate notifications so identical alerts created at the same time are shown only ONCE
+    // Transform LinkRequests into standard Notification objects
+    const linkNotifs = linkRequests.map(lr => {
+      const isAccepted = lr.status === 'ACCEPTED';
+      return {
+        _id: lr._id || `lr_${Date.now()}`,
+        title: isAccepted ? `🤝 Connection Linked: ${lr.targetName || 'Responder'}` : `👥 Connection Request: ${lr.targetName || 'Responder'}`,
+        message: `${lr.seniorName || 'Senior Citizen'} linked with ${lr.targetName || 'Responder'} (${lr.relationship || lr.targetRole || 'Contact'}). Address: ${lr.seniorAddress || 'Springboard Community'}.`,
+        senderName: lr.seniorName || 'Senior Citizen',
+        type: 'LINK_REQUEST',
+        status: isAccepted ? 'ACCEPTED' : (lr.status || 'PENDING'),
+        date: lr.createdAt ? new Date(lr.createdAt).toLocaleDateString() : '',
+        time: lr.createdAt ? new Date(lr.createdAt).toLocaleTimeString() : '',
+        createdAt: lr.createdAt || new Date()
+      };
+    });
+
+    // Transform Emergency records into standard Notification objects
+    const emgNotifs = emergencies.map(e => {
+      const rawId = e.alertId || e.emergencyId || 'SOS';
+      const isPending = ['PENDING_LOCAL', 'ESCALATED_VOLUNTEER'].includes(e.status);
+      const isAccepted = e.status === 'ACCEPTED';
+      const isResolved = e.status === 'RESOLVED';
+      const isCancelled = e.status === 'CANCELLED';
+
+      let status = 'READ';
+      let title = `🚨 Emergency Alert #${rawId}`;
+      if (isPending) {
+        status = 'PENDING';
+        title = `🚨 ACTIVE EMERGENCY: #${rawId}`;
+      } else if (isAccepted) {
+        status = 'ACCEPTED';
+        title = `✅ Responder En Route: #${rawId}`;
+      } else if (isResolved) {
+        status = 'READ';
+        title = `🏁 Incident Resolved: #${rawId}`;
+      } else if (isCancelled) {
+        status = 'READ';
+        title = `🛑 Alert Cancelled: #${rawId}`;
+      }
+
+      const senior = e.userName || e.seniorName || 'Senior Citizen';
+      const addr = e.address || e.seniorAddress || 'Springboard Community';
+      const resp = e.acceptedBy?.name || e.responderName || '';
+      const respRole = e.acceptedBy?.role || '';
+      const respText = resp ? ` Responded by: ${resp} (${respRole || 'Nearby Guardian'}).` : '';
+
+      return {
+        _id: e._id || `emg_${Date.now()}`,
+        title,
+        message: `Emergency #${rawId} for ${senior} at ${addr}. Status: ${e.status}.${respText}`,
+        senderName: senior,
+        emergencyType: e.emergencyType || 'Medical SOS',
+        address: addr,
+        type: 'EMERGENCY_ALERT',
+        status,
+        date: e.date || (e.createdAt ? new Date(e.createdAt).toLocaleDateString() : ''),
+        time: e.time || (e.createdAt ? new Date(e.createdAt).toLocaleTimeString() : ''),
+        createdAt: e.createdAt || new Date()
+      };
+    });
+
+    // Combine all notification streams
+    let allNotifications = [...rawNotifications, ...linkNotifs, ...emgNotifs];
+
+    // Sort by createdAt descending
+    allNotifications.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+    // Deduplicate notifications
     const seenKeys = new Set();
-    const uniqueNotifications = notifications.filter(n => {
-      const sender = n.senderName || (n.senderUserId ? n.senderUserId.toString() : '');
-      const type = n.type || 'ALERT';
-      const msg = n.message || '';
-      const timeVal = n.time || n.date || '';
-      const key = `${sender}_${type}_${msg}_${timeVal}`;
+    const uniqueNotifications = allNotifications.filter(n => {
+      const key = `${n.title}_${n.message}_${n.status}`;
       if (seenKeys.has(key)) return false;
       seenKeys.add(key);
       return true;
     });
 
-    notifications = uniqueNotifications;
+    const notifications = uniqueNotifications;
 
     const pendingCount = notifications.filter(n => n.status === 'PENDING').length;
     const acceptedCount = notifications.filter(n => n.status === 'ACCEPTED').length;
     const readCount = notifications.filter(n => n.status === 'READ').length;
-    const unreadCount = notifications.filter(n => n.status === 'PENDING' || n.status === 'UNREAD').length;
+    const unreadCount = pendingCount;
 
     return res.status(200).json({
       success: true,
@@ -63,7 +169,8 @@ exports.getUserNotifications = async (req, res) => {
         pending: pendingCount,
         accepted: acceptedCount,
         read: readCount,
-        unread: unreadCount
+        unread: unreadCount,
+        total: notifications.length
       },
       notifications
     });

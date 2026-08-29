@@ -8,12 +8,6 @@ const CareConnectAccessibility = {
     const newState = !currentState;
     localStorage.setItem('careconnect_accessibility', newState ? 'true' : 'false');
     CareConnectAccessibility.applyState();
-
-    if (newState && window.CareConnectVoice) {
-      CareConnectVoice.speak('High contrast accessibility mode enabled.');
-    }
-
-    CareConnectAccessibility.triggerHaptic();
   },
 
   applyState: () => {

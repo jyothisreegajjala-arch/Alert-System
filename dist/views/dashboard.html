@@ -20,35 +20,91 @@
 </head>
 <body>
 
-  <!-- Navigation Header -->
-  <nav class="navbar">
-    <div class="container nav-content">
-      <a href="/" class="brand-logo">
-        <div class="logo-icon">🆘</div>
-        <span>SafeReach</span>
+  <!-- Mobile Sidebar / Drawer Backdrop (Fixed Overlay) -->
+  <div id="dashboard-drawer-backdrop" class="dashboard-drawer-backdrop" onclick="closeDashboardDrawer()"></div>
+
+  <!-- Mobile Slide-In Sidebar Drawer (Fixed Drawer Overlay) -->
+  <aside id="dashboard-mobile-drawer" class="dashboard-mobile-drawer">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <span class="drawer-brand-icon">🛡️</span>
+        <h3 class="drawer-brand-title">CareConnect</h3>
+      </div>
+      <button class="drawer-close-btn" onclick="closeDashboardDrawer()" aria-label="Close Drawer">✕</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <!-- 1. Dashboard -->
+      <a href="javascript:void(0)" id="drawer-item-dashboard" class="drawer-nav-item active" onclick="switchDashboardDrawerSection('dashboard')">
+        <span class="drawer-nav-icon">🏠</span>
+        <span data-i18n="nav_dashboard">Dashboard</span>
       </a>
-      <div class="nav-actions">
-        <!-- Language Selector Dropdown (Requirement 8) -->
-        <div id="nav-language-selector-container"></div>
 
-        <button id="btn-toggle-accessibility" onclick="CareConnectAccessibility.toggle()" class="btn btn-outline-secondary btn-sm" data-i18n="accessibility_mode">
-          👁️ Accessibility
+      <!-- 2. Active Emergency Alert -->
+      <a href="javascript:void(0)" id="drawer-item-alerts" class="drawer-nav-item" onclick="switchDashboardDrawerSection('alerts')">
+        <span class="drawer-nav-icon">🚨</span>
+        <span data-i18n="nav_alerts">Active Emergency Alert</span>
+      </a>
+
+      <!-- 3. Live GPS Location & Controls -->
+      <a href="javascript:void(0)" id="drawer-item-gps" class="drawer-nav-item" onclick="switchDashboardDrawerSection('gps')">
+        <span class="drawer-nav-icon">📍</span>
+        <span data-i18n="live_gps_title">Live GPS Location & Controls</span>
+      </a>
+
+      <!-- 4. Emergency Contacts -->
+      <a href="javascript:void(0)" id="drawer-item-contacts" class="drawer-nav-item" onclick="switchDashboardDrawerSection('contacts')">
+        <span class="drawer-nav-icon">👥</span>
+        <span data-i18n="emergency_contacts">Emergency Contacts</span>
+      </a>
+
+      <!-- 5. Reports & Logs -->
+      <a href="javascript:void(0)" id="drawer-item-reports" class="drawer-nav-item" onclick="switchDashboardDrawerSection('reports')">
+        <span class="drawer-nav-icon">📊</span>
+        <span data-i18n="nav_reports">Reports & Logs</span>
+      </a>
+
+      <!-- 6. Profile -->
+      <a href="javascript:void(0)" id="drawer-item-profile" class="drawer-nav-item" onclick="switchDashboardDrawerSection('profile')">
+        <span class="drawer-nav-icon">👤</span>
+        <span data-i18n="nav_profile">Profile</span>
+      </a>
+
+      <div class="drawer-divider"></div>
+
+      <!-- Sign Out -->
+      <button onclick="logout()" class="drawer-nav-item drawer-logout-btn">
+        <span class="drawer-nav-icon">🚪</span>
+        <span data-i18n="sign_out">Sign Out</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Top Navigation Bar -->
+  <nav class="navbar dashboard-navbar">
+    <div class="container nav-content">
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <button class="drawer-toggle-btn" onclick="openDashboardDrawer()" aria-label="Toggle Sidebar Menu" style="background:var(--surface); border:1px solid var(--border-color); color:var(--text-primary); width:40px; height:40px; border-radius:10px; box-shadow:var(--neo-btn); font-size:1.25rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <span>☰</span>
         </button>
-
-        <!-- Real-Time Notifications Button with Red Badge (Requirement 1, 3) -->
+        <a href="/" class="brand-logo">
+          <div class="logo-icon">🆘</div>
+          <span>SafeReach</span>
+        </a>
+      </div>
+      <div class="nav-actions" style="display:flex; align-items:center; gap:0.75rem;">
+        <div id="dashboard-language-selector-container"></div>
         <button id="btn-nav-notifications" onclick="openNotificationsModal()" class="btn btn-outline-secondary btn-sm" style="position:relative; display:flex; align-items:center; gap:0.4rem;">
           <span>🔔</span> <span data-i18n="notifications">Notifications</span>
           <span id="nav-unread-badge" class="badge-unread-count d-none">0</span>
         </button>
-
-        <div id="duty-status-container"></div>
         <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="sign_out">Sign Out</button>
       </div>
     </div>
   </nav>
 
   <!-- Main Dashboard Wrapper -->
-  <div class="container dashboard-container">
+  <div class="container dashboard-container" id="dashboard-main-content">
     
     <!-- User Profile Banner -->
     <div id="user-profile-bar" class="user-profile-bar d-none">
@@ -60,9 +116,8 @@
         </div>
       </div>
       <div style="display:flex; gap:0.75rem; align-items:center;">
-        <button id="btn-edit-profile" onclick="openEditProfileModal()" class="btn btn-primary btn-sm">✏️ <span data-i18n="profile">Edit Profile & Contacts</span></button>
+        <div id="duty-status-container"></div>
         <a id="btn-emergency-logs" href="#history" class="btn btn-secondary btn-sm d-none">📜 <span data-i18n="reports">Emergency Logs</span></a>
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm">🚪 <span data-i18n="sign_out">Logout</span></button>
       </div>
     </div>
 
@@ -91,14 +146,14 @@
         </div>
 
         <div class="main-sos-subtext-group">
-          <span class="main-sos-line1">Press and Hold for 3 Seconds</span>
-          <span class="main-sos-line2">For Emergency Assistance</span>
+          <span class="main-sos-line1" data-i18n="sos_hold_text">Press and Hold for 3 Seconds</span>
+          <span class="main-sos-line2" data-i18n="sos_instruction">For Emergency Assistance</span>
         </div>
       </div>
     </div>
 
     <!-- GPS & CURRENT LOCATION CARD (Requirements 4, 9, 10, 12) -->
-    <div id="location-widget-section" class="glass-card" style="margin-bottom:2rem; padding:1.25rem;">
+    <div id="location-widget-section" class="glass-card d-none" style="margin-bottom:2rem; padding:1.25rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
         <h4 style="color:#fff; margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.15rem;">
           <span>📡</span> <span data-i18n="live_gps_title">Live GPS Location & Controls</span>
@@ -107,23 +162,25 @@
           📍 <span data-i18n="get_current_location">Get Current Location</span>
         </button>
       </div>
-      <div id="location-status-text" class="location-status status-neutral" style="font-size:0.9rem; color:#94a3b8; margin-bottom:0.5rem;">
+      <div id="location-status-text" class="location-status status-neutral" data-i18n="gps_desc" style="font-size:0.9rem; color:#94a3b8; margin-bottom:0.5rem;">
         Click "Get Current Location" to fetch your live high-accuracy GPS coordinates.
       </div>
       <div id="location-info-display" class="d-none"></div>
     </div>
 
-    <!-- SENIOR CITIZEN LINK REQUESTS & NETWORK STATUS SECTION -->
-    <div id="senior-link-requests-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.5rem;">
+    <!-- SENIOR CITIZEN EMERGENCY CONTACTS SECTION (MATCHING SCREENSHOT) -->
+    <div id="senior-link-requests-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.5rem; border-radius:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
-        <h3 style="color:#fff; font-weight:800; font-size:1.3rem; display:flex; align-items:center; gap:0.5rem;">
-          <span>📋</span> <span data-i18n="emergency_contacts">Account Link Requests & Safety Network Status</span>
+        <h3 style="color:var(--text-primary); font-weight:800; font-size:1.45rem; display:flex; align-items:center; gap:0.65rem; margin:0;">
+          <span style="font-size:1.6rem;">📋</span> <span data-i18n="emergency_contacts">Emergency Contacts</span>
         </h3>
-        <button onclick="openAddContactModal()" class="btn btn-primary btn-sm">➕ Add Contact</button>
+        <button onclick="openAddContactModal()" class="btn btn-primary" style="padding:0.65rem 1.25rem; border-radius:14px; font-weight:700; background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; display:flex; align-items:center; gap:0.4rem; border:none; box-shadow:0 4px 14px rgba(2, 132, 199, 0.3); cursor:pointer;">
+          <span>➕</span> <span>Add Contact</span>
+        </button>
       </div>
 
       <div id="senior-link-requests-content">
-        <div style="text-align:center; padding:1.5rem; color:var(--dark-muted);">Loading link requests...</div>
+        <div style="text-align:center; padding:1.5rem; color:var(--dark-muted);">Loading emergency contacts...</div>
       </div>
     </div>
 
@@ -131,7 +188,7 @@
     <div id="view-responder-feed" class="d-none" style="margin-bottom:2.5rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
         <h3 style="font-size:1.4rem; color:#fff; font-weight:800;">🚨 <span data-i18n="active_emergency">Active Community Emergency Alerts</span></h3>
-        <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm">🔄 Refresh Feed</button>
+        <button onclick="loadActiveEmergencies()" class="btn btn-secondary btn-sm" data-i18n="refresh_alerts">🔄 Refresh Feed</button>
       </div>
 
       <!-- Feed Container -->
@@ -152,20 +209,22 @@
       </div>
     </div>
 
-    <!-- History Section -->
-    <div id="history" class="glass-card d-none">
-      <h3 style="color:#fff; font-weight:700; margin-bottom:1rem;">📜 <span data-i18n="history">Emergency History & Audit Log</span></h3>
-      <div style="overflow-x:auto;">
-        <table class="history-table">
+    <!-- History Section (MATCHING SCREENSHOT) -->
+    <div id="history" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.5rem; border-radius:24px;">
+      <h3 style="color:var(--text-primary); font-weight:800; font-size:1.45rem; display:flex; align-items:center; gap:0.65rem; margin-bottom:1.25rem;">
+        <span style="font-size:1.6rem;">📜</span> <span data-i18n="history">Emergency History & Audit Log</span>
+      </h3>
+      <div style="overflow-x:auto; width:100%; border-radius:14px;">
+        <table style="width:100%; border-collapse:separate; border-spacing:0; min-width:700px;">
           <thead>
-            <tr>
-              <th>Alert ID</th>
-              <th>User Name</th>
-              <th>Date & Time</th>
-              <th>Location Address</th>
-              <th>Status</th>
-              <th>Accepted By</th>
-              <th>Response Time</th>
+            <tr style="background:#e0f2fe; color:#0f172a;">
+              <th data-i18n="th_alert_id" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-top-left-radius:10px; border-bottom-left-radius:10px;">ALERT ID</th>
+              <th data-i18n="th_senior_user" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">USER NAME</th>
+              <th data-i18n="th_datetime" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">DATE & TIME</th>
+              <th data-i18n="th_location" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">LOCATION ADDRESS</th>
+              <th data-i18n="th_status" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">STATUS</th>
+              <th data-i18n="th_responded_by" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">ACCEPTED BY</th>
+              <th data-i18n="th_response_time" style="padding:0.85rem 1rem; text-align:left; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; border-top-right-radius:10px; border-bottom-right-radius:10px;">RESPONSE TIME</th>
             </tr>
           </thead>
           <tbody id="history-table-body">
@@ -177,6 +236,25 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Inline Profile Section (Directly on Dashboard) -->
+    <div id="profile-section" class="glass-card d-none" style="margin-bottom:2.5rem; padding:1.75rem; border-radius:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid #f1f5f9; padding-bottom:1rem;">
+        <h3 id="profile-section-title" style="color:var(--text-primary); font-weight:800; font-size:1.45rem; display:flex; align-items:center; gap:0.65rem; margin:0;">
+          <span style="font-size:1.6rem;">👤</span> <span data-i18n="profile">Profile & Safety Network</span>
+        </h3>
+      </div>
+      <form id="inline-profile-form" onsubmit="handleSaveProfile(event)">
+        <div id="profile-section-body">
+          <!-- Dynamically populated based on user role -->
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid #f1f5f9;">
+          <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.75rem; border-radius:14px; font-weight:700; background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; display:flex; align-items:center; gap:0.5rem; border:none; box-shadow:0 4px 14px rgba(2, 132, 199, 0.3); cursor:pointer;">
+            <span>💾</span> <span data-i18n="save_profile">Save Profile Changes</span>
+          </button>
+        </div>
+      </form>
     </div>
 
   </div>
@@ -259,41 +337,81 @@
     </div>
   </div>
 
-  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL (Requirements 1, 3) -->
+  <!-- DYNAMIC ROLE-BASED NOTIFICATIONS & REQUESTS MODAL -->
   <div id="notifications-modal" class="modal-backdrop d-none">
-    <div class="modal-content" style="max-width: 750px;">
-      <div class="modal-header">
-        <h3 style="display:flex; align-items:center; gap:0.5rem; margin:0;">
-          <span>🔔</span> <span data-i18n="notifications">Notifications & Connection Requests</span>
-        </h3>
-        <button onclick="closeNotificationsModal()" class="modal-close-btn" aria-label="Close">&times;</button>
+    <div class="modal-content notif-modal-container" style="max-width: 620px; width: 95%; border-radius: 24px;">
+      
+      <div class="notif-modal-header" style="padding: 1.25rem 1.5rem 0.85rem 1.5rem;">
+        <div class="notif-header-title">
+          <span class="notif-bell-icon">🔔</span>
+          <h3 class="notif-title-text" data-i18n="notifications" style="font-size: 1.35rem; font-weight: 800;">Notifications</h3>
+        </div>
+        <button onclick="closeNotificationsModal()" class="notif-close-btn" aria-label="Close" style="font-size: 1.25rem; cursor: pointer;">✕</button>
       </div>
 
-      <div class="modal-body">
-        <!-- Filter Tabs & Count Metrics -->
-        <div style="display:flex; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap; align-items:center;">
-          <button type="button" id="tab-notif-all" class="btn btn-sm notif-tab-btn active" onclick="filterNotifications('all')">
-            📋 All
+      <div class="notif-modal-body" style="padding: 0 1.5rem 1.25rem 1.5rem;">
+        <!-- Top Metric Summary Cards (3 wide balanced) -->
+        <div class="notif-metrics-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 0.5rem;">
+          <div class="notif-metric-card" style="padding: 0.75rem 0.9rem;">
+            <span class="notif-status-dot dot-red">🔴</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label" style="font-size: 0.65rem;">PENDING</span>
+              <strong id="count-pending" class="notif-metric-num" style="font-size: 1.25rem;">0</strong>
+            </div>
+          </div>
+
+          <div class="notif-metric-card" style="padding: 0.75rem 0.9rem;">
+            <span class="notif-status-dot dot-green">🟢</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label" style="font-size: 0.65rem;">ACCEPTED</span>
+              <strong id="count-accepted" class="notif-metric-num" style="font-size: 1.25rem;">0</strong>
+            </div>
+          </div>
+
+          <div class="notif-metric-card" style="padding: 0.75rem 0.9rem;">
+            <span class="notif-status-dot dot-logs">📋</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label" style="font-size: 0.65rem;">TOTAL LOGS</span>
+              <strong id="count-total-logs" class="notif-metric-num" style="font-size: 1.25rem;">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Chips / Tabs -->
+        <div class="notif-filter-chips-row" style="margin-bottom: 0.75rem;">
+          <button type="button" id="tab-notif-all" class="notif-chip-btn active" onclick="filterNotifications('all')">
+            <span>📋</span>
+            <span>All Notifications</span>
           </button>
-          <button type="button" id="tab-notif-pending" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('PENDING')">
-            🔴 Pending (<span id="count-pending">0</span>)
+          <button type="button" id="tab-notif-pending" class="notif-chip-btn" onclick="filterNotifications('PENDING')">
+            <span>🔴</span>
+            <span>Pending Requests</span>
           </button>
-          <button type="button" id="tab-notif-accepted" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('ACCEPTED')">
-            🟢 Accepted (<span id="count-accepted">0</span>)
+          <button type="button" id="tab-notif-accepted" class="notif-chip-btn" onclick="filterNotifications('ACCEPTED')">
+            <span>🟢</span>
+            <span>Accepted Requests</span>
           </button>
-          <button type="button" id="tab-notif-read" class="btn btn-sm notif-tab-btn" onclick="filterNotifications('READ')">
-            ⚪ Read (<span id="count-read">0</span>)
+          <button type="button" id="tab-notif-read" class="notif-chip-btn" onclick="filterNotifications('READ')">
+            <span>⚪</span>
+            <span>Read Logs</span>
           </button>
         </div>
 
-        <!-- Notification List Container -->
-        <div id="notifications-list-content">
-          <div style="text-align:center; padding:2rem; color:var(--dark-muted);">Loading notifications...</div>
+        <!-- Notifications List Container with Clean Single Scrollbar -->
+        <div id="notifications-list-content" class="notif-list-area" style="max-height: 380px; overflow-y: auto; overflow-x: hidden; padding: 0.25rem;">
+          <div class="notif-empty-state">
+            <div class="notif-empty-bell">🔔</div>
+            <p class="notif-empty-msg">No notifications found in this category.</p>
+          </div>
         </div>
       </div>
 
-      <div class="modal-footer">
-        <button type="button" onclick="closeNotificationsModal()" class="btn btn-secondary">Close</button>
+      <div class="notif-modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" onclick="clearNotificationsHistory()" class="notif-footer-btn btn-clear">
+          <span>🗑️</span>
+          <span>Clear History</span>
+        </button>
+        <button type="button" onclick="closeNotificationsModal()" class="notif-footer-btn btn-close" data-i18n="close">Close</button>
       </div>
     </div>
   </div>
@@ -314,7 +432,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.CareConnectI18n) {
-        CareConnectI18n.renderLanguageSelector('nav-language-selector-container');
+        CareConnectI18n.renderLanguageSelector('dashboard-language-selector-container');
       }
     });
   </script>

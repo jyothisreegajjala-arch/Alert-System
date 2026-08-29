@@ -51,11 +51,30 @@ const SafeReachLocation = {
     }
 
     return new Promise((resolve, reject) => {
-      // Requirement 14: Check HTTPS / Localhost context
       if (!navigator.geolocation) {
-        const error = new Error('Geolocation is not supported by your browser.');
-        error.code = 'NOT_SUPPORTED';
-        return reject(error);
+        // Fallback to IP geolocation if browser doesn't have geolocation API
+        fetch('https://ipapi.co/json/')
+          .then(res => res.json())
+          .then(ipData => {
+            if (ipData && ipData.latitude && ipData.longitude) {
+              const locData = {
+                latitude: ipData.latitude,
+                longitude: ipData.longitude,
+                accuracy: 50,
+                googleMapsUrl: SafeReachLocation.generateGoogleMapsUrl(ipData.latitude, ipData.longitude),
+                timestamp: new Date()
+              };
+              SafeReachLocation.lastLocation = locData;
+              return resolve(locData);
+            }
+            throw new Error('IP Geolocation not available');
+          })
+          .catch(() => {
+            const error = new Error('Geolocation is not supported by your browser.');
+            error.code = 'NOT_SUPPORTED';
+            reject(error);
+          });
+        return;
       }
 
       const isSecureContext = window.isSecureContext || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
@@ -68,7 +87,7 @@ const SafeReachLocation = {
           const locData = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            accuracy: Math.round(position.coords.accuracy),
+            accuracy: Math.round(position.coords.accuracy || 10),
             googleMapsUrl: SafeReachLocation.generateGoogleMapsUrl(
               position.coords.latitude,
               position.coords.longitude
@@ -79,22 +98,58 @@ const SafeReachLocation = {
           resolve(locData);
         },
         (err) => {
-          let errorMessage = 'Failed to retrieve location. Please try again.';
-          
-          // Requirement 9: Permission denied exact message
-          if (err.code === err.PERMISSION_DENIED) {
-            errorMessage = 'Location permission is required to send an emergency alert.';
-          } else if (err.code === err.POSITION_UNAVAILABLE) {
-            // Requirement 10: GPS unavailable error
-            errorMessage = 'GPS position unavailable. Please ensure location services are enabled on your device and retry.';
-          } else if (err.code === err.TIMEOUT) {
-            // Requirement 10: Location timeout
-            errorMessage = 'Location retrieval timed out. Please retry.';
-          }
+          console.warn('[SafeReach Location] Primary GPS error:', err.message, 'Trying low-accuracy Wi-Fi fallback...');
+          // Attempt Low-Accuracy Wi-Fi Geolocation
+          navigator.geolocation.getCurrentPosition(
+            (pos2) => {
+              const locData = {
+                latitude: pos2.coords.latitude,
+                longitude: pos2.coords.longitude,
+                accuracy: Math.round(pos2.coords.accuracy || 30),
+                googleMapsUrl: SafeReachLocation.generateGoogleMapsUrl(
+                  pos2.coords.latitude,
+                  pos2.coords.longitude
+                ),
+                timestamp: new Date(pos2.timestamp)
+              };
+              SafeReachLocation.lastLocation = locData;
+              resolve(locData);
+            },
+            async (err2) => {
+              console.warn('[SafeReach Location] Wi-Fi Geolocation failed:', err2.message, 'Trying live IP Geolocation...');
+              try {
+                const ipRes = await fetch('https://ipapi.co/json/');
+                if (ipRes.ok) {
+                  const ipData = await ipRes.json();
+                  if (ipData && ipData.latitude && ipData.longitude) {
+                    const locData = {
+                      latitude: ipData.latitude,
+                      longitude: ipData.longitude,
+                      accuracy: 50,
+                      googleMapsUrl: SafeReachLocation.generateGoogleMapsUrl(ipData.latitude, ipData.longitude),
+                      timestamp: new Date()
+                    };
+                    SafeReachLocation.lastLocation = locData;
+                    return resolve(locData);
+                  }
+                }
+              } catch (ipErr) {}
 
-          const error = new Error(errorMessage);
-          error.code = err.code;
-          reject(error);
+              let errorMessage = 'Failed to retrieve location. Please try again.';
+              if (err.code === err.PERMISSION_DENIED) {
+                errorMessage = 'Location permission is required to send an emergency alert.';
+              } else if (err.code === err.POSITION_UNAVAILABLE) {
+                errorMessage = 'GPS position unavailable. Please ensure location services are enabled on your device and retry.';
+              } else if (err.code === err.TIMEOUT) {
+                errorMessage = 'Location retrieval timed out. Please retry.';
+              }
+
+              const error = new Error(errorMessage);
+              error.code = err.code;
+              reject(error);
+            },
+            { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+          );
         },
         options
       );

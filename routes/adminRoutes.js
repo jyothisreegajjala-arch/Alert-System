@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getStats,
+  getComprehensiveAnalytics,
   getUsers,
   toggleUserStatus,
   deleteUser,
@@ -18,6 +19,7 @@ router.use(protect);
 router.use(authorizeRoles('admin'));
 
 router.get('/stats', getStats);
+router.get('/analytics', getComprehensiveAnalytics);
 router.get('/users', getUsers);
 router.post('/users/import-csv', importUsersCSV);
 router.get('/users/export-csv', exportUsersCSV);

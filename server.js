@@ -172,7 +172,13 @@ app.get(['/login/volunteer', '/login/volunteer.html'], serveView(path.join('logi
 app.get(['/login/admin', '/login/admin.html'], serveView(path.join('login', 'admin.html')));
 app.get(['/register', '/register.html'], serveView('register.html'));
 app.get(['/dashboard', '/dashboard.html', '/dashboard/'], serveView('dashboard.html'));
-app.get(['/admin', '/admin.html', '/admin/'], serveView('admin.html'));
+app.get(['/dashboard/senior', '/dashboard/senior.html'], serveView('dashboard.html'));
+app.get(['/dashboard/family', '/dashboard/family.html'], serveView('dashboard.html'));
+app.get(['/dashboard/child', '/dashboard/child.html'], serveView('dashboard.html'));
+app.get(['/dashboard/neighbor', '/dashboard/neighbor.html'], serveView('dashboard.html'));
+app.get(['/dashboard/security', '/dashboard/security.html'], serveView('dashboard.html'));
+app.get(['/dashboard/volunteer', '/dashboard/volunteer.html'], serveView('dashboard.html'));
+app.get(['/dashboard/admin', '/dashboard/admin.html', '/admin', '/admin.html', '/admin/'], serveView('admin.html'));
 
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));

@@ -22,7 +22,7 @@
     <div class="drawer-header">
       <div class="drawer-brand">
         <span class="drawer-brand-icon">👑</span>
-        <h3 class="drawer-brand-title">SafeReach Admin</h3>
+        <h3 class="drawer-brand-title" data-i18n="admin_brand">SafeReach Admin</h3>
       </div>
       <button class="drawer-close-btn" onclick="closeAdminDrawer()" aria-label="Close Drawer">✕</button>
     </div>
@@ -30,29 +30,29 @@
     <nav class="drawer-nav">
       <a href="javascript:void(0)" id="drawer-nav-dashboard" class="drawer-nav-item active" onclick="switchAdminTab('tab-dashboard'); closeAdminDrawer();">
         <span class="drawer-nav-icon">🏠</span>
-        <span>Dashboard</span>
+        <span data-i18n="nav_dashboard">Dashboard</span>
       </a>
       <a href="javascript:void(0)" id="drawer-nav-alerts" class="drawer-nav-item" onclick="switchAdminTab('tab-alerts'); closeAdminDrawer();">
         <span class="drawer-nav-icon">🚨</span>
-        <span>Emergency Alerts</span>
+        <span data-i18n="nav_alerts">Emergency Alerts</span>
       </a>
       <a href="javascript:void(0)" id="drawer-nav-gps" class="drawer-nav-item" onclick="switchAdminTab('tab-gps'); closeAdminDrawer();">
         <span class="drawer-nav-icon">📍</span>
-        <span>Live GPS</span>
+        <span data-i18n="nav_gps">Live GPS</span>
       </a>
       <a href="javascript:void(0)" id="drawer-nav-reports" class="drawer-nav-item" onclick="switchAdminTab('tab-reports'); closeAdminDrawer();">
         <span class="drawer-nav-icon">📊</span>
-        <span>Reports &amp; Logs</span>
+        <span data-i18n="nav_reports">Reports &amp; Logs</span>
       </a>
       <a href="javascript:void(0)" id="drawer-nav-profile" class="drawer-nav-item" onclick="openAdminProfileModal(); closeAdminDrawer();">
         <span class="drawer-nav-icon">👤</span>
-        <span>Profile</span>
+        <span data-i18n="nav_profile">Profile</span>
       </a>
       
       <div class="drawer-divider"></div>
       <button onclick="logout()" class="drawer-nav-item drawer-logout-btn">
         <span class="drawer-nav-icon">🚪</span>
-        <span>Sign Out</span>
+        <span data-i18n="sign_out">Sign Out</span>
       </button>
     </nav>
   </aside>
@@ -71,8 +71,7 @@
           </button>
 
           <div class="header-welcome-block">
-            <span>Welcome to CareConnect , <strong id="admin-welcome-name" class="admin-name-highlight">tarun tej</strong> (</span>
-            <span class="admin-role-text">System Admin )</span>
+            <span><span data-i18n="welcome">Welcome to CareConnect</span>, <strong id="admin-welcome-name" class="admin-name-highlight">tarun tej</strong> (<span class="admin-role-text" data-i18n="admin">System Admin</span>)</span>
           </div>
         </div>
 
@@ -82,12 +81,12 @@
 
           <button onclick="openAdminNotificationsModal()" class="header-control-pill notif-pill" title="View Notifications">
             <span>🔔</span>
-            <span>Notifications <span id="header-notif-count">2</span></span>
+            <span><span data-i18n="notifications">Notifications</span> <span id="header-notif-count">2</span></span>
           </button>
 
           <button onclick="logout()" class="header-control-pill signout-pill" title="Sign Out">
             <span>🚪</span>
-            <span>Sign Out</span>
+            <span data-i18n="sign_out">Sign Out</span>
           </button>
         </div>
       </div>
@@ -107,8 +106,8 @@
       
       <!-- Hero Title & Subtitle -->
       <section class="admin-hero-heading" id="overview">
-        <h1 class="hero-title">System Administration &amp;<br>Analytics</h1>
-        <p class="hero-description">
+        <h1 class="hero-title" data-i18n="admin_overview_title">System Administration &amp;<br>Analytics</h1>
+        <p class="hero-description" data-i18n="admin_overview_desc">
           Monitor real-time network telemetry, manage users, and review emergency response metrics.
         </p>
       </section>
@@ -121,7 +120,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-blue">👥</div>
             <div class="kpi-info">
-              <span class="kpi-label">TOTAL<br>USERS</span>
+              <span class="kpi-label" data-i18n="kpi_total_users">TOTAL USERS</span>
               <div id="kpi-total-users" class="kpi-number">16</div>
             </div>
           </div>
@@ -130,7 +129,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-cyan">🧓</div>
             <div class="kpi-info">
-              <span class="kpi-label">SENIOR<br>CITIZENS</span>
+              <span class="kpi-label" data-i18n="kpi_seniors">SENIOR CITIZENS</span>
               <div id="kpi-seniors" class="kpi-number">5</div>
             </div>
           </div>
@@ -139,7 +138,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-green">🏡</div>
             <div class="kpi-info">
-              <span class="kpi-label">NEIGHB<br>ORS</span>
+              <span class="kpi-label" data-i18n="kpi_neighbors">NEIGHBORS</span>
               <div id="kpi-neighbors" class="kpi-number">1</div>
             </div>
           </div>
@@ -148,7 +147,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-purple">👮</div>
             <div class="kpi-info">
-              <span class="kpi-label">SECURIT<br>Y<br>GUARDS</span>
+              <span class="kpi-label" data-i18n="kpi_guards">SECURITY GUARDS</span>
               <div id="kpi-guards" class="kpi-number">1</div>
             </div>
           </div>
@@ -157,7 +156,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-orange">🤝</div>
             <div class="kpi-info">
-              <span class="kpi-label">VOLUN<br>TEERS</span>
+              <span class="kpi-label" data-i18n="kpi_volunteers">VOLUNTEERS</span>
               <div id="kpi-volunteers" class="kpi-number">2</div>
             </div>
           </div>
@@ -166,7 +165,7 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-pink">👨‍👩‍👧</div>
             <div class="kpi-info">
-              <span class="kpi-label">FAMILY<br>MEMBE<br>RS</span>
+              <span class="kpi-label" data-i18n="kpi_family">FAMILY MEMBERS</span>
               <div id="kpi-family-members" class="kpi-number">4</div>
             </div>
           </div>
@@ -175,90 +174,157 @@
           <div class="kpi-card">
             <div class="kpi-icon-box bg-red">🚨</div>
             <div class="kpi-info">
-              <span class="kpi-label">ACTIVE<br>EMERG<br>ENCIES</span>
+              <span class="kpi-label" data-i18n="kpi_active_sos">ACTIVE EMERGENCIES</span>
               <div id="kpi-active-sos" class="kpi-number">4</div>
             </div>
           </div>
 
-          <!-- 8. AVG RESPONSE TIME -->
-          <div class="kpi-card">
-            <div class="kpi-icon-box bg-emerald">⚡</div>
-            <div class="kpi-info">
-              <span class="kpi-label">AVG<br>RESPON<br>SE TIME</span>
-              <div id="kpi-avg-response" class="kpi-number">99935s</div>
-            </div>
-          </div>
-
         </div>
       </section>
 
-      <!-- Real-Time Event Stream Terminal -->
-      <section class="admin-section-card" id="event-stream-section">
-        <div class="section-card-header">
+      <!-- ========================================================
+           OVERALL SYSTEM ANALYTICS & VISUAL INTELLIGENCE SECTION
+           ======================================================== -->
+      <section class="admin-section-card" id="overall-analytics-section">
+        <div class="section-card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
           <div class="section-title-group">
-            <span class="section-icon">📡</span>
-            <h2 class="section-title">Real-Time System Event Stream</h2>
+            <span class="section-icon">📈</span>
+            <h2 class="section-title">Overall System Analytics &amp; Visual Reports</h2>
           </div>
-        </div>
-
-        <div class="system-event-terminal-box">
-          <div id="admin-log-terminal" class="event-stream-content">
-            <div class="terminal-line"><span class="line-tag">[System]</span></div>
-            <div class="terminal-line"><span class="line-info">Connecting to SafeReach socket stream...</span></div>
-            <div class="terminal-line"><span class="line-time">[11:19:00 pm]</span></div>
-            <div class="terminal-line"><span class="line-success">SafeReach Operations Console Initialized.</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Community User Accounts Directory & Access Control -->
-      <section class="admin-section-card" id="users-directory-section">
-        <div class="section-card-header">
-          <div class="section-title-group">
-            <span class="section-icon">👥</span>
-            <h2 class="section-title">Community User Accounts Directory &amp; Access Control</h2>
-          </div>
-        </div>
-
-        <!-- Search & Role Filter Box -->
-        <div class="user-search-filter-card">
-          <div class="search-input-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="user-search-input" class="search-input-field" placeholder="Search by name, email, or phone number...">
-          </div>
-
-          <div class="filter-controls-row">
-            <div class="role-select-wrapper">
-              <span class="filter-icon">🏷️</span>
-              <select id="user-role-select" class="role-dropdown-select" onchange="handleRoleFilterChange(this.value)">
-                <option value="all">Filter by All Roles</option>
-                <option value="senior_citizen">Senior Citizens</option>
-                <option value="child">Children</option>
-                <option value="family_member">Family Members</option>
-                <option value="neighbor">Neighbors</option>
-                <option value="security_guard">Security Guards</option>
-                <option value="volunteer">Volunteers</option>
-                <option value="admin">System Admins</option>
-              </select>
-            </div>
-
-            <button type="button" onclick="executeUserSearch()" class="btn-primary-blue">
-              <span>🔍</span>
-              <span>Search &amp; Filter</span>
-            </button>
-          </div>
-
-          <div style="margin-top:0.5rem;">
-            <button type="button" onclick="resetUserFilter()" class="btn-reset-pill">
-              <span>❌</span>
-              <span>Reset</span>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <button type="button" onclick="loadComprehensiveAnalytics()" class="action-pill-btn" title="Refresh Analytics Data">
+              <span>🔄</span>
+              <span>Refresh Analytics</span>
             </button>
           </div>
         </div>
 
-        <!-- User Directory Container -->
-        <div id="admin-users-list-container" class="users-cards-list" style="margin-top:1.25rem;">
-          <!-- Dynamically rendered -->
+        <p class="section-description">
+          Real-time dynamic visual telemetry aggregated directly from MongoDB Atlas across User Demographics, Incident Types, Response Speed, Trends, and Location Hotspots.
+        </p>
+
+        <!-- Response & Resolution Speed Highlights -->
+        <div class="analytics-metrics-row" style="margin-top:1rem;">
+          <div class="analytics-metric-box">
+            <div class="metric-icon-mini bg-emerald">⚡</div>
+            <div class="metric-info-mini">
+              <span class="metric-label-mini">AVG RESPONSE TIME</span>
+              <strong id="analytics-avg-response" class="metric-value-mini">--</strong>
+            </div>
+          </div>
+
+          <div class="analytics-metric-box">
+            <div class="metric-icon-mini bg-cyan">⏱️</div>
+            <div class="metric-info-mini">
+              <span class="metric-label-mini">FASTEST RESPONSE</span>
+              <strong id="analytics-fastest-response" class="metric-value-mini">--</strong>
+            </div>
+          </div>
+
+          <div class="analytics-metric-box">
+            <div class="metric-icon-mini bg-orange">⏳</div>
+            <div class="metric-info-mini">
+              <span class="metric-label-mini">SLOWEST RESPONSE</span>
+              <strong id="analytics-slowest-response" class="metric-value-mini">--</strong>
+            </div>
+          </div>
+
+          <div class="analytics-metric-box">
+            <div class="metric-icon-mini bg-blue">🎯</div>
+            <div class="metric-info-mini">
+              <span class="metric-label-mini">RESOLUTION RATE</span>
+              <strong id="analytics-resolution-rate" class="metric-value-mini">--</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Visual Analytics Chart Cards Grid -->
+        <div class="analytics-charts-grid" style="margin-top:1.25rem;">
+          
+          <!-- Chart 1: Emergency Incident Trends (Line Chart) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">📅</span>
+                <span>Emergency Incident Trends (Timeline)</span>
+              </div>
+              <span class="chart-badge">Line Chart</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-emergency-trends"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 2: Emergency Incident Types Breakdown (Bar Chart) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">🚨</span>
+                <span>Emergency Incident Types Breakdown</span>
+              </div>
+              <span class="chart-badge">Bar Chart</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-emergency-types"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 3: Community User Roles & Directory Distribution (Doughnut Chart) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">👥</span>
+                <span>User Analytics &amp; Role Distribution</span>
+              </div>
+              <span class="chart-badge">Doughnut</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-user-analytics"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 4: Resolution Analytics (Resolved vs Unresolved vs Cancelled) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">⚖️</span>
+                <span>Resolution Analytics (Resolved vs Active)</span>
+              </div>
+              <span class="chart-badge">Status Ratio</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-resolution-analytics"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 5: Responder Response Analytics (Bar Chart) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">👮</span>
+                <span>Responder Activity by Role</span>
+              </div>
+              <span class="chart-badge">Responders</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-responder-analytics"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 6: Top Emergency Locations (Horizontal Bar Chart) -->
+          <div class="chart-panel-card">
+            <div class="chart-panel-header">
+              <div class="chart-panel-title">
+                <span class="chart-icon">📍</span>
+                <span>Top Incident Location Hotspots</span>
+              </div>
+              <span class="chart-badge">Hotspots</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-location-analytics"></canvas>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -271,31 +337,56 @@
       
       <!-- Section Title Header -->
       <section class="admin-hero-heading">
-        <h1 class="hero-title">Community Emergency Alerts &amp;<br>Active Feed</h1>
-        <p class="hero-description">
+        <h1 class="hero-title" data-i18n="alerts_view_title">Community Emergency Alerts &amp;<br>Active Feed</h1>
+        <p class="hero-description" data-i18n="alerts_view_desc">
           Monitor real-time SOS triggers, dispatched responders, and live community alert status.
         </p>
       </section>
 
       <!-- Live Community Emergency Alerts Feed Card -->
       <section class="admin-section-card" id="live-alerts-section">
-        <div class="section-card-header">
+        <div class="section-card-header clickable-header" onclick="toggleSectionExpand('live-alerts-content', 'live-alerts-arrow-icon')">
           <div class="section-title-group">
             <span class="section-icon">🚨</span>
-            <h2 class="section-title">Live Community Emergency Alerts Feed</h2>
+            <h2 class="section-title" data-i18n="live_alerts_feed_title">Live Community Emergency Alerts Feed</h2>
           </div>
+          <span id="live-alerts-arrow-icon" class="expand-arrow">▼</span>
         </div>
 
-        <div class="section-action-bar">
-          <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
-            <span>🔄</span>
-            <span>Refresh Alerts</span>
-          </button>
-        </div>
+        <div id="live-alerts-content" class="expandable-content" style="display:block; margin-top:0.75rem;">
+          <p class="section-description" data-i18n="live_alerts_feed_desc">
+            Complete real-time feed of all triggered SOS alerts, emergency locations, responder assignments, and response times. Click to expand or collapse.
+          </p>
 
-        <!-- Alerts List Display -->
-        <div id="admin-live-alerts-container" class="live-alerts-feed-list">
-          <!-- Dynamically rendered via JS -->
+          <div class="section-action-bar">
+            <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
+              <span>🔄</span>
+              <span data-i18n="refresh_alerts">Refresh Alerts</span>
+            </button>
+          </div>
+
+          <!-- Alerts Table Display (Matching Reports & Logs Format) -->
+          <div class="table-responsive-container" style="margin-top:1rem;">
+            <table class="admin-data-table" id="admin-live-alerts-table">
+              <thead>
+                <tr>
+                  <th data-i18n="th_alert_id">ALERT ID</th>
+                  <th data-i18n="th_senior_user">SENIOR / USER</th>
+                  <th data-i18n="th_phone">PHONE</th>
+                  <th data-i18n="th_datetime">DATE &amp; TIME</th>
+                  <th data-i18n="th_location">EMERGENCY LOCATION &amp; ADDRESS</th>
+                  <th data-i18n="th_gps">GPS COORDINATES</th>
+                  <th data-i18n="th_medical">MEDICAL DETAILS</th>
+                  <th data-i18n="th_status">STATUS</th>
+                  <th data-i18n="th_responded_by">RESPONDED BY</th>
+                  <th data-i18n="th_response_time">RESPONSE TIME</th>
+                </tr>
+              </thead>
+              <tbody id="admin-live-alerts-container">
+                <!-- Dynamically rendered via JS -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -311,18 +402,18 @@
         <div class="section-card-header">
           <div class="section-title-group">
             <span class="section-icon">📡</span>
-            <h2 class="section-title">Live GPS Location &amp; Controls</h2>
+            <h2 class="section-title" data-i18n="live_gps_title">Live GPS Location &amp; Controls</h2>
           </div>
         </div>
 
         <div style="margin-top:0.25rem;">
           <button type="button" id="btn-get-admin-location" onclick="fetchAndDisplayAdminGps()" class="btn-primary-blue" style="border-radius: 12px; padding: 0.85rem 1.5rem; font-weight: 800; font-size: 0.92rem;">
             <span>📍</span>
-            <span>Get Current Location</span>
+            <span data-i18n="get_current_location">Get Current Location</span>
           </button>
         </div>
 
-        <p class="section-description" style="margin-top:0.25rem; font-size:0.92rem; color:var(--admin-text-sub);">
+        <p class="section-description" style="margin-top:0.25rem; font-size:0.92rem; color:var(--admin-text-sub);" data-i18n="gps_desc">
           Click "Get Current Location" to fetch your live high-accuracy GPS coordinates.
         </p>
 
@@ -337,7 +428,7 @@
         <div class="section-card-header">
           <div class="section-title-group">
             <span class="section-icon">🗺️</span>
-            <h2 class="section-title">Live GPS Location &amp; Controls</h2>
+            <h2 class="section-title" data-i18n="live_gps_title">Live GPS Location &amp; Controls</h2>
           </div>
         </div>
 
@@ -356,73 +447,85 @@
       
       <!-- Section Title Header -->
       <section class="admin-hero-heading">
-        <h1 class="hero-title">Reports, Response Logs &amp;<br>Data Operations</h1>
-        <p class="hero-description">
+        <h1 class="hero-title" data-i18n="reports_view_title">Reports, Response Logs &amp;<br>Data Operations</h1>
+        <p class="hero-description" data-i18n="reports_view_desc">
           Access comprehensive historical emergency response audits, registered members logs, and Microsoft Excel CSV data pipelines.
         </p>
       </section>
 
-      <!-- 1. Registered Community Members Details & Directory (Requested by User) -->
+      <!-- 1. Registered Community Members Details -->
       <section class="admin-section-card" id="reports-users-section">
         <div class="section-card-header clickable-header" onclick="toggleSectionExpand('reports-users-content', 'reports-users-arrow-icon')">
           <div class="section-title-group">
             <span class="section-icon">👥</span>
-            <h2 class="section-title">Registered Members Directory &amp; Account Details</h2>
+            <h2 class="section-title" data-i18n="registered_members_title">Registered Community Members Details</h2>
           </div>
           <span id="reports-users-arrow-icon" class="expand-arrow">▼</span>
         </div>
 
-        <p class="section-description">
-          Complete community roster of all registered senior citizens, family members, security guards, volunteers, and neighbors with medical profiles and emergency contacts.
-        </p>
-
-        <div class="section-action-bar">
-          <button type="button" onclick="loadUsersTable()" class="action-pill-btn">
-            <span>🔄</span>
-            <span>Refresh Members List</span>
-          </button>
-        </div>
-
         <div id="reports-users-content" class="expandable-content" style="display:block; margin-top:0.75rem;">
+          <p class="section-description" data-i18n="registered_members_desc">
+            Comprehensive directory of all registered Senior Citizens, Guardians, Neighbors, Security Guards, and Volunteers. Click to expand or collapse.
+          </p>
+
+          <div class="section-action-bar">
+            <button type="button" onclick="loadUsersTable()" class="action-pill-btn">
+              <span>🔄</span>
+              <span data-i18n="refresh_members">Refresh Members</span>
+            </button>
+          </div>
+
           <!-- Search & Role Filter Box for Reports -->
-          <div class="user-search-filter-card">
+          <div class="user-search-filter-card" style="margin-top:0.75rem;">
             <div class="search-input-wrapper">
               <span class="search-icon">🔍</span>
-              <input type="text" id="reports-user-search-input" class="search-input-field" placeholder="Search registered members by name, email, or phone number...">
+              <input type="text" id="reports-user-search-input" class="search-input-field" placeholder="Search by name, email, or phone number..." data-i18n-placeholder="search_placeholder" oninput="handleReportsSearchInput(this.value)" onkeydown="if(event.key==='Enter') executeReportsUserSearch()">
             </div>
 
             <div class="filter-controls-row">
               <div class="role-select-wrapper">
                 <span class="filter-icon">🏷️</span>
                 <select id="reports-user-role-select" class="role-dropdown-select" onchange="handleReportsRoleFilterChange(this.value)">
-                  <option value="all">Filter by All Roles</option>
-                  <option value="senior_citizen">Senior Citizens</option>
-                  <option value="child">Children</option>
-                  <option value="family_member">Family Members</option>
-                  <option value="neighbor">Neighbors</option>
-                  <option value="security_guard">Security Guards</option>
-                  <option value="volunteer">Volunteers</option>
-                  <option value="admin">System Admins</option>
+                  <option value="all" data-i18n="filter_all_roles">Filter by All Roles</option>
+                  <option value="senior_citizen" data-i18n="role_seniors">Senior Citizens</option>
+                  <option value="child" data-i18n="role_dependents">Children / Dependents</option>
+                  <option value="family_member" data-i18n="role_family">Family Members / Guardians</option>
+                  <option value="neighbor" data-i18n="role_neighbors">Neighbors</option>
+                  <option value="security_guard" data-i18n="role_guards">Security Guards</option>
+                  <option value="volunteer" data-i18n="role_volunteers">Volunteers</option>
+                  <option value="admin" data-i18n="role_admins">System Admins</option>
                 </select>
               </div>
 
               <button type="button" onclick="executeReportsUserSearch()" class="btn-primary-blue">
                 <span>🔍</span>
-                <span>Search &amp; Filter</span>
+                <span data-i18n="search_and_filter">Search &amp; Filter</span>
               </button>
-            </div>
 
-            <div style="margin-top:0.5rem;">
               <button type="button" onclick="resetReportsUserFilter()" class="btn-reset-pill">
                 <span>❌</span>
-                <span>Reset Filters</span>
+                <span data-i18n="reset">Reset</span>
               </button>
             </div>
           </div>
 
-          <!-- Members List Container in Reports -->
-          <div id="admin-reports-users-list-container" class="users-cards-list" style="margin-top:1.25rem;">
-            <!-- Populated dynamically via JS with comprehensive member details -->
+          <!-- Members Table Container in Reports -->
+          <div class="table-responsive-container" style="margin-top:1.25rem;">
+            <table class="admin-data-table" id="admin-reports-users-table">
+              <thead>
+                <tr>
+                  <th data-i18n="th_name">NAME</th>
+                  <th data-i18n="th_email">EMAIL</th>
+                  <th data-i18n="th_phone">PHONE</th>
+                  <th data-i18n="th_role">ROLE</th>
+                  <th data-i18n="th_apartment">APARTMENT &amp; ADDRESS</th>
+                  <th data-i18n="th_actions">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="admin-reports-users-list-container">
+                <!-- Dynamically rendered rows -->
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -432,25 +535,44 @@
         <div class="section-card-header clickable-header" onclick="toggleSectionExpand('history-details-content', 'history-arrow-icon')">
           <div class="section-title-group">
             <span class="section-icon">🚨</span>
-            <h2 class="section-title">Emergency Alerts Details &amp; Response History</h2>
+            <h2 class="section-title" data-i18n="emergency_history_title">Emergency Alerts Details &amp; Response History</h2>
           </div>
           <span id="history-arrow-icon" class="expand-arrow">▼</span>
         </div>
 
-        <p class="section-description">
-          Complete historical audit log of all triggered SOS alerts, emergency locations, responder assignments, and response times.
-        </p>
+        <div id="history-details-content" class="expandable-content" style="display:block; margin-top:0.75rem;">
+          <p class="section-description" data-i18n="emergency_history_desc">
+            Complete historical audit log of all triggered SOS alerts, emergency locations, responder assignments, and response times. Click to expand or collapse.
+          </p>
 
-        <div class="section-action-bar">
-          <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
-            <span>🔄</span>
-            <span>Refresh Emergency Logs</span>
-          </button>
-        </div>
+          <div class="section-action-bar">
+            <button type="button" onclick="loadEmergencyReports()" class="action-pill-btn">
+              <span>🔄</span>
+              <span data-i18n="refresh_emergency_logs">Refresh Emergency Logs</span>
+            </button>
+          </div>
 
-        <div id="history-details-content" class="expandable-content" style="display:block; margin-top:1rem;">
-          <div id="admin-emergency-history-list" class="emergency-history-feed">
-            <!-- Dynamically populated -->
+          <!-- Emergency Logs Table Container -->
+          <div class="table-responsive-container" style="margin-top:1rem;">
+            <table class="admin-data-table" id="admin-emergency-history-table">
+              <thead>
+                <tr>
+                  <th data-i18n="th_alert_id">ALERT ID</th>
+                  <th data-i18n="th_senior_user">SENIOR / USER</th>
+                  <th data-i18n="th_phone">PHONE</th>
+                  <th data-i18n="th_datetime">DATE &amp; TIME</th>
+                  <th data-i18n="th_location">EMERGENCY LOCATION &amp; ADDRESS</th>
+                  <th data-i18n="th_gps">GPS COORDINATES</th>
+                  <th data-i18n="th_medical">MEDICAL DETAILS</th>
+                  <th data-i18n="th_status">STATUS</th>
+                  <th data-i18n="th_responded_by">RESPONDED BY</th>
+                  <th data-i18n="th_response_time">RESPONSE TIME</th>
+                </tr>
+              </thead>
+              <tbody id="admin-emergency-history-list">
+                <!-- Dynamically rendered rows -->
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -460,11 +582,11 @@
         <div class="section-card-header">
           <div class="section-title-group">
             <span class="section-icon">📊</span>
-            <h2 class="section-title">Excel CSV Data Operations &amp; Import</h2>
+            <h2 class="section-title" data-i18n="csv_section_title">Excel CSV Data Operations &amp; Import</h2>
           </div>
         </div>
 
-        <p class="section-description">
+        <p class="section-description" data-i18n="csv_section_desc">
           Import external CSV records into MongoDB system database, or export directory logs directly to Microsoft Excel format.
         </p>
 
@@ -473,27 +595,27 @@
         <div class="csv-buttons-vertical-list">
           <button type="button" onclick="triggerCSVImport()" class="csv-action-btn solid-blue">
             <span class="btn-icon">📥</span>
-            <span>Import CSV File to Database</span>
+            <span data-i18n="csv_import">Import CSV File to Database</span>
           </button>
 
           <button type="button" onclick="exportAllDataCSV()" class="csv-action-btn solid-blue">
             <span class="btn-icon">📁</span>
-            <span>Export All Data (Users + Emergencies) CSV</span>
+            <span data-i18n="csv_export_all">Export All Data (Users + Emergencies) CSV</span>
           </button>
 
           <button type="button" onclick="exportUsersCSV()" class="csv-action-btn soft-neo">
             <span class="btn-icon">👥</span>
-            <span>Export Users Details CSV</span>
+            <span data-i18n="csv_export_users">Export Users Details CSV</span>
           </button>
 
           <button type="button" onclick="exportEmergenciesCSV()" class="csv-action-btn soft-neo">
             <span class="btn-icon">🚨</span>
-            <span>Export Emergency Alerts CSV</span>
+            <span data-i18n="csv_export_alerts">Export Emergency Alerts CSV</span>
           </button>
 
           <button type="button" onclick="downloadSampleCSV()" class="csv-action-btn soft-neo">
             <span class="btn-icon">📄</span>
-            <span>Download CSV Template</span>
+            <span data-i18n="csv_download_template">Download CSV Template</span>
           </button>
         </div>
       </section>
@@ -510,7 +632,7 @@
       <div class="modal-header-bar">
         <div class="modal-header-left">
           <span class="modal-title-icon">👑</span>
-          <h3 class="modal-title-text">System Admin</h3>
+          <h3 class="modal-title-text" data-i18n="admin">System Admin</h3>
         </div>
         <button onclick="closeAdminProfileModal()" class="modal-close-icon" aria-label="Close">✕</button>
       </div>
@@ -519,22 +641,22 @@
         <div class="modal-inner-card">
           <div class="inner-card-title">
             <span class="inner-icon">👤</span>
-            <span>Admin Details</span>
+            <span data-i18n="admin_details">Admin Details</span>
           </div>
 
           <form id="admin-profile-form" onsubmit="handleSaveProfile(event)">
             <div class="modal-form-group">
-              <label for="admin-name-input">Administrator Name</label>
+              <label for="admin-name-input" data-i18n="admin_name">Administrator Name</label>
               <input type="text" id="admin-name-input" class="modal-input-control" value="tarun tej" required>
             </div>
 
             <div class="modal-form-group">
-              <label for="admin-phone-input">Direct Contact Phone</label>
+              <label for="admin-phone-input" data-i18n="admin_phone">Direct Contact Phone</label>
               <input type="text" id="admin-phone-input" class="modal-input-control" value="9390816692">
             </div>
 
             <div class="modal-form-group">
-              <label for="admin-location-input">Command Center Office Location</label>
+              <label for="admin-location-input" data-i18n="admin_location">Command Center Office Location</label>
               <input type="text" id="admin-location-input" class="modal-input-control" value="tamilnadu">
             </div>
           </form>
@@ -542,40 +664,103 @@
       </div>
 
       <div class="modal-bottom-actions">
-        <button type="button" onclick="closeAdminProfileModal()" class="btn-modal-cancel">
+        <button type="button" onclick="closeAdminProfileModal()" class="btn-modal-cancel" data-i18n="cancel">
           Cancel
         </button>
         <button type="button" onclick="document.getElementById('admin-profile-form').requestSubmit()" class="btn-modal-save">
           <span>💾</span>
-          <span>Save Profile Changes</span>
+          <span data-i18n="save_profile">Save Profile Changes</span>
         </button>
       </div>
     </div>
   </div>
 
   <!-- ========================================================
-       MODAL 2: NOTIFICATIONS MODAL
+       MODAL 2: NOTIFICATIONS MODAL (MATCHING SCREENSHOT 1 & 2)
        ======================================================== -->
   <div id="admin-notifications-modal" class="modal-backdrop-overlay d-none">
-    <div class="modal-card-box">
-      <div class="modal-header-bar">
-        <div class="modal-header-left">
-          <span class="modal-title-icon">🔔</span>
-          <h3 class="modal-title-text">Notifications</h3>
+    <div class="modal-card-box notif-modal-container">
+      
+      <!-- Modal Header -->
+      <div class="notif-modal-header">
+        <div class="notif-header-title">
+          <span class="notif-bell-icon">🔔</span>
+          <h3 class="notif-title-text" data-i18n="notifications">Notifications</h3>
         </div>
-        <button onclick="closeAdminNotificationsModal()" class="modal-close-icon" aria-label="Close">✕</button>
+        <button type="button" onclick="closeAdminNotificationsModal()" class="notif-close-btn" aria-label="Close">✕</button>
       </div>
 
-      <div class="modal-inner-content">
-        <div id="admin-notifications-list" style="display:flex; flex-direction:column; gap:0.6rem;">
-          <div class="modal-loading-text">Loading notifications...</div>
+      <!-- Inner Content -->
+      <div class="notif-modal-body">
+
+        <!-- Top Metric Summary Cards (2 on top, 1 below) -->
+        <div class="notif-metrics-grid">
+          <div class="notif-metric-card">
+            <span class="notif-status-dot dot-red">🔴</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label">PENDING REQUESTS</span>
+              <strong id="notif-count-pending" class="notif-metric-num">0</strong>
+            </div>
+          </div>
+
+          <div class="notif-metric-card">
+            <span class="notif-status-dot dot-green">🟢</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label">ACCEPTED / LINKED</span>
+              <strong id="notif-count-accepted" class="notif-metric-num">0</strong>
+            </div>
+          </div>
+
+          <div class="notif-metric-card notif-card-wide">
+            <span class="notif-status-dot dot-logs">📋</span>
+            <div class="notif-metric-text">
+              <span class="notif-metric-label">TOTAL LOGS</span>
+              <strong id="notif-count-total" class="notif-metric-num">0</strong>
+            </div>
+          </div>
         </div>
+
+        <!-- Filter Chips / Tabs (Scrollable Horizontal Row) -->
+        <div class="notif-filter-chips-row">
+          <button type="button" id="notif-tab-all" class="notif-chip-btn active" onclick="filterAdminNotifications('all')">
+            <span>📋</span>
+            <span>All Notifications</span>
+          </button>
+          <button type="button" id="notif-tab-pending" class="notif-chip-btn" onclick="filterAdminNotifications('PENDING')">
+            <span>🔴</span>
+            <span>Pending Requests</span>
+          </button>
+          <button type="button" id="notif-tab-accepted" class="notif-chip-btn" onclick="filterAdminNotifications('ACCEPTED')">
+            <span>🟢</span>
+            <span>Accepted Requests</span>
+          </button>
+          <button type="button" id="notif-tab-read" class="notif-chip-btn" onclick="filterAdminNotifications('READ')">
+            <span>⚪</span>
+            <span>Read Logs</span>
+          </button>
+        </div>
+
+        <!-- Notifications List Container -->
+        <div id="admin-notifications-list" class="notif-list-area">
+          <div class="notif-empty-state">
+            <div class="notif-empty-bell">🔔</div>
+            <p class="notif-empty-msg">No notifications found in this category.</p>
+          </div>
+        </div>
+
       </div>
 
-      <div class="modal-bottom-actions">
-        <button type="button" onclick="clearAdminNotifications()" class="btn-modal-cancel">Clear History</button>
-        <button type="button" onclick="closeAdminNotificationsModal()" class="btn-modal-save">Close</button>
+      <!-- Modal Bottom Actions Bar -->
+      <div class="notif-modal-footer">
+        <button type="button" onclick="clearAdminNotifications()" class="notif-footer-btn btn-clear">
+          <span>🗑️</span>
+          <span data-i18n="clear_history">Clear History</span>
+        </button>
+        <button type="button" onclick="closeAdminNotificationsModal()" class="notif-footer-btn btn-close" data-i18n="close">
+          Close
+        </button>
       </div>
+
     </div>
   </div>
 
@@ -585,6 +770,7 @@
   <!-- Scripts -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="/public/js/map.js"></script>
   <script src="/public/js/app.js"></script>
   <script src="/public/js/i18n.js"></script>

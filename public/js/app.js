@@ -134,15 +134,14 @@ const SafeReach = {
   },
 
   autoRedirectIfLoggedIn: async () => {
-    const path = window.location.pathname;
-    const isLoginPage = path === '/login' || path.endsWith('/login.html') || path === '/' || path.endsWith('/index.html');
-    if (!isLoginPage) return;
+    // Only auto-redirect on native mobile app launch (Capacitor)
+    const isCapacitorNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+    if (!isCapacitorNative) return;
 
     await SafeReach.syncNativeStorage();
     const token = SafeReach.getToken();
     if (!token) return;
 
-    // Show persistent session validation splash if element exists
     const splashEl = document.getElementById('session-bootstrap-splash');
     if (splashEl) splashEl.style.display = 'flex';
 

@@ -37,25 +37,8 @@ class SOSTriggerEngine {
   }
 
   playAlarmSound(freq = 880, duration = 0.2) {
-    try {
-      this.initAudio();
-      if (!this.audioCtx) return;
-      if (this.audioCtx.state === 'suspended') {
-        this.audioCtx.resume();
-      }
-      const osc = this.audioCtx.createOscillator();
-      const gain = this.audioCtx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.15, this.audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(this.audioCtx.destination);
-      osc.start();
-      osc.stop(this.audioCtx.currentTime + duration);
-    } catch (e) {
-      console.warn('Audio play error:', e);
-    }
+    // Muted to prevent screeching noise on clicks and button hold
+    return;
   }
 
   initEvents() {
