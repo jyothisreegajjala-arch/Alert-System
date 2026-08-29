@@ -134,122 +134,81 @@
 <body>
 
   <!-- ========================================================================
-       1. NAVIGATION HEADER (NEOMORPHIC LIGHT)
+       1. NAVIGATION HEADER (EXACT REPLICA OF SCREENSHOT 1)
        ======================================================================== -->
-  <nav class="navbar" id="main-nav">
-    <div class="container nav-content">
+  <nav class="navbar" id="main-nav" style="background:#eaf2f8; box-shadow:0 4px 12px rgba(0,0,0,0.04); border-bottom:1px solid #d0e1f0;">
+    <div class="container nav-content" style="display:flex; align-items:center; justify-content:space-between;">
       <!-- Left: Logo + Brand -->
-      <a href="/" class="brand-logo" aria-label="SafeReach Home">
-        <div class="logo-icon">🆘</div>
-        <span>SafeReach</span>
+      <a href="/" class="brand-logo" aria-label="CareConnect Home" style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:#0f172a; font-weight:800; font-size:1.35rem;">
+        <span style="font-size:1.4rem;">🛡️</span>
+        <span style="color:#1e293b;">CareConnect</span>
       </a>
 
-      <!-- Center: Desktop Navigation Links (>= 960px) -->
-      <ul class="nav-links">
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#features">Features</a></li>
-      </ul>
-
-      <!-- Right: Desktop Actions Group (>= 768px) -->
-      <div class="nav-actions-desktop">
-        <!-- Role Login Quick Portal -->
-        <a href="#role-portals" class="btn btn-secondary btn-sm">
-          <span>🔑</span> Role Login
-        </a>
-
-        <!-- Desktop Language Selector Container -->
+      <!-- Right: Language Selector + Login + Register -->
+      <div style="display:flex; align-items:center; gap:0.5rem;">
         <div id="home-language-selector-container"></div>
-
-        <!-- Primary Register Account CTA -->
-        <a href="/register" class="btn btn-primary btn-sm" data-i18n="register">
-          <span>🚀</span> Register Account
-        </a>
+        <a href="/login" class="btn btn-sm" style="background:#e0edf7; color:#0369a1; font-weight:700; border-radius:10px; padding:0.4rem 0.9rem; border:1px solid #bae6fd; text-decoration:none;" data-i18n="login">Login</a>
+        <a href="/register" class="btn btn-sm" style="background:#e0edf7; color:#0369a1; font-weight:700; border-radius:10px; padding:0.4rem 0.9rem; border:1px solid #bae6fd; text-decoration:none;" data-i18n="register">Register</a>
       </div>
-
-      <!-- Mobile Hamburger Toggle (<= 767px) -->
-      <button type="button" class="mobile-menu-btn" id="mobile-hamburger-btn" onclick="toggleMobileNavDrawer()" aria-label="Open Navigation Menu">
-        <span id="hamburger-icon">☰</span>
-      </button>
-    </div>
-
-    <!-- Mobile Slide-Down Drawer (<= 767px) -->
-    <div class="mobile-nav-drawer" id="mobile-drawer">
-      <a href="#how-it-works" onclick="closeMobileNavDrawer()">
-        <span>📋</span> How It Works
-      </a>
-      <a href="#features" onclick="closeMobileNavDrawer()">
-        <span>⭐</span> Features & Capabilities
-      </a>
-      <a href="#role-portals" onclick="closeMobileNavDrawer()">
-        <span>🔑</span> Role Login Portals
-      </a>
-      
-      <!-- Mobile Language Selector Container -->
-      <div id="mobile-language-selector-container" class="mobile-lang-container"></div>
-
-      <!-- Full-Width Mobile Register CTA -->
-      <a href="/register" class="btn btn-primary" style="margin-top:0.25rem; text-align:center; justify-content:center;" data-i18n="register">
-        <span>🚀</span> Register Account
-      </a>
     </div>
   </nav>
 
   <!-- ========================================================================
-       2. HERO SECTION WITH HOLD-TO-ACTIVATE CIRCULAR NEOMORPHIC SOS HUB
+       2. HERO SECTION WITH EXACT REPLICA OF SCREENSHOT 1
        ======================================================================== -->
-  <header class="hero-section">
-    <div class="container hero-container">
+  <header class="hero-section" style="padding:2rem 1rem 3rem; text-align:center; background:linear-gradient(180deg, #eef6fc 0%, #dbeafe 100%);">
+    <div class="container hero-container" style="max-width:680px; margin:0 auto;">
       <!-- Inset Badge -->
-      <div class="hero-badge">
+      <div style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 1.25rem; background:#e0f2fe; border:1.5px solid #7dd3fc; border-radius:9999px; color:#0284c7; font-size:0.9rem; font-weight:800; margin-bottom:1.5rem; box-shadow:0 2px 6px rgba(14,165,233,0.1);">
         <span>⚡</span>
-        <span data-i18n="hero_badge">Next-Gen Community Emergency Response</span>
+        <span data-i18n="hero_badge">Instant 60-Second Community Escalation</span>
       </div>
 
       <!-- Main Headline -->
-      <h1 class="hero-title" data-i18n="hero_title">
-        Instant SOS Alert &amp; Multi-Tier Community Response Network
+      <h1 class="hero-title" style="font-size:clamp(1.85rem, 5vw, 2.75rem); font-weight:900; line-height:1.2; color:#0f172a; margin-bottom:1.15rem;" data-i18n="hero_title">
+        Smart Community Emergency Alert System
       </h1>
 
       <!-- Subheadline -->
-      <p class="hero-subtitle" data-i18n="hero_subtitle">
-        Connecting senior citizens, children, and vulnerable individuals with family members, nearby neighbors, on-duty security guards, and registered volunteers with real-time GPS tracking.
+      <p class="hero-subtitle" style="font-size:clamp(0.95rem, 2.5vw, 1.12rem); color:#334155; line-height:1.65; max-width:620px; margin:0 auto 2.25rem; font-weight:500;" data-i18n="hero_subtitle">
+        Connect Senior Citizens directly with linked Family Members, Neighbors, Security Guards, and Volunteers for instant response and GPS tracking.
       </p>
 
       <!-- Central Circular Red Neomorphic SOS Hub (Exact 3-Second Hold) -->
-      <div class="sos-section">
-        <div class="sos-button-wrapper" id="sos-wrapper">
+      <div class="sos-section" style="display:flex; flex-direction:column; align-items:center; margin-bottom:2rem;">
+        <div class="sos-button-wrapper" id="sos-wrapper" style="position:relative; width:220px; height:220px; display:flex; align-items:center; justify-content:center; margin-bottom:1.25rem;">
           <!-- Circular SVG Progress Ring -->
-          <svg class="sos-svg-ring" viewBox="0 0 220 220">
-            <circle class="sos-ring-bg" cx="110" cy="110" r="95"></circle>
-            <circle class="sos-ring-progress" id="sos-progress-circle" cx="110" cy="110" r="95"></circle>
+          <svg class="sos-svg-ring" viewBox="0 0 220 220" style="position:absolute; top:0; left:0; width:100%; height:100%; transform:rotate(-90deg); pointer-events:none;">
+            <circle class="sos-ring-bg" cx="110" cy="110" r="95" style="fill:none; stroke:rgba(239,68,68,0.15); stroke-width:8;"></circle>
+            <circle class="sos-ring-progress" id="sos-progress-circle" cx="110" cy="110" r="95" style="fill:none; stroke:#ef4444; stroke-width:8; stroke-dasharray:660; stroke-dashoffset:660; stroke-linecap:round; transition:stroke-dashoffset 0.1s linear;"></circle>
           </svg>
 
           <!-- Large Circular Red Neomorphic SOS Dome -->
-          <div class="main-sos-circle-btn" id="main-sos-circle-btn" role="button" tabindex="0" aria-label="Hold for 3 seconds to trigger Emergency SOS Alert">
-            <div class="sos-btn-text">
-              <span>🆘</span>
-              <span>SOS</span>
+          <div class="main-sos-circle-btn" id="main-sos-circle-btn" role="button" tabindex="0" aria-label="Hold for 3 seconds to trigger Emergency SOS Alert" style="width:175px; height:175px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #f87171 0%, #e11d48 50%, #9f1239 100%); border:4px solid rgba(255,255,255,0.6); box-shadow:0 12px 30px rgba(225,29,72,0.4), inset 0 -6px 12px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; color:#fff; text-decoration:none; cursor:pointer; user-select:none; transition:transform 0.2s ease;">
+            <div class="sos-btn-text" style="display:flex; align-items:center; gap:0.35rem; font-weight:900; font-size:1.85rem; letter-spacing:1px; color:#0f172a;">
+              <span style="background:#e11d48; color:#fff; font-size:0.9rem; font-weight:900; padding:0.2rem 0.45rem; border-radius:6px; box-shadow:0 2px 4px rgba(0,0,0,0.2);">SOS</span>
+              <span style="color:#0f172a; font-weight:900;">SOS</span>
             </div>
           </div>
         </div>
 
-        <div class="sos-subtext-group">
-          <div class="sos-line-1" id="sos-countdown-text" data-i18n="sos_press_hold">
-            PRESS &amp; HOLD FOR 3 SECONDS
+        <div class="sos-subtext-group" style="text-align:center;">
+          <div class="sos-line-1" id="sos-countdown-text" style="font-size:1.05rem; font-weight:800; color:#0f172a; margin-bottom:0.3rem;" data-i18n="sos_press_hold">
+            Press &amp; Hold 3 Seconds to Trigger SOS
           </div>
-          <div class="sos-line-2" data-i18n="sos_subtext">
-            Instantly alerts family, neighbors &amp; guards with live GPS
+          <div class="sos-line-2" style="font-size:0.95rem; font-weight:700; color:#ea580c;" data-i18n="sos_subtext">
+            Immediate Socket Broadcast to Linked Responders
           </div>
         </div>
       </div>
 
-      <!-- Hero Action Buttons -->
-      <div class="hero-action-buttons">
-        <a href="/register" class="btn btn-hero-primary" data-i18n="get_started">
-          <span>🚀</span> Create Free Account
+      <!-- Hero Action Buttons (Exact Replica of Screenshot 1) -->
+      <div class="hero-action-buttons" style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:380px; margin:0 auto;">
+        <a href="/register" class="btn" style="background:#e0edf7; color:#0369a1; font-weight:800; padding:0.85rem 1.5rem; border-radius:14px; border:1px solid #bae6fd; font-size:0.95rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.5rem; box-shadow:0 4px 10px rgba(0,0,0,0.03);" data-i18n="register">
+          <span>🚀</span> Register Account Now
         </a>
-        <a href="/login" class="btn btn-hero-secondary" data-i18n="sign_in">
-          <span>🔑</span> Sign In to Console
+        <a href="/login" class="btn" style="background:#e0edf7; color:#0369a1; font-weight:800; padding:0.85rem 1.5rem; border-radius:14px; border:1px solid #bae6fd; font-size:0.95rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.5rem; box-shadow:0 4px 10px rgba(0,0,0,0.03);" data-i18n="sign_in">
+          <span>🔑</span> Access Role Portals
         </a>
       </div>
     </div>

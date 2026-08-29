@@ -161,7 +161,7 @@ app.get(['/app-debug.apk', '/public/app-debug.apk'], (req, res) => {
 });
 
 app.get(['/language', '/language.html'], serveView('language.html'));
-app.get(['/', '/index.html'], (req, res) => res.redirect('/dashboard'));
+app.get(['/', '/index.html'], serveView('index.html'));
 app.get(['/login', '/login.html'], serveView('login.html'));
 app.get(['/login/senior', '/login/senior.html'], serveView(path.join('login', 'senior.html')));
 app.get(['/login/child', '/login/child.html'], serveView(path.join('login', 'child.html')));
